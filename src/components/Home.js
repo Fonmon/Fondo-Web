@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from '../logo.svg';
 import RaisedButton from 'material-ui/RaisedButton';
-import './App.css';
+import '../styles/App.css';
 
-class App extends Component {
+class Home extends Component {
   render() {
     return (
       <div className="App">
@@ -13,11 +13,10 @@ class App extends Component {
         </header>
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
-          <RaisedButton>Button new</RaisedButton>
         </p>
       </div>
     );
   }
 }
 
-export default App;
+export default Home;
