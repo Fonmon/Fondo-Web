@@ -17,12 +17,12 @@ class FinanceInfo extends Component {
     render(){
         return (
             <Paper className="Info" zDepth={5}>
-                <h2>Finance Information</h2>
+                <h2>Información financiera</h2>
                 <p>
-                    <span className="Labels"><strong>Contributions:</strong> ${this.financeInfo.contributions}</span><br/>
-                    <span className="Labels"><strong>Balance contributions:</strong> ${this.financeInfo.balance_contributions}</span><br/>
-                    <span className="Labels"><strong>Total quota:</strong> ${this.financeInfo.total_quota}</span><br/>
-                    <span className="Labels"><strong>Available quota:</strong> ${this.financeInfo.available_quota}</span><br/>
+                    <span className="Labels"><strong>Aportes:</strong> ${this.financeInfo.contributions}</span><br/>
+                    <span className="Labels"><strong>Saldo de aportes:</strong> ${this.financeInfo.balance_contributions}</span><br/>
+                    <span className="Labels"><strong>Cupo total:</strong> ${this.financeInfo.total_quota}</span><br/>
+                    <span className="Labels"><strong>Cupo disponible:</strong> ${this.financeInfo.available_quota}</span><br/>
                 </p>
             </Paper>
         );

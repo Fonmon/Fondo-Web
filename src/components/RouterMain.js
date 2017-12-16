@@ -1,20 +1,32 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Login from './Login';
 import Home from './Home';
+import Utils from '../utils/Utils';
 
-// The Main component renders one of the three provided
-// Routes (provided that one matches). Both the /roster
-// and /schedule routes will match any pathname that starts
-// with /roster or /schedule. The / route will only match
-// when the pathname is exactly the string "/"
+const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={(props) => (
+        Utils.isAuthenticated()
+        ? <Component {...props} />
+        : <Redirect to='/login' />
+    )} />
+);
+
+const NotValidRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={(props) => (
+        !Utils.isAuthenticated()
+        ? <Component {...props} />
+        : <Redirect to='/home' />
+    )} />
+);
+
 const RouterMain = () => (
     <main>
         <Switch>
-            <Route exact path='/' component={Login}/>
-            <Route exact path='/login' component={Login}/>
-            <Route exact path='/home' component={Home}/>
+            <NotValidRoute exact path='/' component={Login}/>
+            <NotValidRoute exact path='/login' component={Login}/>
+            <PrivateRoute exact path='/home' component={Home} />
         </Switch>
     </main>
 )
