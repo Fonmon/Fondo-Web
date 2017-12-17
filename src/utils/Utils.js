@@ -2,6 +2,8 @@ import axios from 'axios';
 
 export const TOKEN_KEY = "TOKEN_FONDO_KEY";
 export const HOST_APP = "http://localhost:8000/";
+export const ID_KEY = "USER_ID";
+export const ROLE_KEY = "USER_ROLE";
 
 class Utils{
 
@@ -15,17 +17,23 @@ class Utils{
     }
 
     static isTreasurer(){
-        //something
-        return false;
+        return localStorage.getItem(ROLE_KEY) === 2;
     }
-    
+
+    static isPresident(){
+        return localStorage.getItem(ROLE_KEY) === 1;
+    }
+
     static isAdmin(){
-        //something
-        return true;
+        return localStorage.getItem(ROLE_KEY) === 0;
+    }
+
+    static isAuthorized(){
+        return this.isAdmin() || this.isPresident() || this.isTreasurer();
     }
 
     static logout(){
-        localStorage.removeItem(TOKEN_KEY);
+        localStorage.clear();
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -50,6 +58,22 @@ class Utils{
 
     static removeUser(id){
         return axios.delete(`${HOST_APP}api/user/${id}`,{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        });
+    }
+
+    static createUser(obj){
+        return axios.post(`${HOST_APP}api/user/`,obj,{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        })
+    }
+
+    static getUser(id){
+        return axios.get(`${HOST_APP}api/user/${id}`,{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }

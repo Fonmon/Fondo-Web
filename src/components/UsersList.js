@@ -20,6 +20,7 @@ import Pagination from 'material-ui-pagination';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import CreateUserDialog from './CreateUserDialog';
 
 const ButtonsActions = (props) => {
     if(Utils.isAdmin())
@@ -46,11 +47,16 @@ class UsersList extends Component{
             errorMessage: '',
             users: [],
             removeOpen: false,
-            removeId: -1
+            removeId: -1,
+            createUserDialog: false
         }
     }
 
     componentWillMount = () => {
+        this.getUsers();
+    }
+
+    getUsers(){
         let scope = this;
         Utils.getUsers()
             .then(function(response){
@@ -83,12 +89,32 @@ class UsersList extends Component{
     }
 
     handleRemoveUser = () =>{
-        // remove user
-        this.handleClose();
+        let scope = this;
+        Utils.removeUser(this.state.removeId)
+            .then(function(response){
+                scope.showMessageError('Usuario eliminado');
+                scope.handleClose();
+                scope.getUsers();
+            }).catch(function(error){
+                if(!error.response){
+                    scope.showMessageError('Error de conexión, inténtalo más tarde.');
+                }else{
+                    scope.showMessageError(error.message);
+                }
+            });
     }
 
     handleClose = () => {
         this.setState({removeOpen: false});
+    }
+
+    handleCreateUserDialog = () =>{
+        this.setState({createUserDialog: true});
+    }
+
+    callbackUserCreated = () => {
+        this.setState({createUserDialog: false});
+        this.getUsers();
     }
     
     render(){
@@ -101,7 +127,7 @@ class UsersList extends Component{
             <FlatButton
                 label="Si"
                 primary={true}
-                onClick={this.handleClose}
+                onClick={this.handleRemoveUser}
             />,
         ];
         return (
@@ -113,6 +139,7 @@ class UsersList extends Component{
                             <RaisedButton label="Crear Usuario" 
                                 secondary={true} 
                                 style={{marginTop: '30px',width:'100%'}}
+                                onClick={this.handleCreateUserDialog}
                                 disabled={!Utils.isAdmin()} />
                             <Paper className="TableLoan" zDepth={5}>
                                 <Table fixedHeader={false} 
@@ -177,13 +204,16 @@ class UsersList extends Component{
                     onRequestClose={this.handleRequestClose}
                     />
                 <Dialog
-                    title="Advertencia"
+                    title="Confirmación"
                     actions={actions}
                     modal={false}
                     onRequestClose={this.handleClose}
                     open={this.state.removeOpen}>
                     ¿Seguro que desea eliminar este usuario?
                 </Dialog>
+                <CreateUserDialog 
+                    onUserCreated={this.callbackUserCreated}
+                    creationOpen={this.state.createUserDialog}/>
             </div>
         );
     }

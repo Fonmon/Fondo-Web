@@ -22,13 +22,21 @@ const NotValidRoute = ({ component: Component, ...rest }) => (
     )} />
 );
 
+const ManagementRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={(props) => (
+        Utils.isAuthenticated() && Utils.isAuthorized()
+        ? <Component {...props} />
+        : <Redirect to='/home' />
+    )} />
+);
+
 const RouterMain = () => (
     <main>
         <Switch>
             <NotValidRoute exact path='/' component={Login}/>
             <NotValidRoute exact path='/login' component={Login}/>
             <PrivateRoute exact path='/home' component={Home} />
-            <PrivateRoute exact path='/users' component={UsersList} />
+            <ManagementRoute exact path='/users' component={UsersList} />
         </Switch>
     </main>
 )

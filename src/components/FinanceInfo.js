@@ -7,13 +7,12 @@ class FinanceInfo extends Component {
     constructor(props){
         super(props);
         this.state = {
-            financeInfo : {
-                contributions: '0',
-                balance_contributions: '0',
-                total_quota: '0',
-                available_quota: '0'
-            }
+            financeInfo : props.financeInfo
         }
+    }
+
+    componentWillReceiveProps(nextValue){
+        this.setState(nextValue);
     }
 
     render(){

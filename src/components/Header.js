@@ -41,6 +41,7 @@ const SidebarMenus = () => {
                 <MenuItem>Mi Perfil</MenuItem>
                 <MenuItem href="/users">Usuarios</MenuItem>
                 <MenuItem>Solicitudes de créditos</MenuItem>
+                <MenuItem>Información del fondo</MenuItem>
             </div>
         );
     else
@@ -48,6 +49,7 @@ const SidebarMenus = () => {
             <div>
                 <MenuItem href="/home">Inicio</MenuItem>
                 <MenuItem>Mi Perfil</MenuItem>
+                <MenuItem>Información del fondo</MenuItem>
             </div>
         );
 }

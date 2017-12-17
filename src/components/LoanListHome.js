@@ -17,29 +17,29 @@ class LoanListHome extends Component{
 
     state = {
         selected: [1],
-      };
+    };
     
-      isSelected = (index) => {
+    isSelected = (index) => {
         return this.state.selected.indexOf(index) !== -1;
-      };
+    };
     
-      handleRowSelection = (selectedRows) => {
+    handleRowSelection = (selectedRows) => {
         this.setState({
-          selected: selectedRows,
+            selected: selectedRows,
         });
-      };
+    };
     
-
     render(){
         return (
             <Paper className="TableLoan" zDepth={5}>
                 <Table 
                     onRowSelection={this.handleRowSelection}
+                    fixedHeader={false} 
+                    style={{ tableLayout: 'auto' }}
                     selectable={false}>
                     <TableHeader
                         adjustForCheckbox={false}
-                        displaySelectAll={false}
-                        >
+                        displaySelectAll={false}>
                         <TableRow>
                             <TableHeaderColumn 
                                 colSpan="4"
