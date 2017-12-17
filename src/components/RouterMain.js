@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Login from './Login';
 import Home from './Home';
+import UsersList from './UsersList';
 import Utils from '../utils/Utils';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -27,6 +28,7 @@ const RouterMain = () => (
             <NotValidRoute exact path='/' component={Login}/>
             <NotValidRoute exact path='/login' component={Login}/>
             <PrivateRoute exact path='/home' component={Home} />
+            <PrivateRoute exact path='/users' component={UsersList} />
         </Switch>
     </main>
 )

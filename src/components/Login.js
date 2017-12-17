@@ -3,6 +3,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Utils, {TOKEN_KEY,HOST_APP} from '../utils/Utils';
+import Snackbar from 'material-ui/Snackbar';
 import '../styles/Login.css';
 
 class Login extends Component{
@@ -11,30 +12,46 @@ class Login extends Component{
         super();
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            openMessage: false,
+            errorMessage: ''
         }
     }
 
     submit(event){
+        let scope = this;
         Utils.authenticate(this.state.email,this.state.password)
             .then(function (response){
                 localStorage.setItem(TOKEN_KEY,response.data.token);
+                Utils.redirectTo('/home');
             }).catch(function(error){
-                if(error.response.status === 400){
-
+                if(!error.response){
+                    scope.showMessageError('Error de conexión, inténtalo más tarde.');
+                }else if(error.response.status === 400){
+                    scope.showMessageError('Email o contraseña incorrectos.');
                 }else{
-
+                    scope.showMessageError(error.message);
                 }
             });
     }
 
+    showMessageError(message){
+        this.setState({openMessage: true,errorMessage:message});
+    }
+
     forgotPassword(event){
-        window.location = HOST_APP+'password_reset';
+        Utils.redirectTo(HOST_APP+'password_reset');
     }
 
     handleKeyPress(event){
         if(event.key === 'Enter')
             this.submit();
+    }
+
+    handleRequestClose = () => {
+        this.setState({
+            openMessage: false
+        });
     }
 
     render(){
@@ -68,6 +85,12 @@ class Login extends Component{
                         label="¿Olvidaste tu contraseña?" 
                         secondary={true} 
                         onClick={(event) => this.forgotPassword(event)}
+                        />
+                    <Snackbar
+                        open={this.state.openMessage}
+                        message={this.state.errorMessage}
+                        autoHideDuration={4000}
+                        onRequestClose={this.handleRequestClose}
                         />
                 </Paper>
             </div>

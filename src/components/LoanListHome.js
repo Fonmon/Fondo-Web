@@ -33,7 +33,9 @@ class LoanListHome extends Component{
     render(){
         return (
             <Paper className="TableLoan" zDepth={5}>
-                <Table onRowSelection={this.handleRowSelection}>
+                <Table 
+                    onRowSelection={this.handleRowSelection}
+                    selectable={false}>
                     <TableHeader
                         adjustForCheckbox={false}
                         displaySelectAll={false}
@@ -60,7 +62,7 @@ class LoanListHome extends Component{
                             <TableRowColumn>1</TableRowColumn>
                             <TableRowColumn>John Smith</TableRowColumn>
                             <TableRowColumn>Employed</TableRowColumn>
-                            <TableRowColumn style={{textAlign: 'center'}}>
+                            <TableRowColumn>
                                 <IconButton>
                                     <ActionOpenInNew />
                                 </IconButton>
@@ -70,7 +72,7 @@ class LoanListHome extends Component{
                             <TableRowColumn>2</TableRowColumn>
                             <TableRowColumn>Randal White</TableRowColumn>
                             <TableRowColumn>Unemployed</TableRowColumn>
-                            <TableRowColumn style={{textAlign: 'center'}}>
+                            <TableRowColumn>
                                 <IconButton>
                                     <ActionOpenInNew />
                                 </IconButton>
@@ -80,7 +82,7 @@ class LoanListHome extends Component{
                             <TableRowColumn>3</TableRowColumn>
                             <TableRowColumn>Stephanie Sanders</TableRowColumn>
                             <TableRowColumn>Employed</TableRowColumn>
-                            <TableRowColumn style={{textAlign: 'center'}}>
+                            <TableRowColumn>
                                 <IconButton>
                                     <ActionOpenInNew />
                                 </IconButton>
@@ -90,7 +92,7 @@ class LoanListHome extends Component{
                             <TableRowColumn>4</TableRowColumn>
                             <TableRowColumn>Steve Brown</TableRowColumn>
                             <TableRowColumn>Employed</TableRowColumn>
-                            <TableRowColumn style={{textAlign: 'center'}}>
+                            <TableRowColumn>
                                 <IconButton>
                                     <ActionOpenInNew />
                                 </IconButton>

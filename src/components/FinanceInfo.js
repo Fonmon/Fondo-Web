@@ -6,11 +6,13 @@ class FinanceInfo extends Component {
 
     constructor(props){
         super(props);
-        this.financeInfo = {
-            contributions: '0',
-            balance_contributions: '0',
-            total_quota: '0',
-            available_quota: '0'
+        this.state = {
+            financeInfo : {
+                contributions: '0',
+                balance_contributions: '0',
+                total_quota: '0',
+                available_quota: '0'
+            }
         }
     }
 
@@ -19,10 +21,10 @@ class FinanceInfo extends Component {
             <Paper className="Info" zDepth={5}>
                 <h2>Información financiera</h2>
                 <p>
-                    <span className="Labels"><strong>Aportes:</strong> ${this.financeInfo.contributions}</span><br/>
-                    <span className="Labels"><strong>Saldo de aportes:</strong> ${this.financeInfo.balance_contributions}</span><br/>
-                    <span className="Labels"><strong>Cupo total:</strong> ${this.financeInfo.total_quota}</span><br/>
-                    <span className="Labels"><strong>Cupo disponible:</strong> ${this.financeInfo.available_quota}</span><br/>
+                    <span className="Labels"><strong>Aportes:</strong> ${this.state.financeInfo.contributions}</span><br/>
+                    <span className="Labels"><strong>Saldo de aportes:</strong> ${this.state.financeInfo.balance_contributions}</span><br/>
+                    <span className="Labels"><strong>Cupo total:</strong> ${this.state.financeInfo.total_quota}</span><br/>
+                    <span className="Labels"><strong>Cupo disponible:</strong> ${this.state.financeInfo.available_quota}</span><br/>
                 </p>
             </Paper>
         );

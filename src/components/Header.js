@@ -5,6 +5,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Badge from 'material-ui/Badge';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import Drawer from 'material-ui/Drawer';
+import Utils from '../utils/Utils';
 
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 
@@ -32,6 +33,25 @@ const RightElements = () => (
     </div>
 );
 
+const SidebarMenus = () => {
+    if(Utils.isTreasurer() || Utils.isAdmin())
+        return (
+            <div>
+                <MenuItem href="/home">Inicio</MenuItem>
+                <MenuItem>Mi Perfil</MenuItem>
+                <MenuItem href="/users">Usuarios</MenuItem>
+                <MenuItem>Solicitudes de créditos</MenuItem>
+            </div>
+        );
+    else
+        return (
+            <div>
+                <MenuItem href="/home">Inicio</MenuItem>
+                <MenuItem>Mi Perfil</MenuItem>
+            </div>
+        );
+}
+
 class Header extends Component{
 
     constructor(props){
@@ -54,7 +74,7 @@ class Header extends Component{
                     docked={false}
                     onRequestChange={(open) => this.setState({open})}
                     >
-                    <MenuItem>Menu Item 2</MenuItem>
+                    <SidebarMenus />
                 </Drawer>
             </div>
         );
