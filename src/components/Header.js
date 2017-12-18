@@ -6,8 +6,10 @@ import Badge from 'material-ui/Badge';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import Drawer from 'material-ui/Drawer';
 import Utils from '../utils/Utils';
-
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
+import RaisedButton from 'material-ui/RaisedButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+
 
 const Notifications = () => (
     <div>
@@ -29,6 +31,7 @@ const ContextMenu = () => (
 // <Notifications />
 const RightElements = () => (
     <div>
+        <RaisedButton label="Crear Solicitud" secondary={true} style={{top:1}}/>
         <ContextMenu />
     </div>
 );
@@ -49,7 +52,7 @@ const SidebarMenus = () => {
         return (
             <div>
                 <MenuItem href="/home">Inicio</MenuItem>
-                <MenuItem>Mi Perfil</MenuItem>
+                <MenuItem href={currentId}>Mi Perfil</MenuItem>
                 <MenuItem>Información del fondo</MenuItem>
             </div>
         );

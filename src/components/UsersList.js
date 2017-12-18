@@ -48,19 +48,23 @@ class UsersList extends Component{
             users: [],
             removeOpen: false,
             removeId: -1,
-            createUserDialog: false
+            createUserDialog: false,
+            currentPage: 1,
+            totalPages:1
         }
     }
 
-    componentWillMount = () => {
-        this.getUsers();
+    componentDidMount = () => {
+        this.getUsers(1);
     }
 
-    getUsers(){
+    getUsers(page){
         let scope = this;
-        Utils.getUsers()
+        this.setState({currentPage:page});
+        Utils.getUsers(page)
             .then(function(response){
-                scope.setState({users:response.data});
+                scope.setState({totalPages:response.data.num_pages});
+                scope.setState({users:response.data.list});
             }).catch(function(error){
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
@@ -187,10 +191,10 @@ class UsersList extends Component{
                                 </Table>
                                 <Divider />
                                 <center><Pagination
-                                    total = { 2 }
-                                    current = { 1 }
-                                    display = { 2 }
-                                    onChange = { number => this.setState({ number }) }
+                                    total = { this.state.totalPages }
+                                    current = { this.state.currentPage }
+                                    display = { 10 }
+                                    onChange = { number => this.getUsers(number) }
                                     />
                                 </center>  
                             </Paper>

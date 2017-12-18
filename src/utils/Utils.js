@@ -40,6 +40,20 @@ class Utils{
         localStorage.clear();
     }
 
+    static parseNumberMoney(value){
+        let valueArray = String(value).split('');
+        let newValue = [];
+        let j = 0;
+        for(let i = valueArray.length-1;i>=0;i--,j++){
+            if(j === 3){
+                newValue.unshift('.');
+                j=0;
+            }
+            newValue.unshift(valueArray[i]);
+        }
+        return newValue;
+    }
+
     ///////////////////////////////////////////////////////////////////////
     // CALLS TO API
     ///////////////////////////////////////////////////////////////////////
@@ -52,8 +66,8 @@ class Utils{
         });
     }
 
-    static getUsers(){
-        return axios.get(`${HOST_APP}api/user/`,{
+    static getUsers(page){
+        return axios.get(`${HOST_APP}api/user?page=${page}`,{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }

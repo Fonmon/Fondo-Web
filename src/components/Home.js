@@ -24,7 +24,7 @@ class Home extends Component {
         }
     }
 
-    componentWillMount = () => {
+    componentDidMount = () => {
         let scope = this;
         Utils.getUser(-1)
             .then(function(response){

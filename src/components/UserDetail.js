@@ -31,7 +31,7 @@ class UserDetail extends Component{
         }
     }
 
-    componentWillMount = () =>{
+    componentDidMount = () =>{
         this.getUser();
     }
 
@@ -43,7 +43,6 @@ class UserDetail extends Component{
             .then(function(response){
                 scope.setState({user:response.data});
             }).catch(function(error){
-                console.log(error);
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else if(error.response.status === 404){
@@ -68,12 +67,24 @@ class UserDetail extends Component{
 
     handleUpdate(){
         let user = this.state.user;
-        console.log(user);
+        let scope = this;
         if(user.email === '' || user.identification === 0 || user.first_name === ''
             || user.last_name === '')
             this.showMessageError('Debe completar los campos faltantes.');
         else{
-            // call api
+            Utils.updateUser(this.state.id,user)
+                .then(function(response){
+                    scope.showMessageError('Cambios guardados');
+                }).catch(function(error){
+                    if(!error.response){
+                        scope.showMessageError('Error de conexión, inténtalo más tarde.');
+                    }else if(error.response.status === 404){
+                        window.location = '/notfound';
+                    }else if(error.response.status === 409){
+                        scope.showMessageError('Email/Documento de identidad ya existe.');
+                    }else
+                        scope.showMessageError(error.message);
+                })
         }
     }
 
@@ -92,7 +103,7 @@ class UserDetail extends Component{
                                 secondary={true} 
                                 style={{marginTop: '30px',width:'100%'}}
                                 onClick={this.handleUpdate.bind(this)}
-                                disabled={!this.allowToEditPersonal() || !this.allowToEditFinance()} />
+                                disabled={!this.allowToEditPersonal() && !this.allowToEditFinance()} />
                         </Col>
                     </Row>
                     <Row>
@@ -137,6 +148,7 @@ class UserDetail extends Component{
                                     value={this.state.user.role}
                                     style={{width:'100%'}}
                                     onChange={(event,index,newValue) => this.setStateCustom('role',newValue)}
+                                    disabled={!Utils.isAdmin()}
                                     >
                                     <MenuItem value={3} primaryText="Miembro" />
                                     <MenuItem value={2} primaryText="Tesorero" />
