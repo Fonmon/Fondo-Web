@@ -81,7 +81,7 @@ class UsersList extends Component{
     }
 
     handleEditUser = (id) => {
-        console.log(id);
+        window.location = `/user/${id}`;
     }
     
     handleDialogRemoveUser = (id) => {

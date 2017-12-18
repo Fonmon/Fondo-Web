@@ -17,19 +17,23 @@ class Utils{
     }
 
     static isTreasurer(){
-        return localStorage.getItem(ROLE_KEY) === 2;
+        return localStorage.getItem(ROLE_KEY) === '2';
     }
 
     static isPresident(){
-        return localStorage.getItem(ROLE_KEY) === 1;
+        return localStorage.getItem(ROLE_KEY) === '1';
     }
 
     static isAdmin(){
-        return localStorage.getItem(ROLE_KEY) === 0;
+        return localStorage.getItem(ROLE_KEY) === '0';
     }
 
     static isAuthorized(){
         return this.isAdmin() || this.isPresident() || this.isTreasurer();
+    }
+
+    static currentId(){
+        return localStorage.getItem(ID_KEY);
     }
 
     static logout(){
@@ -74,6 +78,14 @@ class Utils{
 
     static getUser(id){
         return axios.get(`${HOST_APP}api/user/${id}`,{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        });
+    }
+
+    static updateUser(id,obj){
+        return axios.patch(`${HOST_APP}api/user/${id}`,obj,{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }

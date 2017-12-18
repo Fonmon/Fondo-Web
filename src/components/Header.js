@@ -34,11 +34,12 @@ const RightElements = () => (
 );
 
 const SidebarMenus = () => {
-    if(Utils.isTreasurer() || Utils.isAdmin())
+    let currentId = `/user/${Utils.currentId()}`;
+    if(Utils.isAuthorized())
         return (
             <div>
                 <MenuItem href="/home">Inicio</MenuItem>
-                <MenuItem>Mi Perfil</MenuItem>
+                <MenuItem href={currentId} >Mi Perfil</MenuItem>
                 <MenuItem href="/users">Usuarios</MenuItem>
                 <MenuItem>Solicitudes de créditos</MenuItem>
                 <MenuItem>Información del fondo</MenuItem>
