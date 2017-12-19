@@ -6,6 +6,8 @@ import Home from './Home';
 import UsersList from './UsersList';
 import UserDetail from './UserDetail';
 import NotFound from './NotFound';
+import RequestLoan from './RequestLoan';
+import LoanDetail from './LoanDetail';
 import Utils from '../utils/Utils';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -40,6 +42,8 @@ const RouterMain = () => (
             <NotValidRoute exact path='/login' component={Login}/>
             <PrivateRoute exact path='/home' component={Home} />
             <PrivateRoute exact path='/user/:id' component={UserDetail} />
+            <PrivateRoute exact path='/requestloan' component={RequestLoan} />
+            <PrivateRoute exact path='/loan/:id' component={LoanDetail} />
             <ManagementRoute exact path='/users' component={UsersList} />
         </Switch>
     </main>

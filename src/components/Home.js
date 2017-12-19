@@ -71,12 +71,14 @@ class Home extends Component {
                     autoHideDuration={4000}
                     onRequestClose={(event) => this.setState({openMessage: false})}
                     />
-                <FloatingActionButton secondary={true} 
+                <FloatingActionButton 
+                    secondary={true} 
                     style={{
                         right: 20,
                         bottom:20,
                         position:'absolute'
-                    }}>
+                    }}
+                    href="/requestloan">
                     <ContentAdd />
                 </FloatingActionButton>
             </div>

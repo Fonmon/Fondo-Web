@@ -5,6 +5,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
 import Utils from '../utils/Utils';
 
 class CreateUserDialog extends Component{
@@ -82,7 +83,7 @@ class CreateUserDialog extends Component{
                 primary={true}
                 onClick={this.handleClose}
             />,
-            <FlatButton
+            <RaisedButton
                 label="Crear"
                 primary={true}
                 onClick={this.handleCreateUser}

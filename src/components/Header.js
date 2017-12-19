@@ -64,13 +64,17 @@ class Header extends Component{
 
     handleToggle = () => this.setState({open: !this.state.open});
 
+    handleTitleClick = () => (window.location = "/home")
+
     render(){
         return (
             <div>
                 <AppBar
                     title="Fondo Montañez"
+                    titleStyle={{cursor:'pointer'}}
                     iconElementRight={<RightElements />}
                     onLeftIconButtonClick = {this.handleToggle}
+                    onTitleClick={this.handleTitleClick}
                     />
                 <Drawer 
                     open={this.state.open}

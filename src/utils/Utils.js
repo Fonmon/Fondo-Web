@@ -54,6 +54,10 @@ class Utils{
         return newValue;
     }
 
+    static formatDate(date){
+        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+    }
+
     ///////////////////////////////////////////////////////////////////////
     // CALLS TO API
     ///////////////////////////////////////////////////////////////////////
@@ -100,6 +104,22 @@ class Utils{
 
     static updateUser(id,obj){
         return axios.patch(`${HOST_APP}api/user/${id}`,obj,{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        });
+    }
+
+    static createLoan(obj){
+        return axios.post(`${HOST_APP}api/loan/`,obj,{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        });
+    }
+
+    static getLoan(id){
+        return axios.get(`${HOST_APP}api/loan/${id}`,{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }
