@@ -7,8 +7,6 @@ import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import Drawer from 'material-ui/Drawer';
 import Utils from '../utils/Utils';
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
-import RaisedButton from 'material-ui/RaisedButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 
 
 const Notifications = () => (
@@ -31,7 +29,6 @@ const ContextMenu = () => (
 // <Notifications />
 const RightElements = () => (
     <div>
-        <RaisedButton label="Crear Solicitud" secondary={true} style={{top:1}}/>
         <ContextMenu />
     </div>
 );

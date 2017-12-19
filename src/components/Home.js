@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Header from './Header';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Snackbar from 'material-ui/Snackbar';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import FinanceInfo from './FinanceInfo';
 import LoanListHome from './LoanListHome';
@@ -55,7 +57,7 @@ class Home extends Component {
                 <Header />
                 <Grid fluid>
                     <Row>
-                        <Col xs={4} >
+                        <Col xs={3} >
                             <FinanceInfo financeInfo={this.state.financeInfo}/>
                         </Col>
                         <Col xs={8} >
@@ -69,6 +71,14 @@ class Home extends Component {
                     autoHideDuration={4000}
                     onRequestClose={(event) => this.setState({openMessage: false})}
                     />
+                <FloatingActionButton secondary={true} 
+                    style={{
+                        right: 20,
+                        bottom:20,
+                        position:'absolute'
+                    }}>
+                    <ContentAdd />
+                </FloatingActionButton>
             </div>
         );
     }

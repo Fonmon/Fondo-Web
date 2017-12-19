@@ -19,12 +19,16 @@ class FinanceInfo extends Component {
     render(){
         return (
             <Paper className="Info" zDepth={5}>
-                <h2>Información financiera</h2>
+                <h2 style={{textAlign:'center'}}>Información financiera</h2>
                 <p>
-                    <span className="Labels"><strong>Aportes:</strong> ${Utils.parseNumberMoney(this.state.financeInfo.contributions)}</span><br/>
-                    <span className="Labels"><strong>Saldo de aportes:</strong> ${Utils.parseNumberMoney(this.state.financeInfo.balance_contributions)}</span><br/>
-                    <span className="Labels"><strong>Cupo total:</strong> ${Utils.parseNumberMoney(this.state.financeInfo.total_quota)}</span><br/>
-                    <span className="Labels"><strong>Cupo disponible:</strong> ${Utils.parseNumberMoney(this.state.financeInfo.available_quota)}</span><br/>
+                    <span className="Labels" ><strong>Aportes:</strong> <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.contributions)}</span><br/>
+                    <span className="Labels"><strong>Saldo de aportes:</strong> <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.balance_contributions)}</span><br/>
+                    <span className="Labels"><strong>Cupo total:</strong> <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.total_quota)}</span><br/>
+                    <span className="Labels"><strong>Cupo disponible:</strong> <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.available_quota)}</span><br/>
                 </p>
             </Paper>
         );
