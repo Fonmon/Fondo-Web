@@ -22,7 +22,6 @@ class RequestLoan extends Component{
             fee:0,
             comments: '',
             disbursement_date:null,
-
             value_error:'',
             timelimit_error:'',
             disbursement_date_error:''
@@ -63,7 +62,7 @@ class RequestLoan extends Component{
             Utils.createLoan(loan)
                 .then(function(response){
                     let id = response.data.id;
-                    scope.showMessageError('Solicitud creada y enviada.');
+                    window.location = `/loan/${id}`;
                 }).catch(function(error){
                     if(!error.response){
                         scope.showMessageError('Error de conexión, inténtalo más tarde.');

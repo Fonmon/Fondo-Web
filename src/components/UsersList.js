@@ -50,7 +50,7 @@ class UsersList extends Component{
             removeId: -1,
             createUserDialog: false,
             currentPage: 1,
-            totalPages:1
+            totalPages: 1
         }
     }
 
@@ -98,7 +98,7 @@ class UsersList extends Component{
             .then(function(response){
                 scope.showMessageError('Usuario eliminado');
                 scope.handleClose();
-                scope.getUsers();
+                scope.getUsers(1);
             }).catch(function(error){
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
@@ -118,7 +118,7 @@ class UsersList extends Component{
 
     callbackUserCreated = () => {
         this.setState({createUserDialog: false});
-        this.getUsers();
+        this.getUsers(1);
     }
     
     render(){
@@ -128,7 +128,7 @@ class UsersList extends Component{
                 primary={true}
                 onClick={this.handleClose}
             />,
-            <FlatButton
+            <RaisedButton
                 label="Si"
                 primary={true}
                 onClick={this.handleRemoveUser}
@@ -148,7 +148,6 @@ class UsersList extends Component{
                             <Paper className="TableLoan" zDepth={5}>
                                 <Table fixedHeader={false} 
                                     style={{ tableLayout: 'auto' }}
-                                    onRowSelection={this.handleRowSelection}
                                     selectable={false}>
                                     <TableHeader
                                         adjustForCheckbox={false}
@@ -174,18 +173,18 @@ class UsersList extends Component{
                                         displayRowCheckbox={false}
                                         >
                                         {this.state.users.map((user,i) => {
-                                        return (<TableRow key={i}>
-                                            <TableRowColumn>{user.id}</TableRowColumn>
-                                            <TableRowColumn>{user.full_name}</TableRowColumn>
-                                            <TableRowColumn>{user.email}</TableRowColumn>
-                                            <TableRowColumn>{user.role}</TableRowColumn>
-                                            <TableRowColumn >
-                                                <ButtonsActions 
-                                                    id={user.id} 
-                                                    onEdit={this.handleEditUser}
-                                                    onRemove={this.handleDialogRemoveUser} />
-                                            </TableRowColumn>
-                                        </TableRow>);
+                                            return (<TableRow key={i}>
+                                                <TableRowColumn>{user.id}</TableRowColumn>
+                                                <TableRowColumn>{user.full_name}</TableRowColumn>
+                                                <TableRowColumn>{user.email}</TableRowColumn>
+                                                <TableRowColumn>{user.role}</TableRowColumn>
+                                                <TableRowColumn >
+                                                    <ButtonsActions 
+                                                        id={user.id} 
+                                                        onEdit={this.handleEditUser}
+                                                        onRemove={this.handleDialogRemoveUser} />
+                                                </TableRowColumn>
+                                            </TableRow>);
                                         })}
                                     </TableBody>
                                 </Table>

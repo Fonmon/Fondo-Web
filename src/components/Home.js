@@ -6,7 +6,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import FinanceInfo from './FinanceInfo';
-import LoanListHome from './LoanListHome';
+import LoanListComponent from './LoanListComponent';
 import Utils,{ID_KEY,ROLE_KEY} from '../utils/Utils';
 
 class Home extends Component {
@@ -61,7 +61,8 @@ class Home extends Component {
                             <FinanceInfo financeInfo={this.state.financeInfo}/>
                         </Col>
                         <Col xs={8} >
-                            <LoanListHome />
+                            <LoanListComponent all={false} 
+                                stateColumn={false}/>
                         </Col>
                     </Row>
                 </Grid>
@@ -76,7 +77,7 @@ class Home extends Component {
                     style={{
                         right: 20,
                         bottom:20,
-                        position:'absolute'
+                        position:'fixed'
                     }}
                     href="/requestloan">
                     <ContentAdd />

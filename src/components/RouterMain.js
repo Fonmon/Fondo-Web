@@ -8,6 +8,7 @@ import UserDetail from './UserDetail';
 import NotFound from './NotFound';
 import RequestLoan from './RequestLoan';
 import LoanDetail from './LoanDetail';
+import LoansList from './LoansList';
 import Utils from '../utils/Utils';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -45,6 +46,7 @@ const RouterMain = () => (
             <PrivateRoute exact path='/requestloan' component={RequestLoan} />
             <PrivateRoute exact path='/loan/:id' component={LoanDetail} />
             <ManagementRoute exact path='/users' component={UsersList} />
+            <ManagementRoute exact path='/loans' component={LoansList} />
         </Switch>
     </main>
 )

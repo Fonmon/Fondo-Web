@@ -36,7 +36,7 @@ class Utils{
         return localStorage.getItem(ID_KEY);
     }
 
-    static logout(){
+    static clearStorage(){
         localStorage.clear();
     }
 
@@ -72,6 +72,14 @@ class Utils{
 
     static getUsers(page){
         return axios.get(`${HOST_APP}api/user?page=${page}`,{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        });
+    }
+
+    static getLoans(page,all_loans){
+        return axios.get(`${HOST_APP}api/loan?page=${page}&all_loans=${all_loans}`,{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }
@@ -120,6 +128,14 @@ class Utils{
 
     static getLoan(id){
         return axios.get(`${HOST_APP}api/loan/${id}`,{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        });
+    }
+
+    static logout(){
+        return axios.post(`${HOST_APP}api/logout/`,{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }
