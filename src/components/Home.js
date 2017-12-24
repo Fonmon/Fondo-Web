@@ -79,7 +79,7 @@ class Home extends Component {
                         bottom:20,
                         position:'fixed'
                     }}
-                    href="/requestloan">
+                    href="/request-loan">
                     <ContentAdd />
                 </FloatingActionButton>
             </div>

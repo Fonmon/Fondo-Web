@@ -30,7 +30,7 @@ class Login extends Component{
                 }else if(error.response.status === 400){
                     scope.showMessageError('Email o contraseña incorrectos.');
                 }else{
-                    scope.showMessageError(error.message);
+                    scope.showMessageError(error);
                 }
             });
     }

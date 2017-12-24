@@ -9,6 +9,7 @@ import NotFound from './NotFound';
 import RequestLoan from './RequestLoan';
 import LoanDetail from './LoanDetail';
 import LoansList from './LoansList';
+import ActivateAccount from './ActivateAccount';
 import Utils from '../utils/Utils';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -38,15 +39,17 @@ const ManagementRoute = ({ component: Component, ...rest }) => (
 const RouterMain = () => (
     <main>
         <Switch>
-            <Route exact path = '/notfound' component={NotFound} />
+            <Route exact path = '/error' component={NotFound} />
             <NotValidRoute exact path='/' component={Login}/>
             <NotValidRoute exact path='/login' component={Login}/>
+            <NotValidRoute exact path='/activate/:id/:key' component={ActivateAccount}/>
             <PrivateRoute exact path='/home' component={Home} />
             <PrivateRoute exact path='/user/:id' component={UserDetail} />
-            <PrivateRoute exact path='/requestloan' component={RequestLoan} />
+            <PrivateRoute exact path='/request-loan' component={RequestLoan} />
             <PrivateRoute exact path='/loan/:id' component={LoanDetail} />
             <ManagementRoute exact path='/users' component={UsersList} />
             <ManagementRoute exact path='/loans' component={LoansList} />
+            <Redirect to="/error" />
         </Switch>
     </main>
 )

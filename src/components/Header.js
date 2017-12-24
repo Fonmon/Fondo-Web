@@ -23,12 +23,14 @@ const RightElements = (props) => (
                 onRequestClose={props.handleRequestClose}
                 >
                 <Menu>
-                    <MenuItem primaryText={`${props.newRequests} Solicitudes pendientes`} />
+                    <MenuItem disabled={props.newRequests === 0}
+                        primaryText={`${props.newRequests} Solicitudes pendientes`} />
                 </Menu>
             </Popover>
         </IconButton>}
+        {Utils.isAuthenticated() &&
         <IconButton
-            onClick={props.handleSignOut}><ActionPowerSettingsNew /></IconButton>
+            onClick={props.handleSignOut}><ActionPowerSettingsNew /></IconButton>}
     </div>
 );
 
@@ -112,6 +114,7 @@ class Header extends Component{
                     }
                     onLeftIconButtonClick = {this.handleToggle}
                     onTitleClick={this.handleTitleClick}
+                    showMenuIconButton={Utils.isAuthenticated()}
                     />
                 <Drawer 
                     open={this.state.open}

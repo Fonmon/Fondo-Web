@@ -141,6 +141,10 @@ class Utils{
             }
         });
     }
+
+    static activateAccount(id,obj){
+        return axios.post(`${HOST_APP}api/user/activate/${id}`,obj);
+    }
 }
 
 export default Utils;

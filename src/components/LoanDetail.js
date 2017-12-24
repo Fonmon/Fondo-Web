@@ -45,7 +45,7 @@ class LoanDetail extends Component{
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else if(error.response.status === 404){
-                    window.location = '/notfound';
+                    window.location = '/error';
                 }else{
                     scope.showMessageError(error.message);
                 }

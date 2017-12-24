@@ -33,21 +33,24 @@ class RequestLoan extends Component{
         if(!this.state.disbursement_date){
             isError = true;
             this.setState({disbursement_date_error:'Campo requerido'});
-        }
+        }else
+            this.setState({disbursement_date_error:''});
         if(!this.state.timelimit ){
             isError = true;
             this.setState({timelimit_error:'Campo requerido'});
         }else if(this.state.timelimit < 0 || this.state.timelimit > 24){
             isError = true;
             this.setState({timelimit_error:'Valor debe ser entre 1 y 24'});
-        }
+        }else
+            this.setState({timelimit_error:''});
         if(!this.state.value){
             isError = true;
             this.setState({value_error:'Campo requerido'});
         }else if(this.state.value < 0){
             isError = true;
             this.setState({value_error:'Valor debe ser mayor a 0'});
-        }
+        }else
+            this.setState({value_error:''});
         if(!isError){
             let scope = this;
             this.setState({value_error:'',disbursement_date_error:'',timelimit_error:''});
