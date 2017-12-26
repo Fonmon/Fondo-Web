@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Utils, {HOST_APP} from '../utils/Utils';
 import Snackbar from 'material-ui/Snackbar';
+import banner from '../images/banner.png';
 import '../styles/Login.css';
 
 class ActivateAccount extends Component{
@@ -95,6 +96,7 @@ class ActivateAccount extends Component{
     render(){
         return (
             <div className="Login">
+                <img className="banner" src={banner} alt=""/>
                 <Paper className="LoginForm" zDepth={5}>
                     <h2>Activación de cuenta</h2>
                     <TextField hintText="Escribe tu documento de identidad"

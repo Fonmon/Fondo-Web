@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Utils, {TOKEN_KEY,HOST_APP} from '../utils/Utils';
 import Snackbar from 'material-ui/Snackbar';
+import banner from '../images/banner.png';
 import '../styles/Login.css';
 
 class Login extends Component{
@@ -57,6 +58,7 @@ class Login extends Component{
     render(){
         return (
             <div className="Login">
+                <img className="banner" src={banner} alt=""/>
                 <Paper className="LoginForm" zDepth={5}>
                     <h2>Iniciar Sesión</h2>
                     <TextField hintText="Ingresa tu email"
