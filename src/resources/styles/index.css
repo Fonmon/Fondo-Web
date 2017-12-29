@@ -11,3 +11,9 @@ body {
 img{
     width: 60%;
 }
+.dialogContent{
+    white-space: pre-line;    
+}
+.dialogImage{
+    padding-top:0 !important;
+}

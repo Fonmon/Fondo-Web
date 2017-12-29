@@ -10,6 +10,7 @@ import RequestLoan from './RequestLoan';
 import LoanDetail from './LoanDetail';
 import LoansList from './LoansList';
 import ActivateAccount from './ActivateAccount';
+import FondoInfo from './FondoInfo';
 import Utils from '../utils/Utils';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -47,6 +48,7 @@ const RouterMain = () => (
             <PrivateRoute exact path='/user/:id' component={UserDetail} />
             <PrivateRoute exact path='/request-loan' component={RequestLoan} />
             <PrivateRoute exact path='/loan/:id' component={LoanDetail} />
+            <PrivateRoute exact path='/info' component={FondoInfo} />
             <ManagementRoute exact path='/users' component={UsersList} />
             <ManagementRoute exact path='/loans' component={LoansList} />
             <Redirect to="/error" />

@@ -4,8 +4,8 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Utils, {TOKEN_KEY,HOST_APP} from '../utils/Utils';
 import Snackbar from 'material-ui/Snackbar';
-import banner from '../images/banner.png';
-import '../styles/Login.css';
+import banner from '../resources/images/banner.png';
+import '../resources/styles/Login.css';
 
 class Login extends Component{
 

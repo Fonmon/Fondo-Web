@@ -145,6 +145,14 @@ class Utils{
     static activateAccount(id,obj){
         return axios.post(`${HOST_APP}api/user/activate/${id}`,obj);
     }
+
+    static updateLoad(obj){
+        return axios.patch(`${HOST_APP}api/user/`,obj,{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        });
+    }
 }
 
 export default Utils;

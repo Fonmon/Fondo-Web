@@ -8,7 +8,7 @@ import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import Drawer from 'material-ui/Drawer';
 import Utils from '../utils/Utils';
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
-import logo from '../images/logo_256.png';
+import logo from '../resources/images/logo_256.png';
 
 const RightElements = (props) => (
     <div>
@@ -45,7 +45,7 @@ const SidebarMenus = () => {
                 <MenuItem href={currentId} >Mi Perfil</MenuItem>
                 <MenuItem href="/users">Usuarios</MenuItem>
                 <MenuItem href="/loans">Solicitudes de créditos</MenuItem>
-                <MenuItem>Información del fondo</MenuItem>
+                <MenuItem href="/info">Información del fondo</MenuItem>
             </div>
         );
     else
@@ -54,7 +54,7 @@ const SidebarMenus = () => {
                 <center><img style={{marginTop:'10px',width:'120px'}} src={logo} alt=""/></center>
                 <MenuItem href="/home">Inicio</MenuItem>
                 <MenuItem href={currentId}>Mi Perfil</MenuItem>
-                <MenuItem>Información del fondo</MenuItem>
+                <MenuItem href="/info">Información del fondo</MenuItem>
             </div>
         );
 }

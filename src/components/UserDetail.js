@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Utils from '../utils/Utils';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import '../styles/UserDetail.css';
+import '../resources/styles/UserDetail.css';
 
 class UserDetail extends Component{
     constructor(props){

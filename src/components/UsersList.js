@@ -116,6 +116,27 @@ class UsersList extends Component{
         this.setState({createUserDialog: true});
     }
 
+    handleUpdateLoad = (file) =>{
+        let scope = this;
+        if(!file.name.match(/.(txt)$/i)){
+            this.showMessageError("El archivo a subir debe ser .txt");
+            return;
+        }
+        let formData = new FormData();
+        formData.append('file',file);
+        Utils.updateLoad(formData)
+            .then(function(response){
+                scope.showMessageError('Actualización realizada.');
+                console.log(response.data);
+            }).catch(function(error){
+                if(!error.response){
+                    scope.showMessageError('Error de conexión, inténtalo más tarde.');
+                }else{
+                    scope.showMessageError(error.message);
+                }
+            });
+    }
+
     callbackUserCreated = () => {
         this.setState({createUserDialog: false});
         this.getUsers(1);
@@ -139,12 +160,27 @@ class UsersList extends Component{
                 <Header />
                 <Grid fluid>
                     <Row>
-                        <Col xs={12} >
+                        <Col xs={6} >
                             <RaisedButton label="Crear Usuario" 
                                 secondary={true} 
                                 style={{marginTop: '30px',width:'100%'}}
                                 onClick={this.handleCreateUserDialog}
                                 disabled={!Utils.isAdmin()} />
+                        </Col>
+                        <Col xs={6} >
+                            <RaisedButton label="Cargar información" 
+                                primary={true} 
+                                style={{marginTop:'30px',width:'100%'}}
+                                disabled={!Utils.isAuthorized()}
+                                containerElement='label'>
+                                <input type="file" 
+                                    onChange={e => this.handleUpdateLoad(e.target.files[0])}
+                                    style={{ display: 'none' }} />
+                            </RaisedButton>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12} >
                             <Paper className="TableLoan" zDepth={5}>
                                 <Table fixedHeader={false} 
                                     style={{ tableLayout: 'auto' }}

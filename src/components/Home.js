@@ -4,7 +4,6 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import Snackbar from 'material-ui/Snackbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-
 import FinanceInfo from './FinanceInfo';
 import LoanListComponent from './LoanListComponent';
 import Utils,{ID_KEY,ROLE_KEY} from '../utils/Utils';
