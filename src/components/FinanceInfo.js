@@ -29,6 +29,8 @@ class FinanceInfo extends Component {
                     &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.total_quota)}</span><br/>
                     <span className="Labels"><strong>Cupo disponible:</strong> <br />
                     &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.available_quota)}</span><br/>
+                    <span className="Labels"><strong>Actualizado:</strong> <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;{this.state.financeInfo.last_modified}</span><br/>
                 </p>
             </Paper>
         );

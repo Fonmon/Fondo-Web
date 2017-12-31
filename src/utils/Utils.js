@@ -38,6 +38,7 @@ class Utils{
 
     static clearStorage(){
         localStorage.clear();
+        window.location = '/';
     }
 
     static parseNumberMoney(value){
@@ -135,7 +136,7 @@ class Utils{
     }
 
     static logout(){
-        return axios.post(`${HOST_APP}api/logout/`,{
+        return axios.post(`${HOST_APP}api/logout/`,{},{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }

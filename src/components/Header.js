@@ -72,7 +72,7 @@ class Header extends Component{
 
     handleToggle = () => this.setState({open: !this.state.open});
 
-    handleTitleClick = () => (window.location = "/home")
+    handleTitleClick = () => (Utils.redirectTo("/home"))
 
     handleNotifications(event){
         event.preventDefault();
@@ -90,15 +90,12 @@ class Header extends Component{
     }
 
     handleSignOut(){
-        Utils.clearStorage();
-        window.location = "/";
-        // Utils.logout()
-        //     .then(function(response){
-        //         Utils.clearStorage();
-        //         window.location = "/";
-        //     }).catch(function(error){
-        //         console.log(error);
-        //     });
+        Utils.logout()
+            .then(function(response){
+                Utils.clearStorage();
+            }).catch(function(error){
+                console.log(error);
+            });
     }
 
     render(){

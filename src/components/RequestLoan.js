@@ -71,6 +71,8 @@ class RequestLoan extends Component{
                         scope.showMessageError('Error de conexión, inténtalo más tarde.');
                     }else if(error.response.status === 406){
                         scope.showMessageError(error.response.data.message);
+                    }else if(error.response.status === 401){
+                        Utils.clearStorage();
                     }else{
                         scope.showMessageError(error.message);
                     }

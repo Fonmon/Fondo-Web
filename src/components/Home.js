@@ -35,11 +35,14 @@ class Home extends Component {
                     contributions: response.data.contributions,
                     balance_contributions: response.data.balance_contributions,
                     total_quota: response.data.total_quota,
-                    available_quota: response.data.available_quota
+                    available_quota: response.data.available_quota,
+                    last_modified:response.data.last_modified
                 }});
             }).catch(function(error){
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
+                }else if(error.response.status === 401){
+                    Utils.clearStorage();
                 }else{
                     scope.showMessageError(error.message);
                 }

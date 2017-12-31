@@ -36,7 +36,13 @@ class LoanListComponent extends Component{
                 scope.setState({totalPages:response.data.num_pages});
                 scope.setState({loans:response.data.list})
             }).catch(function(error){
-                console.log(error);
+                if(!error.response){
+                    console.log(error);
+                }else if(error.response.status === 401){
+                    Utils.clearStorage();
+                }else{
+                    console.log(error.message);
+                }
             });
     }
 

@@ -26,7 +26,8 @@ class UserDetail extends Component{
                 contributions:'',
                 balance_contributions:'',
                 total_quota:'',
-                available_quota:''
+                available_quota:'',
+                last_modified:''
             }
         }
     }
@@ -46,7 +47,9 @@ class UserDetail extends Component{
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else if(error.response.status === 404){
-                    window.location = '/error';
+                    Utils.redirectTo('/error');
+                }else if(error.response.status === 401){
+                    Utils.clearStorage();
                 }else{
                     scope.showMessageError(error.message);
                 }
@@ -79,9 +82,11 @@ class UserDetail extends Component{
                     if(!error.response){
                         scope.showMessageError('Error de conexión, inténtalo más tarde.');
                     }else if(error.response.status === 404){
-                        window.location = '/notfound';
+                        Utils.redirectTo('/error');
                     }else if(error.response.status === 409){
                         scope.showMessageError('Email/Documento de identidad ya existe.');
+                    }else if(error.response.status === 401){
+                        Utils.clearStorage();
                     }else
                         scope.showMessageError(error.message);
                 })
@@ -191,6 +196,11 @@ class UserDetail extends Component{
                                     type='number'
                                     disabled={!this.allowToEditFinance()}
                                     onChange = {(event,newValue) => this.setStateCustom('available_quota',newValue)}
+                                    />
+                                <TextField floatingLabelText="Actualizado"
+                                    value={this.state.user.last_modified}
+                                    style={{width:'100%'}}
+                                    disabled={true}
                                     />
                             </Paper>
                         </Col>

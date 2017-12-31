@@ -69,6 +69,8 @@ class CreateUserDialog extends Component{
                         scope.showMessageError('Error de conexión, inténtalo más tarde.');
                     }else if(error.response.status === 409){
                         scope.showMessageError('Email/Documento de identidad ya existe.');
+                    }else if(error.response.status === 401){
+                        Utils.clearStorage();
                     }else{
                         scope.showMessageError(error.message);
                     }
