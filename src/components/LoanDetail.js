@@ -88,7 +88,7 @@ class LoanDetail extends Component{
                                                 <span className="Labels"><strong>ID:</strong> {this.state.loan.id}</span><br/>
                                                 <span className="Labels"><strong>Nombre:</strong> {this.state.loan.user_full_name}</span><br/>
                                                 <span className="Labels"><strong>Fecha creación:</strong> {this.state.loan.created_at}</span><br/>
-                                                <span className="Labels"><strong>Valor a solicitar:</strong> ${Utils.parseNumberMoney(this.state.loan.value)}</span><br/>
+                                                <span className="Labels"><strong>Valor solicitado:</strong> ${Utils.parseNumberMoney(this.state.loan.value)}</span><br/>
                                                 <span className="Labels"><strong>Plazo:</strong> {this.state.loan.timelimit} Meses</span><br/>
                                                 <span className="Labels"><strong>Cuota:</strong> {this.getFeeType(this.state.loan.fee)}</span><br/>
                                                 <span className="Labels"><strong>Fecha de desembolso:</strong> {this.state.loan.disbursement_date}</span><br/>

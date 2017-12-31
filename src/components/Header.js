@@ -13,7 +13,7 @@ import logo from '../resources/images/logo_256.png';
 const RightElements = (props) => (
     <div>
         {Utils.isAuthorized() &&
-        <IconButton
+        <IconButton iconStyle={{fill:'white'}}
             onClick={props.handleNotifications}>
             <NotificationsIcon />
             <Popover
@@ -30,7 +30,7 @@ const RightElements = (props) => (
             </Popover>
         </IconButton>}
         {Utils.isAuthenticated() &&
-        <IconButton
+        <IconButton iconStyle={{fill:'white'}}
             onClick={props.handleSignOut}><ActionPowerSettingsNew /></IconButton>}
     </div>
 );
