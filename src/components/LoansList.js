@@ -13,7 +13,7 @@ class LoansList extends Component {
                     <Row>
                         <Col xs={12} >
                             <LoanListComponent all={true} 
-                                stateColumn={true}/>
+                                applicantColumn={true}/>
                         </Col>
                     </Row>
                 </Grid>

@@ -127,6 +127,16 @@ class Utils{
         });
     }
 
+    static updateLoan(id,state){
+        return axios.patch(`${HOST_APP}api/loan/${id}`,{
+                'state':state
+            },{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        });
+    }
+
     static getLoan(id){
         return axios.get(`${HOST_APP}api/loan/${id}`,{
             headers: {

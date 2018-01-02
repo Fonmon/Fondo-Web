@@ -21,6 +21,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import CreateUserDialog from './CreateUserDialog';
+import LoadingMask from './LoadingMask';
 
 const ButtonsActions = (props) => {
     if(Utils.isAdmin())
@@ -50,7 +51,8 @@ class UsersList extends Component{
             removeId: -1,
             createUserDialog: false,
             currentPage: 1,
-            totalPages: 1
+            totalPages: 1,
+            loading:false
         }
     }
 
@@ -94,12 +96,15 @@ class UsersList extends Component{
 
     handleRemoveUser = () =>{
         let scope = this;
+        this.setState({loading:true});
         Utils.removeUser(this.state.removeId)
             .then(function(response){
+                scope.setState({loading:false});
                 scope.showMessageError('Usuario eliminado');
                 scope.handleClose();
                 scope.getUsers(1);
             }).catch(function(error){
+                scope.setState({loading:false});
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else if(error.response.status === 401){
@@ -124,13 +129,16 @@ class UsersList extends Component{
             this.showMessageError("El archivo a subir debe ser .txt");
             return;
         }
+        this.setState({loading:true});
         let formData = new FormData();
         formData.append('file',file);
         Utils.updateLoad(formData)
             .then(function(response){
+                scope.setState({loading:false});
                 scope.showMessageError('Actualización realizada.');
                 console.log(response.data);
             }).catch(function(error){
+                scope.setState({loading:false});
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else if(error.response.status === 401){
@@ -162,6 +170,7 @@ class UsersList extends Component{
         return (
             <div>
                 <Header />
+                <LoadingMask active={this.state.loading} />
                 <Grid fluid>
                     <Row>
                         <Col xs={6} >

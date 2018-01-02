@@ -7,6 +7,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Utils from '../utils/Utils';
+import LoadingMask from './LoadingMask';
 
 class CreateUserDialog extends Component{
 
@@ -20,7 +21,8 @@ class CreateUserDialog extends Component{
             role:3,
             creationOpen: false,
             openMessage: false,
-            errorMessage: ''
+            errorMessage: '',
+            loading:false
         }
     }
 
@@ -57,14 +59,17 @@ class CreateUserDialog extends Component{
                 last_name: this.state.last_name,
                 email: this.state.email
             }
+            this.setState({loading:true});
             Utils.createUser(user)
                 .then(function(response){
+                    scope.setState({loading:false});
                     scope.setState({
                         creationOpen: false
                     });
                     scope.showMessageError('Usuario creado.');
                     scope.props.onUserCreated()
                 }).catch(function(error){
+                    scope.setState({loading:false});
                     if(!error.response){
                         scope.showMessageError('Error de conexión, inténtalo más tarde.');
                     }else if(error.response.status === 409){
@@ -94,6 +99,7 @@ class CreateUserDialog extends Component{
 
         return (
             <div>
+                <LoadingMask active={this.state.loading} />
                 <Dialog
                     title="Formulario creación de usuario"
                     actions={actions}

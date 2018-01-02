@@ -64,7 +64,7 @@ class Home extends Component {
                         </Col>
                         <Col xs={8} >
                             <LoanListComponent all={false} 
-                                stateColumn={false}/>
+                                applicantColumn={false}/>
                         </Col>
                     </Row>
                 </Grid>

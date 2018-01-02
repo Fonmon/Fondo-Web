@@ -9,6 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import Utils from '../utils/Utils';
+import LoadingMask from './LoadingMask';
 
 class RequestLoan extends Component{
     constructor(){
@@ -24,7 +25,8 @@ class RequestLoan extends Component{
             disbursement_date:null,
             value_error:'',
             timelimit_error:'',
-            disbursement_date_error:''
+            disbursement_date_error:'',
+            loading:false
         }
     }
 
@@ -38,7 +40,7 @@ class RequestLoan extends Component{
         if(!this.state.timelimit ){
             isError = true;
             this.setState({timelimit_error:'Campo requerido'});
-        }else if(this.state.timelimit < 0 || this.state.timelimit > 24){
+        }else if(this.state.timelimit <= 0 || this.state.timelimit > 24){
             isError = true;
             this.setState({timelimit_error:'Valor debe ser entre 1 y 24'});
         }else
@@ -53,6 +55,7 @@ class RequestLoan extends Component{
             this.setState({value_error:''});
         if(!isError){
             let scope = this;
+            this.setState({loading:true});
             this.setState({value_error:'',disbursement_date_error:'',timelimit_error:''});
             let loan = {
                 value: Number(this.state.value),
@@ -64,9 +67,11 @@ class RequestLoan extends Component{
             }
             Utils.createLoan(loan)
                 .then(function(response){
+                    scope.setState({loading:false});
                     let id = response.data.id;
-                    window.location = `/loan/${id}`;
+                    Utils.redirectTo(`/loan/${id}`);
                 }).catch(function(error){
+                    scope.setState({loading:false});
                     if(!error.response){
                         scope.showMessageError('Error de conexión, inténtalo más tarde.');
                     }else if(error.response.status === 406){
@@ -88,6 +93,7 @@ class RequestLoan extends Component{
         return (
             <div>
                 <Header />
+                <LoadingMask active={this.state.loading} />
                 <Grid fluid>
                     <Row>
                         <Col xs={3} />

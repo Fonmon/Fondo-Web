@@ -6,6 +6,7 @@ import Paper from 'material-ui/Paper';
 import Utils from '../utils/Utils';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import LoadingMask from './LoadingMask';
 
 class LoanDetail extends Component{
     constructor(){
@@ -14,6 +15,7 @@ class LoanDetail extends Component{
             id:-1,
             openMessage:false,
             errorMessage:'',
+            loading: false,
             loan:{
                 id:-1,
                 value:'',
@@ -26,6 +28,14 @@ class LoanDetail extends Component{
                 state:0,
                 user_full_name:'',
                 rate:0
+            },
+            loanDetail:{
+                current_balance:0,
+                interest:0,
+                last_payment_date:'',
+                total_payment:0,
+                last_payment_value:0,
+                payday_limit:''
             }
         }
     }
@@ -40,7 +50,8 @@ class LoanDetail extends Component{
         let scope = this;
         Utils.getLoan(id)
             .then(function(response){
-                scope.setState({loan:response.data});
+                scope.setState({loan:response.data.loan});
+                scope.setState({loanDetail:response.data.loan_detail})
             }).catch(function(error){
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
@@ -59,7 +70,37 @@ class LoanDetail extends Component{
     }
 
     updateState(value){
-        console.log(value);
+        let scope = this;
+        if(this.state.loan.state === value)
+            return;
+        if(this.state.loan.state === 0 && value === 3){
+            this.showMessageError('No se puede actualizar de estado.');
+            return;
+        }
+        else if(this.state.loan.state === 1 && value !== 3){
+            this.showMessageError('No se puede actualizar de estado.');
+            return;
+        }else{
+            this.setState({loading:true});
+            Utils.updateLoan(this.state.loan.id,value)
+                .then(function(response){
+                    scope.setState({loading:false});
+                    scope.showMessageError('Cambio de estado exitoso');
+                    scope.setState({loanDetail:response.data});
+                    scope.setState({loan:{...scope.state.loan,state:value}});
+                }).catch(function(error){
+                    scope.setState({loading:false});
+                    if(!error.response){
+                        scope.showMessageError('Error de conexión, inténtalo más tarde.');
+                    }else if(error.response.status === 404){
+                        Utils.redirectTo('/error');
+                    }else if(error.response.status === 401){
+                        Utils.clearStorage();
+                    }else{
+                        scope.showMessageError(error.message);
+                    }
+                })
+        }
     }
 
     getPaymentType(value){
@@ -74,6 +115,7 @@ class LoanDetail extends Component{
         return (
             <div>
                 <Header />
+                <LoadingMask active={this.state.loading} />
                 <Grid fluid>
                     <Row>
                         <Col xs={12} >
@@ -95,6 +137,7 @@ class LoanDetail extends Component{
                                                 <span className="Labels"><strong>Cuota:</strong> {this.getFeeType(this.state.loan.fee)}</span><br/>
                                                 <span className="Labels"><strong>Fecha de desembolso:</strong> {this.state.loan.disbursement_date}</span><br/>
                                                 <span className="Labels"><strong>Abono en:</strong> {this.getPaymentType(this.state.loan.payment)}</span><br/>
+                                                <span className="Labels"><strong>Información adicional:</strong> {this.state.loan.comments}</span><br/>
                                             </p>
                                         </Col>
                                         <Col xs={6} >
@@ -103,28 +146,27 @@ class LoanDetail extends Component{
                                                 value={this.state.loan.state}
                                                 style={{width:'100%'}}
                                                 onChange={(event,index,newValue) => this.updateState(newValue)}
-                                                disabled={!(Utils.isAdmin() || Utils.isTreasurer())}
+                                                disabled={!(Utils.isAdmin() || Utils.isTreasurer()) || this.state.loan.state===3 ||  this.state.loan.state===2}
                                                 >
                                                 <MenuItem value={0} primaryText="Esperando aprobación" />
                                                 <MenuItem value={1} primaryText="Aprobada" />
                                                 <MenuItem value={2} primaryText="Denegada" />
                                                 <MenuItem value={3} primaryText="Finalizada" />
                                             </SelectField>
-                                            <span className="Labels"><strong>Información adicional:</strong> {this.state.loan.comments}</span><br/>
+                                            {this.state.loan.state === 1 && <div>
+                                                <span className="Labels"><strong>Saldo actual:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.current_balance)}</span><br/>
+                                                <span className="Labels"><strong>Intereses:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.interest)}</span><br/>
+                                                <span className="Labels"><strong>Fecha último pago:</strong> {this.state.loanDetail.last_payment_date}</span><br/>
+                                                <span className="Labels"><strong>Pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
+                                                <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br/>
+                                                <span className="Labels"><strong>Valor último pago:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.last_payment_value)}</span><br/>
+                                            </div>}
                                         </Col>
                                     </Row>
                                 </Grid>
                             </Paper>
                         </Col>
                     </Row>
-                    {this.state.loan.state === 1 && <Row>
-                        <Col xs={12} >
-                            <Paper className="UserInfo" zDepth={5}>
-                            
-                            </Paper>
-                        </Col>
-                    </Row>
-                    }
                 </Grid>
                 <Snackbar
                     open={this.state.openMessage}

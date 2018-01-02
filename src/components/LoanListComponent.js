@@ -72,7 +72,7 @@ class LoanListComponent extends Component{
                         displaySelectAll={false}>
                         <TableRow>
                             <TableHeaderColumn 
-                                colSpan={this.props.stateColumn?'6':'5'}
+                                colSpan={this.props.applicantColumn?'6':'5'}
                                 style={{textAlign: 'center'}}
                                 >
                                 Solicitudes de créditos
@@ -80,12 +80,12 @@ class LoanListComponent extends Component{
                         </TableRow>
                         <TableRow>
                             <TableHeaderColumn>ID</TableHeaderColumn>
-                            <TableHeaderColumn>Solicitante</TableHeaderColumn>
+                            {this.props.applicantColumn &&
+                                <TableHeaderColumn>Solicitante</TableHeaderColumn>
+                            }
                             <TableHeaderColumn>Valor</TableHeaderColumn>
                             <TableHeaderColumn>Fecha creación</TableHeaderColumn>
-                            {this.props.stateColumn && 
-                                <TableHeaderColumn>Estado</TableHeaderColumn>
-                            }
+                            <TableHeaderColumn>Estado</TableHeaderColumn>
                             <TableHeaderColumn>Acción</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
@@ -95,12 +95,12 @@ class LoanListComponent extends Component{
                         {this.state.loans.map((loan,i) => {
                             return (<TableRow key={i}>
                                 <TableRowColumn>{loan.id}</TableRowColumn>
-                                <TableRowColumn>{loan.user_full_name}</TableRowColumn>
+                                {this.props.applicantColumn &&
+                                    <TableRowColumn>{loan.user_full_name}</TableRowColumn>
+                                }
                                 <TableRowColumn>${Utils.parseNumberMoney(loan.value)}</TableRowColumn>
                                 <TableRowColumn>{loan.created_at}</TableRowColumn>
-                                {this.props.stateColumn &&
-                                    <TableRowColumn>{this.getStateType(loan.state)}</TableRowColumn>
-                                }
+                                <TableRowColumn>{this.getStateType(loan.state)}</TableRowColumn>
                                 <TableRowColumn >
                                     <IconButton onClick={this.onEdit.bind(this,loan.id)}><ActionOpenInNew /></IconButton>
                                 </TableRowColumn>

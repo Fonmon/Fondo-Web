@@ -8,6 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Utils from '../utils/Utils';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import LoadingMask from './LoadingMask';
 import '../resources/styles/UserDetail.css';
 
 class UserDetail extends Component{
@@ -17,6 +18,7 @@ class UserDetail extends Component{
             openMessage: false,
             errorMessage: '',
             id:0,
+            loading:false,
             user:{
                 identification:0,
                 first_name:'',
@@ -75,10 +77,13 @@ class UserDetail extends Component{
             || user.last_name === '')
             this.showMessageError('Debe completar los campos faltantes.');
         else{
+            this.setState({loading:true});
             Utils.updateUser(this.state.id,user)
                 .then(function(response){
+                    scope.setState({loading:false});
                     scope.showMessageError('Cambios guardados');
                 }).catch(function(error){
+                    scope.setState({loading:false});
                     if(!error.response){
                         scope.showMessageError('Error de conexión, inténtalo más tarde.');
                     }else if(error.response.status === 404){
@@ -100,6 +105,7 @@ class UserDetail extends Component{
     render(){
         return (
             <div>
+                <LoadingMask active={this.state.loading} />
                 <Header />
                 <Grid fluid>
                     <Row>
