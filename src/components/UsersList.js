@@ -87,7 +87,7 @@ class UsersList extends Component{
     }
 
     handleEditUser = (id) => {
-        window.location = `/user/${id}`;
+        Utils.redirectTo(`/user/${id}`);
     }
     
     handleDialogRemoveUser = (id) => {
@@ -125,28 +125,30 @@ class UsersList extends Component{
 
     handleUpdateLoad = (file) =>{
         let scope = this;
+        if(!file)
+            return;
         if(!file.name.match(/.(txt)$/i)){
             this.showMessageError("El archivo a subir debe ser .txt");
             return;
+        }else{
+            this.setState({loading:true});
+            let formData = new FormData();
+            formData.append('file',file);
+            Utils.updateUsersLoad(formData)
+                .then(function(response){
+                    scope.setState({loading:false});
+                    scope.showMessageError('Actualización realizada.');
+                }).catch(function(error){
+                    scope.setState({loading:false});
+                    if(!error.response){
+                        scope.showMessageError('Error de conexión, inténtalo más tarde.');
+                    }else if(error.response.status === 401){
+                        Utils.clearStorage();
+                    }else{
+                        scope.showMessageError(error.message);
+                    }
+                });
         }
-        this.setState({loading:true});
-        let formData = new FormData();
-        formData.append('file',file);
-        Utils.updateLoad(formData)
-            .then(function(response){
-                scope.setState({loading:false});
-                scope.showMessageError('Actualización realizada.');
-                console.log(response.data);
-            }).catch(function(error){
-                scope.setState({loading:false});
-                if(!error.response){
-                    scope.showMessageError('Error de conexión, inténtalo más tarde.');
-                }else if(error.response.status === 401){
-                    Utils.clearStorage();
-                }else{
-                    scope.showMessageError(error.message);
-                }
-            });
     }
 
     callbackUserCreated = () => {
@@ -265,7 +267,7 @@ class UsersList extends Component{
                 </Dialog>
                 <CreateUserDialog 
                     onUserCreated={this.callbackUserCreated}
-                    creationOpen={this.state.createUserDialog}/>
+                    creationOpen={this.state.createUserDialog} />
             </div>
         );
     }

@@ -99,7 +99,6 @@ class CreateUserDialog extends Component{
 
         return (
             <div>
-                <LoadingMask active={this.state.loading} />
                 <Dialog
                     title="Formulario creación de usuario"
                     actions={actions}
@@ -108,6 +107,7 @@ class CreateUserDialog extends Component{
                     onRequestClose={this.handleClose}
                     open={this.state.creationOpen}>
                         <div>
+                            <LoadingMask active={this.state.loading} />
                             <TextField hintText="Ingresa el Documento de identidad"
                                 floatingLabelText="Identificación"
                                 required={true}

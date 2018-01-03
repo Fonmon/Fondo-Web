@@ -157,8 +157,16 @@ class Utils{
         return axios.post(`${HOST_APP}api/user/activate/${id}`,obj);
     }
 
-    static updateLoad(obj){
+    static updateUsersLoad(obj){
         return axios.patch(`${HOST_APP}api/user/`,obj,{
+            headers: {
+                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+            }
+        });
+    }
+
+    static updateLoansLoad(obj){
+        return axios.patch(`${HOST_APP}api/loan/`,obj,{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }

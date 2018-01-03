@@ -27,6 +27,8 @@ class FinanceInfo extends Component {
                     &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.balance_contributions)}</span><br/>
                     <span className="Labels"><strong>Cupo total:</strong> <br />
                     &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.total_quota)}</span><br/>
+                    <span className="Labels"><strong>Cupo utilizado:</strong> <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.utilized_quota)}</span><br/>
                     <span className="Labels"><strong>Cupo disponible:</strong> <br />
                     &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(this.state.financeInfo.available_quota)}</span><br/>
                     <span className="Labels"><strong>Actualizado:</strong> <br />

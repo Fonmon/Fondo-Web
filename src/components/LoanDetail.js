@@ -30,11 +30,8 @@ class LoanDetail extends Component{
                 rate:0
             },
             loanDetail:{
-                current_balance:0,
-                interest:0,
-                last_payment_date:'',
                 total_payment:0,
-                last_payment_value:0,
+                minimum_payment:0,
                 payday_limit:''
             }
         }
@@ -129,7 +126,7 @@ class LoanDetail extends Component{
                                     <Row>
                                         <Col xs={6} >
                                             <p>
-                                                <span className="Labels"><strong>ID:</strong> {this.state.loan.id}</span><br/>
+                                                <span className="Labels"><strong>Número de crédito:</strong> {this.state.loan.id}</span><br/>
                                                 <span className="Labels"><strong>Nombre:</strong> {this.state.loan.user_full_name}</span><br/>
                                                 <span className="Labels"><strong>Fecha creación:</strong> {this.state.loan.created_at}</span><br/>
                                                 <span className="Labels"><strong>Valor solicitado:</strong> ${Utils.parseNumberMoney(this.state.loan.value)}</span><br/>
@@ -154,12 +151,9 @@ class LoanDetail extends Component{
                                                 <MenuItem value={3} primaryText="Finalizada" />
                                             </SelectField>
                                             {this.state.loan.state === 1 && <div>
-                                                <span className="Labels"><strong>Saldo actual:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.current_balance)}</span><br/>
-                                                <span className="Labels"><strong>Intereses:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.interest)}</span><br/>
-                                                <span className="Labels"><strong>Fecha último pago:</strong> {this.state.loanDetail.last_payment_date}</span><br/>
-                                                <span className="Labels"><strong>Pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
+                                                <span className="Labels"><strong>Valor pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
+                                                <span className="Labels"><strong>Valor pago mínimo:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.minimum_payment)}</span><br/>
                                                 <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br/>
-                                                <span className="Labels"><strong>Valor último pago:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.last_payment_value)}</span><br/>
                                             </div>}
                                         </Col>
                                     </Row>

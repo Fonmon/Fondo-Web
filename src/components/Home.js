@@ -17,7 +17,8 @@ class Home extends Component {
                 contributions: '0',
                 balance_contributions: '0',
                 total_quota: '0',
-                available_quota: '0'
+                available_quota: '0',
+                utilized_quota: '0'
             },
             loans : [],
             openMessage: false,
@@ -36,7 +37,8 @@ class Home extends Component {
                     balance_contributions: response.data.balance_contributions,
                     total_quota: response.data.total_quota,
                     available_quota: response.data.available_quota,
-                    last_modified:response.data.last_modified
+                    last_modified:response.data.last_modified,
+                    utilized_quota:response.data.utilized_quota
                 }});
             }).catch(function(error){
                 if(!error.response){

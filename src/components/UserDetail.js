@@ -28,7 +28,7 @@ class UserDetail extends Component{
                 contributions:'',
                 balance_contributions:'',
                 total_quota:'',
-                available_quota:'',
+                utilized_quota:'',
                 last_modified:''
             }
         }
@@ -195,13 +195,13 @@ class UserDetail extends Component{
                                     disabled={!this.allowToEditFinance()}
                                     onChange = {(event,newValue) => this.setStateCustom('total_quota',newValue)}
                                     />
-                                <TextField floatingLabelText="Cupo disponible"
+                                <TextField floatingLabelText="Cupo utilizado"
                                     required={true}
-                                    value={this.state.user.available_quota}
+                                    value={this.state.user.utilized_quota}
                                     style={{width:'100%'}}
                                     type='number'
                                     disabled={!this.allowToEditFinance()}
-                                    onChange = {(event,newValue) => this.setStateCustom('available_quota',newValue)}
+                                    onChange = {(event,newValue) => this.setStateCustom('utilized_quota',newValue)}
                                     />
                                 <TextField floatingLabelText="Actualizado"
                                     value={this.state.user.last_modified}
