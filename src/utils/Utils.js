@@ -1,7 +1,7 @@
 import axios from 'axios';
+import {HOST_APP} from './Constants';
 
 export const TOKEN_KEY = "TOKEN_FONDO_KEY";
-export const HOST_APP = "http://localhost:8000/";
 export const ID_KEY = "USER_ID";
 export const ROLE_KEY = "USER_ROLE";
 
