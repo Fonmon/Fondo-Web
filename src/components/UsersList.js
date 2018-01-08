@@ -34,7 +34,7 @@ const ButtonsActions = (props) => {
     else
         return (
             <div>
-                <IconButton><ActionOpenInNew /></IconButton>
+                <IconButton onClick={props.onEdit.bind(this,props.id)}><ActionOpenInNew /></IconButton>
             </div>
         );
 }
