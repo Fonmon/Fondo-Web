@@ -132,6 +132,7 @@ class LoanDetail extends Component{
                                                 <span className="Labels"><strong>Valor solicitado:</strong> ${Utils.parseNumberMoney(this.state.loan.value)}</span><br/>
                                                 <span className="Labels"><strong>Plazo:</strong> {this.state.loan.timelimit} Meses</span><br/>
                                                 <span className="Labels"><strong>Cuota:</strong> {this.getFeeType(this.state.loan.fee)}</span><br/>
+                                                <span className="Labels"><strong>Tasa:</strong> {this.state.loan.rate*100}%</span><br/>
                                                 <span className="Labels"><strong>Fecha de desembolso:</strong> {this.state.loan.disbursement_date}</span><br/>
                                                 <span className="Labels"><strong>Abono en:</strong> {this.getPaymentType(this.state.loan.payment)}</span><br/>
                                                 <span className="Labels"><strong>Información adicional:</strong> {this.state.loan.comments}</span><br/>
