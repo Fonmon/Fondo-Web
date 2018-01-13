@@ -199,6 +199,7 @@ class UsersList extends Component{
                             <Paper className="TableLoan" zDepth={5}>
                                 <Table fixedHeader={false} 
                                     style={{ tableLayout: 'auto' }}
+                                    bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
                                     selectable={false}>
                                     <TableHeader
                                         adjustForCheckbox={false}

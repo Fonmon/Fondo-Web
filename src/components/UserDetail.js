@@ -118,7 +118,7 @@ class UserDetail extends Component{
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={6} >
+                        <Col sm={6} >
                             <Paper className="UserInfo" zDepth={5}>
                                 <h2>Información personal</h2>
                                 <TextField hintText="Ingresa el Documento de identidad"
@@ -168,7 +168,7 @@ class UserDetail extends Component{
                                 </SelectField>
                             </Paper>
                         </Col>
-                        <Col xs={6} >
+                        <Col sm={6} >
                             <Paper className="UserInfo" zDepth={5}>
                                 <h2>Información financiera</h2>
                                 <TextField floatingLabelText="Aportes"

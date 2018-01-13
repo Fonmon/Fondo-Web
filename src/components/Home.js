@@ -61,10 +61,10 @@ class Home extends Component {
                 <Header />
                 <Grid fluid>
                     <Row>
-                        <Col xs={3} >
+                        <Col sm={3}>
                             <FinanceInfo financeInfo={this.state.financeInfo}/>
                         </Col>
-                        <Col xs={8} >
+                        <Col xs={8}>
                             <LoanListComponent all={false} 
                                 applicantColumn={false}/>
                         </Col>

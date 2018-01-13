@@ -124,7 +124,7 @@ class LoanDetail extends Component{
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col xs={6} >
+                                        <Col sm={6} >
                                             <p>
                                                 <span className="Labels"><strong>Número de crédito:</strong> {this.state.loan.id}</span><br/>
                                                 <span className="Labels"><strong>Nombre:</strong> {this.state.loan.user_full_name}</span><br/>
@@ -138,7 +138,7 @@ class LoanDetail extends Component{
                                                 <span className="Labels"><strong>Información adicional:</strong> {this.state.loan.comments}</span><br/>
                                             </p>
                                         </Col>
-                                        <Col xs={6} >
+                                        <Col sm={6} >
                                             <SelectField
                                                 floatingLabelText="Estado solicitud"
                                                 value={this.state.loan.state}
