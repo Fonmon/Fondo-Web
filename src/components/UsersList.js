@@ -175,14 +175,14 @@ class UsersList extends Component{
                 <LoadingMask active={this.state.loading} />
                 <Grid fluid>
                     <Row>
-                        <Col xs={6} >
+                        <Col lg={6} md={6} xs={12} >
                             <RaisedButton label="Crear Usuario" 
                                 secondary={true} 
                                 style={{marginTop: '30px',width:'100%'}}
                                 onClick={this.handleCreateUserDialog}
                                 disabled={!Utils.isAdmin()} />
                         </Col>
-                        <Col xs={6} >
+                        <Col lg={6} md={6} xs={12} >
                             <RaisedButton label="Cargar información" 
                                 primary={true} 
                                 style={{marginTop:'30px',width:'100%'}}
@@ -199,6 +199,7 @@ class UsersList extends Component{
                             <Paper className="TableLoan" zDepth={5}>
                                 <Table fixedHeader={false} 
                                     style={{ tableLayout: 'auto' }}
+                                    bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
                                     selectable={false}>
                                     <TableHeader
                                         adjustForCheckbox={false}
