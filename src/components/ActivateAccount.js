@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Utils from '../utils/Utils';
 import {HOST_APP} from '../utils/Constants';
 import Snackbar from 'material-ui/Snackbar';
+import LoadingMask from './LoadingMask';
 import banner from '../resources/images/banner.png';
 import '../resources/styles/Login.css';
 
@@ -20,7 +21,8 @@ class ActivateAccount extends Component{
             errorMessage: '',
             errorIdentification:'',
             errorPassword:'',
-            errorRepeatPsw:''
+            errorRepeatPsw:'',
+            loading: false
         }
     }
 
@@ -55,6 +57,7 @@ class ActivateAccount extends Component{
             this.setState({errorRepeatPsw:''});
         if(!error){
             this.setState({errorIdentification:'',errorPassword:'',errorRepeatPsw:''});
+            this.setState({loading:true});
             let obj = {
                 key:this.state.key,
                 identification:Number(this.state.identification),
@@ -62,8 +65,10 @@ class ActivateAccount extends Component{
             };
             Utils.activateAccount(Number(this.state.id),obj)
                 .then(function(response){
-                    window.location = "/";
+                    scope.setState({loading:false});
+                    Utils.redirectTo("/");
                 }).catch(function(error){
+                    scope.setState({loading:false});
                     if(!error.response){
                         scope.showMessageError('Error de conexión, inténtalo más tarde.');
                     }else if(error.response.status === 404){
@@ -97,6 +102,7 @@ class ActivateAccount extends Component{
     render(){
         return (
             <div className="Login">
+                <LoadingMask active={this.state.loading} />
                 <img className="banner" src={banner} alt=""/>
                 <Paper className="LoginForm" zDepth={5}>
                     <h2>Activación de cuenta</h2>

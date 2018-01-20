@@ -7,6 +7,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import FinanceInfo from './FinanceInfo';
 import LoanListComponent from './LoanListComponent';
 import Utils,{ID_KEY,ROLE_KEY} from '../utils/Utils';
+import LoadingMask from './LoadingMask';
 
 class Home extends Component {
 
@@ -22,12 +23,14 @@ class Home extends Component {
             },
             loans : [],
             openMessage: false,
-            errorMessage: ''
+            errorMessage: '',
+            loading: false
         }
     }
 
     componentDidMount = () => {
         let scope = this;
+        this.setState({loading:true});
         Utils.getUser(-1)
             .then(function(response){
                 localStorage.setItem(ID_KEY,response.data.id);
@@ -40,7 +43,9 @@ class Home extends Component {
                     last_modified:response.data.last_modified,
                     utilized_quota:response.data.utilized_quota
                 }});
+                scope.setState({loading:false});
             }).catch(function(error){
+                scope.setState({loading:false});
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else if(error.response.status === 401){
@@ -59,6 +64,7 @@ class Home extends Component {
         return (
             <div>
                 <Header />
+                <LoadingMask active={this.state.loading} />
                 <Grid fluid>
                     <Row>
                         <Col sm={3} >

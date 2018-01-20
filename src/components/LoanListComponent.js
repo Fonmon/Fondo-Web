@@ -12,6 +12,7 @@ import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import Pagination from 'material-ui-pagination';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
+import LoadingMask from './LoadingMask';
 import Utils from '../utils/Utils';
 
 class LoanListComponent extends Component{
@@ -21,7 +22,8 @@ class LoanListComponent extends Component{
         this.state = {
             loans:[],
             currentPage: 1,
-            totalPages: 1
+            totalPages: 1,
+            loading: false
         };
     }
     
@@ -31,11 +33,14 @@ class LoanListComponent extends Component{
 
     getLoanList(page){
         let scope = this;
+        this.setState({loading:true});
         Utils.getLoans(page,this.props.all)
             .then(function(response){
                 scope.setState({totalPages:response.data.num_pages});
-                scope.setState({loans:response.data.list})
+                scope.setState({loans:response.data.list});
+                scope.setState({loading:false});
             }).catch(function(error){
+                scope.setState({loading:false});
                 if(!error.response){
                     console.log(error);
                 }else if(error.response.status === 401){
@@ -47,7 +52,7 @@ class LoanListComponent extends Component{
     }
 
     onEdit(id){
-        window.location = `/loan/${id}`;
+        Utils.redirectTo(`/loan/${id}`);
     }
 
     getStateType(value){
@@ -64,6 +69,7 @@ class LoanListComponent extends Component{
     render(){
         return (
             <Paper className="TableLoan" zDepth={5}>
+                <LoadingMask active={this.state.loading} />
                 <Table fixedHeader={false}
                     style={{ tableLayout: 'auto' }}
                     bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
