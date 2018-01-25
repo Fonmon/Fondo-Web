@@ -67,7 +67,7 @@ class Home extends Component {
                 <LoadingMask active={this.state.loading} />
                 <Grid fluid>
                     <Row>
-                        <Col sm={3} >
+                        <Col xs={12} md={3} lg={3}>
                             <FinanceInfo financeInfo={this.state.financeInfo}/>
                         </Col>
                         <Col xs={12} md={8} lg={8}>

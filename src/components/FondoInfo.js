@@ -55,7 +55,7 @@ class FondoInfo extends Component{
                 <Header />
                 <Grid fluid>
                     <Row>
-                        <Col smOffset={3} sm={6} >
+                        <Col smOffset={3} xs={12} md={6} lg={6} >
                             <Paper className="UserInfo" zDepth={5}>
                                 <h2 style={{textAlign:'center'}}>Información del fondo</h2>
                                 <MenuItem onClick={this.handlerClick.bind(this,history)} primaryText="Historia del fondo" />
