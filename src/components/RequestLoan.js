@@ -123,7 +123,6 @@ class RequestLoan extends Component{
                                     <MenuItem value={1} primaryText="Única" />
                                 </SelectField>
                                 <DatePicker hintText="Fecha de desembolso"
-                                    // mode="landscape"
                                     minDate={new Date()}
                                     autoOk={true}
                                     style={{width:'100%'}}

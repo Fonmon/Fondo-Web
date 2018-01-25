@@ -42,10 +42,13 @@ class UserDetail extends Component{
         let id = this.props.match.params.id;
         this.setState({id:id});
         let scope = this;
+        this.setState({loading:true});
         Utils.getUser(id)
             .then(function(response){
                 scope.setState({user:response.data});
+                scope.setState({loading:false});
             }).catch(function(error){
+                scope.setState({loading:false});
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else if(error.response.status === 404){
@@ -105,8 +108,8 @@ class UserDetail extends Component{
     render(){
         return (
             <div>
-                <LoadingMask active={this.state.loading} />
                 <Header />
+                <LoadingMask active={this.state.loading} />
                 <Grid fluid>
                     <Row>
                         <Col xs={12} >

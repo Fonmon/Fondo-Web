@@ -63,11 +63,14 @@ class UsersList extends Component{
     getUsers(page){
         let scope = this;
         this.setState({currentPage:page});
+        this.setState({loading:true});
         Utils.getUsers(page)
             .then(function(response){
                 scope.setState({totalPages:response.data.num_pages});
                 scope.setState({users:response.data.list});
+                scope.setState({loading:false});
             }).catch(function(error){
+                scope.setState({loading:false});
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else{
