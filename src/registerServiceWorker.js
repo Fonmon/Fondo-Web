@@ -57,7 +57,8 @@ function registerValidSW(swUrl) {
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
               console.log('New content is available; please refresh.');
-              window.location.reload();
+              // Force reload from server, not from cache.
+              window.location.reload(true);
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
