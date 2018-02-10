@@ -1,7 +1,7 @@
 FROM nginx:1.13
 
 RUN apt-get update
-RUN apt-get install -my wget gnupg
+RUN apt-get install -my curl gnupg
 RUN curl -sL https://deb.nodesource.com/setup_9.x | bash
 RUN apt-get install -y nodejs && \
     apt-get install -y build-essential
@@ -10,8 +10,7 @@ WORKDIR /app
 ARG HOST_APP=https://localhost:8443
 
 COPY . /app
-RUN /bin/bash -c "ls -lha"
-RUN /bin/bash -c "echo "export const HOST_APP = \"${HOST_APP}\";" > src/utils/Constants.js";
+RUN echo "export const HOST_APP = \"${HOST_APP}\";" > src/utils/Constants.js
 
 RUN npm install
 RUN npm run build
