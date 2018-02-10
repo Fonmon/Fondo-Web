@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - 8
+install:
+  - pip install awscli
+cache:
+  directories:
+    - node_modules
+script:
+  - npm run build
+  - npm test
+deploy:
+  provider: script
+  script: sh $TRAVIS_BUILD_DIR/scripts/trigger-deploy.sh $TRAVIS_COMMIT i-032bb4826c0e1b2c2 $TRAVIS_BRANCH
+  skip_cleanup: true
+  on:
+    branch: master
+deploy:
+  provider: script
+  script: sh $TRAVIS_BUILD_DIR/scripts/trigger-deploy.sh $TRAVIS_COMMIT i-08237ed5d217d9b91 $TRAVIS_BRANCH
+  skip_cleanup: true
+  on:
+    branch: develop
+
