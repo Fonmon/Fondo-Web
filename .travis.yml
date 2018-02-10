@@ -1,13 +1,15 @@
 language: node_js
 node_js:
   - 8
+python:
+  - 3.6
 install:
-  - npm install -g aws-cli
+  - npm install
+  - pip install awscli
 cache:
   directories:
     - node_modules
 script:
-  - npm run build
   - npm test
 deploy:
   provider: script
