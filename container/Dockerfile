@@ -10,6 +10,7 @@ WORKDIR /app
 ARG HOST_APP=https://localhost:8443
 
 COPY . /app
+RUN /bin/bash -c "ls -lha"
 RUN /bin/bash -c "echo "export const HOST_APP = \"${HOST_APP}\";" > src/utils/Constants.js";
 
 RUN npm install
