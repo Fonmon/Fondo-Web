@@ -8,7 +8,7 @@ import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import Drawer from 'material-ui/Drawer';
 import Utils from '../utils/Utils';
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
-import logo from '../resources/images/logo_256.png';
+import ffm from '../resources/images/ffm_256.png';
 
 const RightElements = (props) => (
     <div>
@@ -40,7 +40,7 @@ const SidebarMenus = () => {
     if(Utils.isAuthorized())
         return (
             <div>
-                <center><img style={{marginTop:'10px',width:'120px'}} src={logo} alt=""/></center>
+                <center><img style={{marginTop:'30px',width:'120px'}} src={ffm} alt=""/></center>
                 <MenuItem href="/home">Inicio</MenuItem>
                 <MenuItem href={currentId} >Mi Perfil</MenuItem>
                 <MenuItem href="/users">Usuarios</MenuItem>
@@ -51,7 +51,7 @@ const SidebarMenus = () => {
     else
         return (
             <div>
-                <center><img style={{marginTop:'10px',width:'120px'}} src={logo} alt=""/></center>
+                <center><img style={{marginTop:'10px',width:'120px'}} src={ffm} alt=""/></center>
                 <MenuItem href="/home">Inicio</MenuItem>
                 <MenuItem href={currentId}>Mi Perfil</MenuItem>
                 <MenuItem href="/info">Información del fondo</MenuItem>
