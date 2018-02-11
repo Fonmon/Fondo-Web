@@ -22,7 +22,7 @@ class Login extends Component{
 
     submit(event){
         let scope = this;
-        Utils.authenticate(this.state.email,this.state.password)
+        Utils.authenticate(this.state.email.toLowerCase(),this.state.password)
             .then(function (response){
                 localStorage.setItem(TOKEN_KEY,response.data.token);
                 Utils.redirectTo('/home');

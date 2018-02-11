@@ -8,11 +8,11 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // Components
 import RouterMain from './components/RouterMain';
-//#009688
+
 const muiTheme = getMuiTheme({
     palette: {
-        primary1Color: '#216778',
-        accent1Color: '#0B2228'
+          primary1Color: '#800000',
+          accent1Color: '#c83737'
     },
 });
 
