@@ -65,6 +65,13 @@ class LoanListComponent extends Component{
         if(value === 3)
             return 'Finalizada';
     }
+
+    onRowSelection(rows){
+        if(rows.length){
+            let id = this.state.loans[rows[0]].id;
+            this.onEdit(id);
+        }
+    }    
     
     render(){
         return (
@@ -73,7 +80,8 @@ class LoanListComponent extends Component{
                 <Table fixedHeader={false}
                     style={{ tableLayout: 'auto' }}
                     bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
-                    selectable={false}>
+                    selectable={true}
+                    onRowSelection={(rows) => this.onRowSelection(rows)}>
                     <TableHeader
                         adjustForCheckbox={false}
                         displaySelectAll={false}>
