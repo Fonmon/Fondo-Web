@@ -7,10 +7,12 @@ RUN apt-get install -y nodejs && \
     apt-get install -y build-essential
 
 WORKDIR /app
-ARG HOST_APP=https://localhost:8443
+ARG HOST_APP
+
+ENV HOST_API_URL=${HOST_APP}
 
 COPY . /app
-RUN echo "export const HOST_APP = \"${HOST_APP}\";" > src/utils/Constants.js
+RUN echo "export const HOST_APP = \"https://${HOST_APP}/\";" > src/utils/Constants.js
 
 RUN npm install
 RUN npm run build
