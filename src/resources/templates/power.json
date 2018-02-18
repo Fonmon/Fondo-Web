@@ -1,4 +1,4 @@
 {
-    "body":"Para situaciones en el que un miembro del fondo no pueda asistir, puede asignar a alguien como su apoderado para la toma de decisiones dentro de las asambleas, para ello, el formato a llenar y el cual debe ser llevado por el apoderado es el siguiente.\n\n<a target=\"_blank\" href=\"/files/Poder Asamblea.pdf\">PODER ASAMBLEA</a>",
+    "body":"Para situaciones en el que un miembro del fondo no pueda asistir, puede asignar a alguien como su apoderado para la toma de decisiones dentro de las asambleas, para ello, el formato a llenar y el cual debe ser llevado por el apoderado es el siguiente.\n\n<a target=\"_blank\" href=\"{{HOST_APP}}static/Poder Asamblea.pdf\">PODER ASAMBLEA</a>",
     "title":"Poder asamblea"
 }
