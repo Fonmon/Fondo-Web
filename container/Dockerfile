@@ -18,8 +18,6 @@ RUN npm install
 RUN npm run build
 RUN /bin/bash -c "cp -r build/* /usr/share/nginx/html"
 
-RUN /bin/bash -c "ls -l"
-RUN /bin/bash -c "ls -l container"
 # nginx resolv env variables
 RUN envsubst '$HOST_API_URL' < container/nginx.conf > /etc/nginx/nginx.conf
 
