@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-cd /home/ubuntu/Fondo-DevOps/
+cd $HOME_FONMON
 
 docker run -d -p 80:80 -p 443:443 \
 	--name fondo_web \
