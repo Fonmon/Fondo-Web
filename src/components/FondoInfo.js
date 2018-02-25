@@ -4,6 +4,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
+import {HOST_APP} from '../utils/Constants';
 
 // templates
 import history from '../resources/templates/history.json';
@@ -28,9 +29,16 @@ class FondoInfo extends Component{
     handlerClick(file){
         this.setState({
             dialogTitle:file.title,
-            dialogOpen:true,
-            dialogContent:file.body
+            dialogOpen:true
         });
+
+        this.resolveJsonVariables(file.body,'HOST_APP',HOST_APP);
+    }
+
+    resolveJsonVariables(content,from,to){
+        let pattern = '{{'+from+'}}';
+        content = content.replace(new RegExp(pattern,'g'),to);
+        this.setState({dialogContent:content});
     }
 
     handlerClickImg(title,file){

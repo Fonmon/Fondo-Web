@@ -79,8 +79,8 @@ class Utils{
         });
     }
 
-    static getLoans(page,all_loans){
-        return axios.get(`${HOST_APP}api/loan?page=${page}&all_loans=${all_loans}`,{
+    static getLoans(page,all_loans,state){
+        return axios.get(`${HOST_APP}api/loan?page=${page}&all_loans=${all_loans}&state=${state}`,{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }

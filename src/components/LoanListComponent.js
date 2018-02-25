@@ -14,6 +14,9 @@ import Pagination from 'material-ui-pagination';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import LoadingMask from './LoadingMask';
 import Utils from '../utils/Utils';
+import MenuItem from 'material-ui/MenuItem';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 
 class LoanListComponent extends Component{
 
@@ -23,18 +26,20 @@ class LoanListComponent extends Component{
             loans:[],
             currentPage: 1,
             totalPages: 1,
-            loading: false
+            loading: false,
+            filterValue: 1
         };
     }
     
     componentDidMount = () => {
-        this.getLoanList(1);
+        this.getLoanList(1,this.state.filterValue);
     }
 
-    getLoanList(page){
+    getLoanList(page,filterValue){
         let scope = this;
         this.setState({loading:true});
-        Utils.getLoans(page,this.props.all)
+        this.setState({currentPage:page});
+        Utils.getLoans(page,this.props.all,filterValue)
             .then(function(response){
                 scope.setState({totalPages:response.data.num_pages});
                 scope.setState({loans:response.data.list});
@@ -71,12 +76,31 @@ class LoanListComponent extends Component{
             let id = this.state.loans[rows[0]].id;
             this.onEdit(id);
         }
-    }    
+    }
+
+    applyFilter = (event, index, value) => {
+        this.setState({filterValue:value});
+        this.getLoanList(1,value);
+    }
     
     render(){
         return (
             <Paper className="TableLoan" zDepth={5}>
                 <LoadingMask active={this.state.loading} />
+                <Toolbar style={{background: 'white'}}>
+                    <ToolbarGroup firstChild={true}>
+                        <ToolbarTitle text="Filtrar por:" 
+                            style={{marginLeft: '15px'}}/>
+                        <DropDownMenu value={this.state.filterValue}
+                            onChange={this.applyFilter}>
+                            <MenuItem value={4} primaryText="Todas" />
+                            <MenuItem value={0} primaryText="Esperando aprobación" />
+                            <MenuItem value={1} primaryText="Aprobada" />
+                            <MenuItem value={2} primaryText="Denegada" />
+                            <MenuItem value={3} primaryText="Finalizada" />
+                        </DropDownMenu>
+                    </ToolbarGroup>
+                </Toolbar>
                 <Table fixedHeader={false}
                     style={{ tableLayout: 'auto' }}
                     bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
@@ -85,6 +109,7 @@ class LoanListComponent extends Component{
                     <TableHeader
                         adjustForCheckbox={false}
                         displaySelectAll={false}>
+                        
                         <TableRow>
                             <TableHeaderColumn 
                                 colSpan={this.props.applicantColumn?'6':'5'}
@@ -128,7 +153,7 @@ class LoanListComponent extends Component{
                     total = { this.state.totalPages }
                     current = { this.state.currentPage }
                     display = { 10 }
-                    onChange = { number => this.getLoanList( number ) }
+                    onChange = { number => this.getLoanList( number,this.state.filterValue ) }
                     /></center>
             </Paper>
         );
