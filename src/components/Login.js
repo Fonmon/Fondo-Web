@@ -65,6 +65,7 @@ class Login extends Component{
                     <TextField hintText="Ingresa tu email"
                         className="LoginFields"
                         floatingLabelText="Email"
+                        type="email"
                         required={true}
                         onChange = {(event,newValue) => this.setState({email:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
