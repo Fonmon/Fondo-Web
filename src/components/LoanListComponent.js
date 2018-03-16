@@ -87,7 +87,7 @@ class LoanListComponent extends Component{
         return (
             <Paper className="TableLoan" zDepth={5}>
                 <LoadingMask active={this.state.loading} />
-                <Toolbar style={{background: 'white'}}>
+                <Toolbar style={{background: 'white', overflow: 'hidden'}}>
                     <ToolbarGroup firstChild={true}>
                         <ToolbarTitle text="Filtrar por:" 
                             style={{marginLeft: '15px'}}/>
@@ -109,7 +109,6 @@ class LoanListComponent extends Component{
                     <TableHeader
                         adjustForCheckbox={false}
                         displaySelectAll={false}>
-                        
                         <TableRow>
                             <TableHeaderColumn 
                                 colSpan={this.props.applicantColumn?'6':'5'}
