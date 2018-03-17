@@ -7,11 +7,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 
-import BasePage from '../base/BasePage';
 import ContainerComponent from '../base/ContainerComponent';
 import Utils from '../../utils/Utils';
 
-class RequestLoanPage extends BasePage{
+class RequestLoanPage extends ContainerComponent{
     constructor(){
         super();
         this.state = {

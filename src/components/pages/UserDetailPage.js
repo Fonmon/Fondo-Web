@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import Header from '../base/Header';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import React from 'react';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Utils from '../../utils/Utils';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import LoadingMask from '../base/LoadingMask';
+
+import ContainerComponent from '../base/ContainerComponent';
+import Utils from '../../utils/Utils';
 import '../../resources/styles/UserDetail.css';
 
-class UserDetail extends Component{
+class UserDetailPage extends ContainerComponent{
+
     constructor(props){
         super(props);
         this.state = {
@@ -61,10 +61,6 @@ class UserDetail extends Component{
             });
     }
 
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
-    }
-
     allowToEditPersonal(){
         return (Utils.isAdmin() || Utils.currentId() === `${this.state.id}`);
     }
@@ -108,122 +104,123 @@ class UserDetail extends Component{
     render(){
         return (
             <div>
-                <Header />
-                <LoadingMask active={this.state.loading} />
-                <Grid fluid>
-                    <Row>
-                        <Col xs={12} >
-                            <RaisedButton label="Guardar cambios" 
-                                secondary={true} 
-                                style={{marginTop: '30px',width:'100%'}}
-                                onClick={this.handleUpdate.bind(this)}
-                                disabled={!this.allowToEditPersonal() && !this.allowToEditFinance()} />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col sm={6} >
-                            <Paper className="UserInfo" zDepth={5}>
-                                <h2>Información personal</h2>
-                                <TextField hintText="Ingresa el Documento de identidad"
-                                    floatingLabelText="Identificación"
-                                    required={true}
-                                    value={this.state.user.identification}
-                                    style={{width:'100%'}}
-                                    type='number'
-                                    disabled={!this.allowToEditPersonal()}
-                                    onChange = {(event,newValue) => this.setStateCustom('identification',Number(newValue))}
-                                    />
-                                <TextField hintText="Ingresa tus nombres"
-                                    floatingLabelText="Nombres"
-                                    required={true}
-                                    value={this.state.user.first_name}
-                                    style={{width:'100%'}}
-                                    disabled={!this.allowToEditPersonal()}
-                                    onChange = {(event,newValue) => this.setStateCustom('first_name',newValue)}
-                                    />
-                                <TextField hintText="Ingresa tus apellidos"
-                                    floatingLabelText="Apellidos"
-                                    required={true}
-                                    value={this.state.user.last_name}
-                                    style={{width:'100%'}}
-                                    disabled={!this.allowToEditPersonal()}
-                                    onChange = {(event,newValue) => this.setStateCustom('last_name',newValue)}
-                                    />
-                                <TextField hintText="Ingresa tu email"
-                                    floatingLabelText="Email"
-                                    required={true}
-                                    value={this.state.user.email}
-                                    style={{width:'100%'}}
-                                    disabled={!this.allowToEditPersonal()}
-                                    onChange = {(event,newValue) => this.setStateCustom('email',newValue)}
-                                    />
-                                <SelectField
-                                    floatingLabelText="Rol"
-                                    value={this.state.user.role}
-                                    style={{width:'100%'}}
-                                    onChange={(event,index,newValue) => this.setStateCustom('role',newValue)}
-                                    disabled={!Utils.isAdmin()}
-                                    >
-                                    <MenuItem value={3} primaryText="Miembro" />
-                                    <MenuItem value={2} primaryText="Tesorero" />
-                                    <MenuItem value={1} primaryText="Presidente" />
-                                    <MenuItem value={0} primaryText="Administrador" />
-                                </SelectField>
-                            </Paper>
-                        </Col>
-                        <Col sm={6} >
-                            <Paper className="UserInfo" zDepth={5}>
-                                <h2>Información financiera</h2>
-                                <TextField floatingLabelText="Aportes"
-                                    required={true}
-                                    value={this.state.user.contributions}
-                                    style={{width:'100%'}}
-                                    type='number'
-                                    disabled={!this.allowToEditFinance()}
-                                    onChange = {(event,newValue) => this.setStateCustom('contributions',newValue)}
-                                    />
-                                <TextField floatingLabelText="Saldo de aportes"
-                                    required={true}
-                                    value={this.state.user.balance_contributions}
-                                    style={{width:'100%'}}
-                                    type='number'
-                                    disabled={!this.allowToEditFinance()}
-                                    onChange = {(event,newValue) => this.setStateCustom('balance_contributions',newValue)}
-                                    />
-                                <TextField floatingLabelText="Cupo total"
-                                    required={true}
-                                    value={this.state.user.total_quota}
-                                    style={{width:'100%'}}
-                                    type='number'
-                                    disabled={!this.allowToEditFinance()}
-                                    onChange = {(event,newValue) => this.setStateCustom('total_quota',newValue)}
-                                    />
-                                <TextField floatingLabelText="Cupo utilizado"
-                                    required={true}
-                                    value={this.state.user.utilized_quota}
-                                    style={{width:'100%'}}
-                                    type='number'
-                                    disabled={!this.allowToEditFinance()}
-                                    onChange = {(event,newValue) => this.setStateCustom('utilized_quota',newValue)}
-                                    />
-                                <TextField floatingLabelText="Actualizado"
-                                    value={this.state.user.last_modified}
-                                    style={{width:'100%'}}
-                                    disabled={true}
-                                    />
-                            </Paper>
-                        </Col>
-                    </Row>
-                </Grid>
+                <ContainerComponent showHeader={true}
+                    loadingMask={this.state.loading}
+                    orderRenderOneFullColGrid={0}
+                    renderOneFullColGrid={true}
+                    middle={
+                        <RaisedButton label="Guardar cambios" 
+                            secondary={true} 
+                            style={{marginTop: '30px',width:'100%'}}
+                            onClick={this.handleUpdate.bind(this)}
+                            disabled={!this.allowToEditPersonal() && !this.allowToEditFinance()} />
+                    }
+                    orderRenderTwoColGrid={1}
+                    renderTwoColGrid={true}
+                    leftWidth={6}
+                    left={
+                        <Paper className="UserInfo" zDepth={5}>
+                            <h2>Información personal</h2>
+                            <TextField hintText="Ingresa el Documento de identidad"
+                                floatingLabelText="Identificación"
+                                required={true}
+                                value={this.state.user.identification}
+                                style={{width:'100%'}}
+                                type='number'
+                                disabled={!this.allowToEditPersonal()}
+                                onChange = {(event,newValue) => this.setStateCustom('identification',Number(newValue))}
+                            />
+                            <TextField hintText="Ingresa tus nombres"
+                                floatingLabelText="Nombres"
+                                required={true}
+                                value={this.state.user.first_name}
+                                style={{width:'100%'}}
+                                disabled={!this.allowToEditPersonal()}
+                                onChange = {(event,newValue) => this.setStateCustom('first_name',newValue)}
+                            />
+                            <TextField hintText="Ingresa tus apellidos"
+                                floatingLabelText="Apellidos"
+                                required={true}
+                                value={this.state.user.last_name}
+                                style={{width:'100%'}}
+                                disabled={!this.allowToEditPersonal()}
+                                onChange = {(event,newValue) => this.setStateCustom('last_name',newValue)}
+                            />
+                            <TextField hintText="Ingresa tu email"
+                                floatingLabelText="Email"
+                                required={true}
+                                value={this.state.user.email}
+                                style={{width:'100%'}}
+                                disabled={!this.allowToEditPersonal()}
+                                onChange = {(event,newValue) => this.setStateCustom('email',newValue)}
+                            />
+                            <SelectField
+                                floatingLabelText="Rol"
+                                value={this.state.user.role}
+                                style={{width:'100%'}}
+                                onChange={(event,index,newValue) => this.setStateCustom('role',newValue)}
+                                disabled={!Utils.isAdmin()}
+                            >
+                                <MenuItem value={3} primaryText="Miembro" />
+                                <MenuItem value={2} primaryText="Tesorero" />
+                                <MenuItem value={1} primaryText="Presidente" />
+                                <MenuItem value={0} primaryText="Administrador" />
+                            </SelectField>
+                        </Paper>
+                    }
+                    rightWidth={6}
+                    right={
+                        <Paper className="UserInfo" zDepth={5}>
+                            <h2>Información financiera</h2>
+                            <TextField floatingLabelText="Aportes"
+                                required={true}
+                                value={this.state.user.contributions}
+                                style={{width:'100%'}}
+                                type='number'
+                                disabled={!this.allowToEditFinance()}
+                                onChange = {(event,newValue) => this.setStateCustom('contributions',newValue)}
+                            />
+                            <TextField floatingLabelText="Saldo de aportes"
+                                required={true}
+                                value={this.state.user.balance_contributions}
+                                style={{width:'100%'}}
+                                type='number'
+                                disabled={!this.allowToEditFinance()}
+                                onChange = {(event,newValue) => this.setStateCustom('balance_contributions',newValue)}
+                            />
+                            <TextField floatingLabelText="Cupo total"
+                                required={true}
+                                value={this.state.user.total_quota}
+                                style={{width:'100%'}}
+                                type='number'
+                                disabled={!this.allowToEditFinance()}
+                                onChange = {(event,newValue) => this.setStateCustom('total_quota',newValue)}
+                            />
+                            <TextField floatingLabelText="Cupo utilizado"
+                                required={true}
+                                value={this.state.user.utilized_quota}
+                                style={{width:'100%'}}
+                                type='number'
+                                disabled={!this.allowToEditFinance()}
+                                onChange = {(event,newValue) => this.setStateCustom('utilized_quota',newValue)}
+                            />
+                            <TextField floatingLabelText="Actualizado"
+                                value={this.state.user.last_modified}
+                                style={{width:'100%'}}
+                                disabled={true}
+                            />
+                        </Paper>
+                    }
+                />
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
                     onRequestClose={(event) => this.setState({openMessage: false})}
-                    />
+                />
             </div>
         );
     }
 }
 
-export default UserDetail;
+export default UserDetailPage;

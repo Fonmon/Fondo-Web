@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
-import Header from './Header';
-import LoadingMask from './LoadingMask';
+import HeaderComponent from './HeaderComponent';
+import LoadingMaskComponent from './LoadingMaskComponent';
 
 class ContainerComponent extends Component{
 
     constructor(props){
         super(props);
         this.state = {
-            loading: false,
+            loading: false
         }
     }
 
@@ -17,41 +17,67 @@ class ContainerComponent extends Component{
         this.setState({loading: props.loadingMask});
     }
 
+    showMessageError(message){
+        this.setState({openMessage: true,errorMessage:message});
+    }
+
+    handleKeyPress(event){
+        if(event.key === 'Enter')
+            this.submit();
+    }
+
     render(){
+        let componentsGrid = new Array(3);
+        let order = -1;
+        if(this.props.renderTwoColGrid){
+            order = !isNaN(this.props.orderRenderTwoColGrid) ? this.props.orderRenderTwoColGrid : 0;
+            componentsGrid[order] = (
+                <Row key={order}>
+                    <Col xs={12} md={this.props.leftWidth} lg={this.props.leftWidth}>
+                        {this.props.left}
+                    </Col>
+                    <Col xs={12} md={this.props.rightWidth} lg={this.props.rightWidth}>
+                        {this.props.right}
+                    </Col>
+                </Row>
+            )
+        }
+
+        if(this.props.renderOneMidColGrid){
+            order = !isNaN(this.props.orderRenderOneMidColGrid) ? this.props.orderRenderOneMidColGrid : 1;
+            componentsGrid[order] = (
+                <Row key={order}>
+                    <Col smOffset={3} sm={6} xs={12}>
+                        {this.props.middle}
+                    </Col>
+                </Row>
+            )
+        }
+
+        if(this.props.renderOneFullColGrid){
+            order = !isNaN(this.props.orderRenderOneFullColGrid) ? this.props.orderRenderOneFullColGrid : 2;
+            componentsGrid[order] = (
+                <Row key={order}>
+                    <Col xs={12} >
+                        {this.props.middle}
+                    </Col>
+                </Row>
+            )
+        }
+            
         return (
             <div>
                 {this.props.showHeader &&
-                    <Header />
+                    <HeaderComponent />
                 }
-                {(this.props.renderTwoColGrid || this.props.renderOneMidColGrid || this.props.renderOneFullColGrid) &&
+                {(order >= 0) &&
                     <Grid fluid>
-                    {this.props.renderTwoColGrid &&
-                        <Row>
-                            <Col xs={12} md={this.props.leftWidth} lg={this.props.leftWidth}>
-                                {this.props.left}
-                            </Col>
-                            <Col xs={12} md={this.props.rightWidth} lg={this.props.rightWidth}>
-                                {this.props.right}
-                            </Col>
-                        </Row>
-                    }
-                    {this.props.renderOneMidColGrid &&
-                        <Row>
-                            <Col smOffset={3} sm={6} >
-                                {this.props.middle}
-                            </Col>
-                        </Row>
-                    }
-                    {this.props.renderOneFullColGrid &&
-                        <Row>
-                            <Col xs={12} >
-                                {this.props.middle}
-                            </Col>
-                        </Row>
-                    }
+                    {componentsGrid.map((component,i) => {
+                        return (component)
+                    })}
                     </Grid>
                 }
-                <LoadingMask active={this.state.loading} />
+                <LoadingMaskComponent active={this.state.loading} />
             </div>
         )
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class LoadingMask extends Component {
+class LoadingMaskComponent extends Component {
 
     constructor(props){
         super(props);
@@ -24,4 +24,4 @@ class LoadingMask extends Component {
     }
 }
 
-export default LoadingMask;
+export default LoadingMaskComponent;

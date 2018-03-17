@@ -4,13 +4,13 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 
-import BasePage from '../base/BasePage';
+import ContainerComponent from '../base/ContainerComponent';
 import Utils, {TOKEN_KEY} from '../../utils/Utils';
 import {HOST_APP} from '../../utils/Constants';
 import banner from '../../resources/images/banner.png';
 import '../../resources/styles/Login.css';
 
-class LoginPage extends BasePage {
+class LoginPage extends ContainerComponent {
 
     constructor(){
         super();
@@ -19,16 +19,24 @@ class LoginPage extends BasePage {
             password: '',
             openMessage: false,
             errorMessage: '',
+            loading: false
         }
+    }
+
+    forgotPassword(event){
+        Utils.redirectTo(HOST_APP+'password_reset');
     }
 
     submit(event){
         let scope = this;
+        this.setState({loading:true});
         Utils.authenticate(this.state.email.toLowerCase(),this.state.password)
             .then(function (response){
+                scope.setState({loading:false});
                 localStorage.setItem(TOKEN_KEY,response.data.token);
                 Utils.redirectTo('/home');
             }).catch(function(error){
+                scope.setState({loading:false});
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else if(error.response.status === 400){
@@ -39,18 +47,10 @@ class LoginPage extends BasePage {
             });
     }
 
-    forgotPassword(event){
-        Utils.redirectTo(HOST_APP+'password_reset');
-    }
-
-    handleKeyPress(event){
-        if(event.key === 'Enter')
-            this.submit();
-    }
-
     render(){
         return (
             <div className="Login">
+                <ContainerComponent loadingMask={this.state.loading} />
                 <img className="banner" src={banner} alt=""/>
                 <Paper className="LoginForm" zDepth={5}>
                     <h2>Iniciar Sesión</h2>

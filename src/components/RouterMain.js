@@ -4,13 +4,15 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import UsersListPage from './pages/UsersListPage';
-import UserDetail from './pages/UserDetailPage';
-import NotFound from './pages/NotFoundPage';
+import UserDetailPage from './pages/UserDetailPage';
+import NotFoundPage from './pages/NotFoundPage';
 import RequestLoanPage from './pages/RequestLoanPage';
-import LoanDetail from './pages/LoanDetailPage';
-import LoansList from './pages/LoansListPage';
-import ActivateAccount from './pages/ActivateAccountPage';
-import FondoInfo from './pages/FondoInfoPage';
+import LoanDetailPage from './pages/LoanDetailPage';
+import LoansListPage from './pages/LoansListPage';
+import ActivateAccountPage from './pages/ActivateAccountPage';
+import FondoInfoPage from './pages/FondoInfoPage';
+import ToolsListPage from './pages/ToolsListPage';
+
 import Utils from '../utils/Utils';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -40,17 +42,18 @@ const ManagementRoute = ({ component: Component, ...rest }) => (
 const RouterMain = () => (
     <main>
         <Switch>
-            <Route exact path = '/error' component={NotFound} />
+            <Route exact path = '/error' component={NotFoundPage} />
             <NotValidRoute exact path='/' component={LoginPage}/>
             <NotValidRoute exact path='/login' component={LoginPage}/>
-            <NotValidRoute exact path='/activate/:id/:key' component={ActivateAccount}/>
+            <NotValidRoute exact path='/activate/:id/:key' component={ActivateAccountPage}/>
             <PrivateRoute exact path='/home' component={HomePage} />
-            <PrivateRoute exact path='/user/:id' component={UserDetail} />
+            <PrivateRoute exact path='/user/:id' component={UserDetailPage} />
             <PrivateRoute exact path='/request-loan' component={RequestLoanPage} />
-            <PrivateRoute exact path='/loan/:id' component={LoanDetail} />
-            <PrivateRoute exact path='/info' component={FondoInfo} />
+            <PrivateRoute exact path='/loan/:id' component={LoanDetailPage} />
+            <PrivateRoute exact path='/info' component={FondoInfoPage} />
+            <PrivateRoute exact path='/tools' component={ToolsListPage} />
             <ManagementRoute exact path='/users' component={UsersListPage} />
-            <ManagementRoute exact path='/loans' component={LoansList} />
+            <ManagementRoute exact path='/loans' component={LoansListPage} />
             <Redirect to="/error" />
         </Switch>
     </main>

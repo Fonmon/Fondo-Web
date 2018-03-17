@@ -18,10 +18,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-import BasePage from '../base/BasePage';
 import ContainerComponent from '../base/ContainerComponent';
 import Utils from '../../utils/Utils';
-import CreateUserDialog from '../CreateUserDialog';
+import CreateUserDialog from '../dialogs/CreateUserDialog';
 
 const ButtonsActions = (props) => {
     if(Utils.isAdmin())
@@ -39,7 +38,7 @@ const ButtonsActions = (props) => {
         );
 }
 
-class UsersListPage extends BasePage{
+class UsersListPage extends ContainerComponent{
 
     constructor(){
         super();

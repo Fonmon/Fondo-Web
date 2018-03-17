@@ -1,16 +1,18 @@
-import React, { Component } from 'react';
-import Header from '../base/Header';
+import React from 'react';
+
+import ContainerComponent from '../base/ContainerComponent';
 import '../../resources/styles/index.css';
 
-class NotFound extends Component{
+class NotFoundPage extends ContainerComponent{
+
     render(){
         return (
             <div>
-                <Header />
+                <ContainerComponent showHeader={true}/>
                 <center><img alt="" src={require("../../resources/images/not_found.png")} /></center>
             </div>
         );
     }
 }
 
-export default NotFound;
+export default NotFoundPage;

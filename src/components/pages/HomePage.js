@@ -3,13 +3,12 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Snackbar from 'material-ui/Snackbar';
 
-import BasePage from '../base/BasePage';
 import ContainerComponent from '../base/ContainerComponent';
-import FinanceInfo from '../base/FinanceInfo';
+import FinanceInfoComponent from '../base/FinanceInfoComponent';
 import LoanListComponent from '../base/LoanListComponent';
 import Utils,{ID_KEY,ROLE_KEY} from '../../utils/Utils';
 
-class HomePage extends BasePage {
+class HomePage extends ContainerComponent {
 
     constructor(){
         super();
@@ -64,7 +63,7 @@ class HomePage extends BasePage {
                     renderTwoColGrid={true}
                     leftWidth={3}
                     left={
-                        <FinanceInfo financeInfo={this.state.financeInfo}/>
+                        <FinanceInfoComponent financeInfo={this.state.financeInfo}/>
                     }
                     rightWidth={8}
                     right={

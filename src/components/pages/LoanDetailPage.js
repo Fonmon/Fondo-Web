@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import Header from '../base/Header';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import React from 'react';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
-import Utils from '../../utils/Utils';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import LoadingMask from '../base/LoadingMask';
 
-class LoanDetail extends Component{
+import ContainerComponent from '../base/ContainerComponent';
+import Utils from '../../utils/Utils';
+
+class LoanDetailPage extends ContainerComponent{
+    
     constructor(){
         super();
         this.state = {
@@ -65,10 +65,6 @@ class LoanDetail extends Component{
             });
     }
 
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
-    }
-
     updateState(value){
         let scope = this;
         if(this.state.loan.state === value)
@@ -114,58 +110,61 @@ class LoanDetail extends Component{
     render(){
         return (
             <div>
-                <Header />
-                <LoadingMask active={this.state.loading} />
-                <Grid fluid>
-                    <Row>
-                        <Col xs={12} >
-                            <Paper className="UserInfo" zDepth={5}>
-                                <Grid fluid>
-                                    <Row>
-                                        <Col xs={12}>
-                                            <h2 style={{textAlign:'center'}}>Solicitud de crédito</h2>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col sm={6} >
-                                            <p>
-                                                <span className="Labels"><strong>Número de crédito:</strong> {this.state.loan.id}</span><br/>
-                                                <span className="Labels"><strong>Nombre:</strong> {this.state.loan.user_full_name}</span><br/>
-                                                <span className="Labels"><strong>Fecha creación:</strong> {this.state.loan.created_at}</span><br/>
-                                                <span className="Labels"><strong>Valor solicitado:</strong> ${Utils.parseNumberMoney(this.state.loan.value)}</span><br/>
-                                                <span className="Labels"><strong>Plazo:</strong> {this.state.loan.timelimit} Meses</span><br/>
-                                                <span className="Labels"><strong>Cuota:</strong> {this.getFeeType(this.state.loan.fee)}</span><br/>
-                                                <span className="Labels"><strong>Tasa:</strong> {this.state.loan.rate*100}%</span><br/>
-                                                <span className="Labels"><strong>Fecha de desembolso:</strong> {this.state.loan.disbursement_date}</span><br/>
-                                                <span className="Labels"><strong>Abono en:</strong> {this.getPaymentType(this.state.loan.payment)}</span><br/>
-                                                <span className="Labels"><strong>Información adicional:</strong> {this.state.loan.comments}</span><br/>
-                                            </p>
-                                        </Col>
-                                        <Col sm={6} >
-                                            <SelectField
-                                                floatingLabelText="Estado solicitud"
-                                                value={this.state.loan.state}
-                                                style={{width:'100%'}}
-                                                onChange={(event,index,newValue) => this.updateState(newValue)}
-                                                disabled={!(Utils.isAdmin() || Utils.isTreasurer()) || this.state.loan.state===3 ||  this.state.loan.state===2}
-                                                >
-                                                <MenuItem value={0} primaryText="Esperando aprobación" />
-                                                <MenuItem value={1} primaryText="Aprobada" />
-                                                <MenuItem value={2} primaryText="Denegada" />
-                                                <MenuItem value={3} primaryText="Finalizada" />
-                                            </SelectField>
-                                            {this.state.loan.state === 1 && <div>
+                <ContainerComponent showHeader={true}
+                    loadingMask={this.state.loading}
+                    renderOneFullColGrid={true}
+                    middle={
+                        <Paper className="UserInfo" zDepth={5}>
+                            <ContainerComponent orderRenderOneFullColGrid={0}
+                                renderOneFullColGrid={true}
+                                middle={
+                                    <h2 style={{textAlign:'center'}}>Solicitud de crédito</h2>
+                                }
+                                orderRenderTwoColGrid={1}
+                                renderTwoColGrid={true}
+                                leftWidth={6}
+                                left={
+                                    <p>
+                                        <span className="Labels"><strong>Número de crédito:</strong> {this.state.loan.id}</span><br/>
+                                        <span className="Labels"><strong>Nombre:</strong> {this.state.loan.user_full_name}</span><br/>
+                                        <span className="Labels"><strong>Fecha creación:</strong> {this.state.loan.created_at}</span><br/>
+                                        <span className="Labels"><strong>Valor solicitado:</strong> ${Utils.parseNumberMoney(this.state.loan.value)}</span><br/>
+                                        <span className="Labels"><strong>Plazo:</strong> {this.state.loan.timelimit} Meses</span><br/>
+                                        <span className="Labels"><strong>Cuota:</strong> {this.getFeeType(this.state.loan.fee)}</span><br/>
+                                        <span className="Labels"><strong>Tasa:</strong> {this.state.loan.rate*100}%</span><br/>
+                                        <span className="Labels"><strong>Fecha de desembolso:</strong> {this.state.loan.disbursement_date}</span><br/>
+                                        <span className="Labels"><strong>Abono en:</strong> {this.getPaymentType(this.state.loan.payment)}</span><br/>
+                                        <span className="Labels"><strong>Información adicional:</strong> {this.state.loan.comments}</span><br/>
+                                    </p>
+                                }
+                                rightWidth={6}
+                                right={
+                                    <div>
+                                        <SelectField
+                                            floatingLabelText="Estado solicitud"
+                                            value={this.state.loan.state}
+                                            style={{width:'100%'}}
+                                            onChange={(event,index,newValue) => this.updateState(newValue)}
+                                            disabled={!(Utils.isAdmin() || Utils.isTreasurer()) || this.state.loan.state===3 ||  this.state.loan.state===2}
+                                        >
+                                            <MenuItem value={0} primaryText="Esperando aprobación" />
+                                            <MenuItem value={1} primaryText="Aprobada" />
+                                            <MenuItem value={2} primaryText="Denegada" />
+                                            <MenuItem value={3} primaryText="Finalizada" />
+                                        </SelectField>
+                                        {this.state.loan.state === 1 && 
+                                            <div>
                                                 <span className="Labels"><strong>Valor pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
                                                 <span className="Labels"><strong>Valor pago mínimo:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.minimum_payment)}</span><br/>
                                                 <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br/>
-                                            </div>}
-                                        </Col>
-                                    </Row>
-                                </Grid>
-                            </Paper>
-                        </Col>
-                    </Row>
-                </Grid>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            />
+                        </Paper>
+                    }
+                />
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
@@ -177,4 +176,4 @@ class LoanDetail extends Component{
     }
 }
 
-export default LoanDetail;
+export default LoanDetailPage;
