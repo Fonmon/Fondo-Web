@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
-import Header from '../base/Header';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import React from 'react';
 import Paper from 'material-ui/Paper';
-import Utils from '../../utils/Utils';
 import {
     Table,
     TableBody,
@@ -20,8 +17,11 @@ import Pagination from 'material-ui-pagination';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+
+import BasePage from '../base/BasePage';
+import ContainerComponent from '../base/ContainerComponent';
+import Utils from '../../utils/Utils';
 import CreateUserDialog from '../CreateUserDialog';
-import LoadingMask from '../base/LoadingMask';
 
 const ButtonsActions = (props) => {
     if(Utils.isAdmin())
@@ -39,7 +39,7 @@ const ButtonsActions = (props) => {
         );
 }
 
-class UsersList extends Component{
+class UsersListPage extends BasePage{
 
     constructor(){
         super();
@@ -77,16 +77,6 @@ class UsersList extends Component{
                     scope.showMessageError(error.message);
                 }
             });
-    }
-
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
-    }
-
-    handleRequestClose = () => {
-        this.setState({
-            openMessage: false
-        });
     }
 
     handleEditUser = (id) => {
@@ -174,92 +164,88 @@ class UsersList extends Component{
         ];
         return (
             <div>
-                <Header />
-                <LoadingMask active={this.state.loading} />
-                <Grid fluid>
-                    <Row>
-                        <Col lg={6} md={6} xs={12} >
-                            <RaisedButton label="Crear Usuario" 
-                                secondary={true} 
-                                style={{marginTop: '30px',width:'100%'}}
-                                onClick={this.handleCreateUserDialog}
-                                disabled={!Utils.isAdmin()} />
-                        </Col>
-                        <Col lg={6} md={6} xs={12} >
-                            <RaisedButton label="Cargar información" 
-                                primary={true} 
-                                style={{marginTop:'30px',width:'100%'}}
-                                disabled={!Utils.isAuthorized()}
-                                containerElement='label'>
-                                <input type="file" 
-                                    onChange={e => this.handleUpdateLoad(e.target.files[0])}
-                                    style={{ display: 'none' }} />
-                            </RaisedButton>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={12} >
-                            <Paper className="TableLoan" zDepth={5}>
-                                <Table fixedHeader={false} 
-                                    style={{ tableLayout: 'auto' }}
-                                    bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
-                                    selectable={false}>
-                                    <TableHeader
-                                        adjustForCheckbox={false}
-                                        displaySelectAll={false}
-                                        >
-                                        <TableRow>
-                                            <TableHeaderColumn 
-                                                colSpan="5"
-                                                style={{textAlign: 'center'}}
-                                                >
-                                                Lista de usuarios
-                                            </TableHeaderColumn>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableHeaderColumn>ID</TableHeaderColumn>
-                                            <TableHeaderColumn>Nombre</TableHeaderColumn>
-                                            <TableHeaderColumn>Email</TableHeaderColumn>
-                                            <TableHeaderColumn>Rol</TableHeaderColumn>
-                                            <TableHeaderColumn>Acciones</TableHeaderColumn>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody
-                                        displayRowCheckbox={false}
-                                        >
-                                        {this.state.users.map((user,i) => {
-                                            return (<TableRow key={i}>
-                                                <TableRowColumn>{user.id}</TableRowColumn>
-                                                <TableRowColumn>{user.full_name}</TableRowColumn>
-                                                <TableRowColumn>{user.email}</TableRowColumn>
-                                                <TableRowColumn>{user.role}</TableRowColumn>
-                                                <TableRowColumn >
-                                                    <ButtonsActions 
-                                                        id={user.id} 
-                                                        onEdit={this.handleEditUser}
-                                                        onRemove={this.handleDialogRemoveUser} />
-                                                </TableRowColumn>
-                                            </TableRow>);
-                                        })}
-                                    </TableBody>
-                                </Table>
-                                <Divider />
-                                <center><Pagination
-                                    total = { this.state.totalPages }
-                                    current = { this.state.currentPage }
-                                    display = { 10 }
-                                    onChange = { number => this.getUsers(number) }
-                                    />
-                                </center>  
-                            </Paper>
-                        </Col>
-                    </Row>
-                </Grid>
+                <ContainerComponent showHeader={true}
+                    loadingMask={this.state.loading}
+                    renderTwoColGrid={true}
+                    leftWidth={6}
+                    left={
+                        <RaisedButton label="Crear Usuario" 
+                            secondary={true} 
+                            style={{marginTop: '30px',width:'100%'}}
+                            onClick={this.handleCreateUserDialog}
+                            disabled={!Utils.isAdmin()} />
+                    }
+                    rightWidth={6}
+                    right={
+                        <RaisedButton label="Cargar información" 
+                            primary={true} 
+                            style={{marginTop:'30px',width:'100%'}}
+                            disabled={!Utils.isAuthorized()}
+                            containerElement='label'>
+                            <input type="file" 
+                                onChange={e => this.handleUpdateLoad(e.target.files[0])}
+                                style={{ display: 'none' }} />
+                        </RaisedButton>
+                    }
+                    renderOneFullColGrid={true}
+                    middle={
+                        <Paper className="TableLoan" zDepth={5}>
+                            <Table fixedHeader={false} 
+                                style={{ tableLayout: 'auto' }}
+                                bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
+                                selectable={false}>
+                                <TableHeader
+                                    adjustForCheckbox={false}
+                                    displaySelectAll={false}>
+                                    <TableRow>
+                                        <TableHeaderColumn 
+                                            colSpan="5"
+                                            style={{textAlign: 'center'}}>
+                                            Lista de usuarios
+                                        </TableHeaderColumn>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableHeaderColumn>ID</TableHeaderColumn>
+                                        <TableHeaderColumn>Nombre</TableHeaderColumn>
+                                        <TableHeaderColumn>Email</TableHeaderColumn>
+                                        <TableHeaderColumn>Rol</TableHeaderColumn>
+                                        <TableHeaderColumn>Acciones</TableHeaderColumn>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody
+                                    displayRowCheckbox={false}>
+                                    {this.state.users.map((user,i) => {
+                                        return (<TableRow key={i}>
+                                            <TableRowColumn>{user.id}</TableRowColumn>
+                                            <TableRowColumn>{user.full_name}</TableRowColumn>
+                                            <TableRowColumn>{user.email}</TableRowColumn>
+                                            <TableRowColumn>{user.role}</TableRowColumn>
+                                            <TableRowColumn >
+                                                <ButtonsActions 
+                                                    id={user.id} 
+                                                    onEdit={this.handleEditUser}
+                                                    onRemove={this.handleDialogRemoveUser}
+                                                />
+                                            </TableRowColumn>
+                                        </TableRow>);
+                                    })}
+                                </TableBody>
+                            </Table>
+                            <Divider />
+                            <center><Pagination
+                                total = { this.state.totalPages }
+                                current = { this.state.currentPage }
+                                display = { 10 }
+                                onChange = { number => this.getUsers(number) }
+                            /></center>  
+                        </Paper>
+                    }
+                />
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={this.handleRequestClose}
+                    onRequestClose={(event) => this.setState({openMessage: false})}
                     />
                 <Dialog
                     title="Confirmación"
@@ -277,4 +263,4 @@ class UsersList extends Component{
     }
 }
 
-export default UsersList;
+export default UsersListPage;

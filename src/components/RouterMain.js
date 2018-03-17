@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
-import UsersList from './pages/UsersListPage';
+import UsersListPage from './pages/UsersListPage';
 import UserDetail from './pages/UserDetailPage';
 import NotFound from './pages/NotFoundPage';
 import RequestLoanPage from './pages/RequestLoanPage';
@@ -49,7 +49,7 @@ const RouterMain = () => (
             <PrivateRoute exact path='/request-loan' component={RequestLoanPage} />
             <PrivateRoute exact path='/loan/:id' component={LoanDetail} />
             <PrivateRoute exact path='/info' component={FondoInfo} />
-            <ManagementRoute exact path='/users' component={UsersList} />
+            <ManagementRoute exact path='/users' component={UsersListPage} />
             <ManagementRoute exact path='/loans' component={LoansList} />
             <Redirect to="/error" />
         </Switch>

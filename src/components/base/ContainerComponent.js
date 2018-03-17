@@ -23,8 +23,9 @@ class ContainerComponent extends Component{
                 {this.props.showHeader &&
                     <Header />
                 }
-                {this.props.renderTwoColGrid &&
+                {(this.props.renderTwoColGrid || this.props.renderOneMidColGrid || this.props.renderOneFullColGrid) &&
                     <Grid fluid>
+                    {this.props.renderTwoColGrid &&
                         <Row>
                             <Col xs={12} md={this.props.leftWidth} lg={this.props.leftWidth}>
                                 {this.props.left}
@@ -33,15 +34,21 @@ class ContainerComponent extends Component{
                                 {this.props.right}
                             </Col>
                         </Row>
-                    </Grid>
-                }
-                {this.props.renderOneMidColGrid &&
-                    <Grid fluid>
+                    }
+                    {this.props.renderOneMidColGrid &&
                         <Row>
                             <Col smOffset={3} sm={6} >
                                 {this.props.middle}
                             </Col>
                         </Row>
+                    }
+                    {this.props.renderOneFullColGrid &&
+                        <Row>
+                            <Col xs={12} >
+                                {this.props.middle}
+                            </Col>
+                        </Row>
+                    }
                     </Grid>
                 }
                 <LoadingMask active={this.state.loading} />
