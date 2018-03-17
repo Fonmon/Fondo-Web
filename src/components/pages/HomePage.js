@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import Header from './Header';
-import { Grid, Row, Col } from 'react-flexbox-grid';
-import Snackbar from 'material-ui/Snackbar';
+import React from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import FinanceInfo from './FinanceInfo';
-import LoanListComponent from './LoanListComponent';
-import Utils,{ID_KEY,ROLE_KEY} from '../utils/Utils';
-import LoadingMask from './LoadingMask';
+import Snackbar from 'material-ui/Snackbar';
 
-class Home extends Component {
+import BasePage from '../base/BasePage';
+import ContainerComponent from '../base/ContainerComponent';
+import FinanceInfo from '../base/FinanceInfo';
+import LoanListComponent from '../base/LoanListComponent';
+import Utils,{ID_KEY,ROLE_KEY} from '../../utils/Utils';
+
+class HomePage extends BasePage {
 
     constructor(){
         super();
@@ -56,32 +56,22 @@ class Home extends Component {
             });
     }
 
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
-    }
-
     render() {
         return (
             <div>
-                <Header />
-                <LoadingMask active={this.state.loading} />
-                <Grid fluid>
-                    <Row>
-                        <Col xs={12} md={3} lg={3}>
-                            <FinanceInfo financeInfo={this.state.financeInfo}/>
-                        </Col>
-                        <Col xs={12} md={8} lg={8}>
-                            <LoanListComponent all={false} 
-                                applicantColumn={false}/>
-                        </Col>
-                    </Row>
-                </Grid>
-                <Snackbar
-                    open={this.state.openMessage}
-                    message={this.state.errorMessage}
-                    autoHideDuration={4000}
-                    onRequestClose={(event) => this.setState({openMessage: false})}
-                    />
+                <ContainerComponent showHeader={true}
+                    loadingMask={this.state.loading}
+                    renderTwoColGrid={true}
+                    leftWidth={3}
+                    left={
+                        <FinanceInfo financeInfo={this.state.financeInfo}/>
+                    }
+                    rightWidth={8}
+                    right={
+                        <LoanListComponent all={false} 
+                            applicantColumn={false}/>
+                    }
+                />
                 <FloatingActionButton 
                     secondary={true} 
                     style={{
@@ -92,9 +82,15 @@ class Home extends Component {
                     href="/request-loan">
                     <ContentAdd />
                 </FloatingActionButton>
+                <Snackbar
+                    open={this.state.openMessage}
+                    message={this.state.errorMessage}
+                    autoHideDuration={4000}
+                    onRequestClose={(event) => this.setState({openMessage: false})}
+                />
             </div>
         );
     }
 }
 
-export default Home;
+export default HomePage;

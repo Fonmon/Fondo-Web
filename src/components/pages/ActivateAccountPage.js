@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Utils from '../utils/Utils';
-import {HOST_APP} from '../utils/Constants';
+import Utils from '../../utils/Utils';
+import {HOST_APP} from '../../utils/Constants';
 import Snackbar from 'material-ui/Snackbar';
-import LoadingMask from './LoadingMask';
-import banner from '../resources/images/banner.png';
-import '../resources/styles/Login.css';
+import LoadingMask from '../base/LoadingMask';
+import banner from '../../resources/images/banner.png';
+import '../../resources/styles/Login.css';
 
 class ActivateAccount extends Component{
 

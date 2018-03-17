@@ -1,16 +1,16 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import Login from './Login';
-import Home from './Home';
-import UsersList from './UsersList';
-import UserDetail from './UserDetail';
-import NotFound from './NotFound';
-import RequestLoan from './RequestLoan';
-import LoanDetail from './LoanDetail';
-import LoansList from './LoansList';
-import ActivateAccount from './ActivateAccount';
-import FondoInfo from './FondoInfo';
+import LoginPage from './pages/LoginPage';
+import HomePage from './pages/HomePage';
+import UsersList from './pages/UsersListPage';
+import UserDetail from './pages/UserDetailPage';
+import NotFound from './pages/NotFoundPage';
+import RequestLoanPage from './pages/RequestLoanPage';
+import LoanDetail from './pages/LoanDetailPage';
+import LoansList from './pages/LoansListPage';
+import ActivateAccount from './pages/ActivateAccountPage';
+import FondoInfo from './pages/FondoInfoPage';
 import Utils from '../utils/Utils';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -41,12 +41,12 @@ const RouterMain = () => (
     <main>
         <Switch>
             <Route exact path = '/error' component={NotFound} />
-            <NotValidRoute exact path='/' component={Login}/>
-            <NotValidRoute exact path='/login' component={Login}/>
+            <NotValidRoute exact path='/' component={LoginPage}/>
+            <NotValidRoute exact path='/login' component={LoginPage}/>
             <NotValidRoute exact path='/activate/:id/:key' component={ActivateAccount}/>
-            <PrivateRoute exact path='/home' component={Home} />
+            <PrivateRoute exact path='/home' component={HomePage} />
             <PrivateRoute exact path='/user/:id' component={UserDetail} />
-            <PrivateRoute exact path='/request-loan' component={RequestLoan} />
+            <PrivateRoute exact path='/request-loan' component={RequestLoanPage} />
             <PrivateRoute exact path='/loan/:id' component={LoanDetail} />
             <PrivateRoute exact path='/info' component={FondoInfo} />
             <ManagementRoute exact path='/users' component={UsersList} />

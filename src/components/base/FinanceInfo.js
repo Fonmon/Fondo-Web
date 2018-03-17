@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
-import Utils from '../utils/Utils';
-import '../resources/styles/FinanceInfo.css';
+import Utils from '../../utils/Utils';
+import '../../resources/styles/FinanceInfo.css';
 
 class FinanceInfo extends Component {
 

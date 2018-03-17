@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Header from './Header';
+import Header from '../base/Header';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Paper from 'material-ui/Paper';
-import Utils from '../utils/Utils';
+import Utils from '../../utils/Utils';
 import {
     Table,
     TableBody,
@@ -20,8 +20,8 @@ import Pagination from 'material-ui-pagination';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import CreateUserDialog from './CreateUserDialog';
-import LoadingMask from './LoadingMask';
+import CreateUserDialog from '../CreateUserDialog';
+import LoadingMask from '../base/LoadingMask';
 
 const ButtonsActions = (props) => {
     if(Utils.isAdmin())

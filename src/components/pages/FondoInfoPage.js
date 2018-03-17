@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import Header from './Header';
+import Header from '../base/Header';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
-import {HOST_APP} from '../utils/Constants';
+import {HOST_APP} from '../../utils/Constants';
 
 // templates
-import history from '../resources/templates/history.json';
-import visionMision from '../resources/templates/visionMision.json';
-import statutes from '../resources/templates/statutes.json';
-import regulation from '../resources/templates/regulation.json';
-import directive from '../resources/images/directive.jpg';
-import proceedings from '../resources/templates/proceedings.json';
-import power from '../resources/templates/power.json';
+import history from '../../resources/templates/history.json';
+import visionMision from '../../resources/templates/visionMision.json';
+import statutes from '../../resources/templates/statutes.json';
+import regulation from '../../resources/templates/regulation.json';
+import directive from '../../resources/images/directive.jpg';
+import proceedings from '../../resources/templates/proceedings.json';
+import power from '../../resources/templates/power.json';
 
 class FondoInfo extends Component{
     constructor(){

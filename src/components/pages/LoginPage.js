@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Utils, {TOKEN_KEY} from '../utils/Utils';
-import {HOST_APP} from '../utils/Constants';
 import Snackbar from 'material-ui/Snackbar';
-import banner from '../resources/images/banner.png';
-import '../resources/styles/Login.css';
 
-class Login extends Component{
+import BasePage from '../base/BasePage';
+import Utils, {TOKEN_KEY} from '../../utils/Utils';
+import {HOST_APP} from '../../utils/Constants';
+import banner from '../../resources/images/banner.png';
+import '../../resources/styles/Login.css';
+
+class LoginPage extends BasePage {
 
     constructor(){
         super();
@@ -16,7 +18,7 @@ class Login extends Component{
             email: '',
             password: '',
             openMessage: false,
-            errorMessage: ''
+            errorMessage: '',
         }
     }
 
@@ -37,10 +39,6 @@ class Login extends Component{
             });
     }
 
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
-    }
-
     forgotPassword(event){
         Utils.redirectTo(HOST_APP+'password_reset');
     }
@@ -48,12 +46,6 @@ class Login extends Component{
     handleKeyPress(event){
         if(event.key === 'Enter')
             this.submit();
-    }
-
-    handleRequestClose = () => {
-        this.setState({
-            openMessage: false
-        });
     }
 
     render(){
@@ -69,7 +61,7 @@ class Login extends Component{
                         required={true}
                         onChange = {(event,newValue) => this.setState({email:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
-                        />
+                    />
                     <TextField hintText="Ingresa tu contraseña"
                         className="LoginFields"
                         floatingLabelText="Contraseña"
@@ -77,29 +69,29 @@ class Login extends Component{
                         required={true}
                         onChange = {(event,newValue) => this.setState({password:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
-                        /><br/>
+                    /><br/>
                     <RaisedButton 
                         className="LoginFields"
                         label="Ingresar" 
                         primary={true} 
                         onClick={(event) => this.submit(event)}
-                        /><br/>
+                    /><br/>
                     <RaisedButton 
                         className="LoginFields"
                         label="¿Olvidaste tu contraseña?" 
                         secondary={true} 
                         onClick={(event) => this.forgotPassword(event)}
-                        />
+                    />
                     <Snackbar
                         open={this.state.openMessage}
                         message={this.state.errorMessage}
                         autoHideDuration={4000}
-                        onRequestClose={this.handleRequestClose}
-                        />
+                        onRequestClose={(event) => this.setState({openMessage: false})}
+                    />
                 </Paper>
             </div>
         );
     }
 }
 
-export default Login;
+export default LoginPage;

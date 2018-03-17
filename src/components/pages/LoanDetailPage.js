@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Header from './Header';
+import Header from '../base/Header';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
-import Utils from '../utils/Utils';
+import Utils from '../../utils/Utils';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import LoadingMask from './LoadingMask';
+import LoadingMask from '../base/LoadingMask';
 
 class LoanDetail extends Component{
     constructor(){

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import Header from './Header';
-import LoanListComponent from './LoanListComponent';
+import Header from '../base/Header';
+import LoanListComponent from '../base/LoanListComponent';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
-import LoadingMask from './LoadingMask';
-import Utils from '../utils/Utils';
+import LoadingMask from '../base/LoadingMask';
+import Utils from '../../utils/Utils';
 
 class LoansList extends Component {
 

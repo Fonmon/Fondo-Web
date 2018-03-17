@@ -6,9 +6,9 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import Drawer from 'material-ui/Drawer';
-import Utils from '../utils/Utils';
+import Utils from '../../utils/Utils';
 import ActionPowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
-import ffm from '../resources/images/ffm_256.png';
+import ffm from '../../resources/images/ffm_256.png';
 
 const RightElements = (props) => (
     <div>

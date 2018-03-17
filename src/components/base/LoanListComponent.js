@@ -13,7 +13,7 @@ import Divider from 'material-ui/Divider';
 import Pagination from 'material-ui-pagination';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import LoadingMask from './LoadingMask';
-import Utils from '../utils/Utils';
+import Utils from '../../utils/Utils';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';

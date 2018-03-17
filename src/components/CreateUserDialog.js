@@ -7,7 +7,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Utils from '../utils/Utils';
-import LoadingMask from './LoadingMask';
+import LoadingMask from './base/LoadingMask';
 
 class CreateUserDialog extends Component{
 

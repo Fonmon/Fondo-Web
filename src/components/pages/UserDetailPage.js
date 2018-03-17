@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import Header from './Header';
+import Header from '../base/Header';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Utils from '../utils/Utils';
+import Utils from '../../utils/Utils';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import LoadingMask from './LoadingMask';
-import '../resources/styles/UserDetail.css';
+import LoadingMask from '../base/LoadingMask';
+import '../../resources/styles/UserDetail.css';
 
 class UserDetail extends Component{
     constructor(props){
