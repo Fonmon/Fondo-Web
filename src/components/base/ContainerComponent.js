@@ -27,7 +27,7 @@ class ContainerComponent extends Component{
     }
 
     render(){
-        let componentsGrid = new Array(3);
+        let componentsGrid = new Array(4);
         let order = -1;
         if(this.props.renderTwoColGrid){
             order = !isNaN(this.props.orderRenderTwoColGrid) ? this.props.orderRenderTwoColGrid : 0;
@@ -61,6 +61,21 @@ class ContainerComponent extends Component{
                     <Col xs={12} >
                         {this.props.middle}
                     </Col>
+                </Row>
+            )
+        }
+
+        if(this.props.renderListColGrid){
+            order = !isNaN(this.props.orderRenderOneFullColGrid) ? this.props.orderRenderOneFullColGrid : 3;
+            componentsGrid[order] = (
+                <Row key={order}>
+                    {this.props.items.map((item,i)=>{
+                        return (
+                            <Col xs={6} md={this.props.colsWidth} lg={this.props.colsWidth} key={i}>
+                                {item}
+                            </Col>
+                        )
+                    })}
                 </Row>
             )
         }

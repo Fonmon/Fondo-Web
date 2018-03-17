@@ -12,6 +12,7 @@ import LoansListPage from './pages/LoansListPage';
 import ActivateAccountPage from './pages/ActivateAccountPage';
 import FondoInfoPage from './pages/FondoInfoPage';
 import ToolsListPage from './pages/ToolsListPage';
+    import SimulationPage from './pages/tools/SimulationPage';
 
 import Utils from '../utils/Utils';
 
@@ -52,6 +53,7 @@ const RouterMain = () => (
             <PrivateRoute exact path='/loan/:id' component={LoanDetailPage} />
             <PrivateRoute exact path='/info' component={FondoInfoPage} />
             <PrivateRoute exact path='/tools' component={ToolsListPage} />
+            <PrivateRoute exact path='/tool/simulation' component={SimulationPage} />
             <ManagementRoute exact path='/users' component={UsersListPage} />
             <ManagementRoute exact path='/loans' component={LoansListPage} />
             <Redirect to="/error" />
