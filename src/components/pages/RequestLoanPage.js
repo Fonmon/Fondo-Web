@@ -121,7 +121,7 @@ class RequestLoanPage extends ContainerComponent{
                                 autoOk={true}
                                 style={{width:'100%'}}
                                 errorText={this.state.disbursement_date_error}
-                                formatDate={date => Utils.formatDate(date)}
+                                formatDate={date => Utils.formatDateDisplay(date)}
                                 onChange = {(event,newValue) => this.setState({disbursement_date:Utils.formatDate(newValue)})}
                             />
                             <SelectField

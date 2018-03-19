@@ -55,8 +55,13 @@ class Utils{
         return newValue;
     }
 
+    static formatDateDisplay(date){
+        let dateRet = new Date(this.formatDate(date));
+        return dateRet.toDateString();
+    }
+
     static formatDate(date){
-        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
     }
 
     ///////////////////////////////////////////////////////////////////////
