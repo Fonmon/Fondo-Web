@@ -12,11 +12,12 @@ import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import Pagination from 'material-ui-pagination';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
-import LoadingMask from './LoadingMask';
-import Utils from '../utils/Utils';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
+
+import LoadingMaskComponent from './LoadingMaskComponent';
+import Utils from '../../utils/Utils';
 
 class LoanListComponent extends Component{
 
@@ -86,8 +87,8 @@ class LoanListComponent extends Component{
     render(){
         return (
             <Paper className="TableLoan" zDepth={5}>
-                <LoadingMask active={this.state.loading} />
-                <Toolbar style={{background: 'white'}}>
+                <LoadingMaskComponent active={this.state.loading} />
+                <Toolbar style={{background: 'white', overflow: 'hidden'}}>
                     <ToolbarGroup firstChild={true}>
                         <ToolbarTitle text="Filtrar por:" 
                             style={{marginLeft: '15px'}}/>
@@ -109,7 +110,6 @@ class LoanListComponent extends Component{
                     <TableHeader
                         adjustForCheckbox={false}
                         displaySelectAll={false}>
-                        
                         <TableRow>
                             <TableHeaderColumn 
                                 colSpan={this.props.applicantColumn?'6':'5'}

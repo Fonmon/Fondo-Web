@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
-import Header from './Header';
-import LoanListComponent from './LoanListComponent';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
-import LoadingMask from './LoadingMask';
-import Utils from '../utils/Utils';
 
-class LoansList extends Component {
+import ContainerComponent from '../base/ContainerComponent';
+import LoanListComponent from '../base/LoanListComponent';
+import Utils from '../../utils/Utils';
+
+class LoansListPage extends ContainerComponent {
 
     constructor(){
         super();
@@ -16,10 +15,6 @@ class LoansList extends Component {
             errorMessage: '',
             loading:false
         }
-    }
-
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
     }
 
     handleUpdateLoad = (file) =>{
@@ -50,20 +45,14 @@ class LoansList extends Component {
         }
     }
 
-    handleRequestClose = () => {
-        this.setState({
-            openMessage: false
-        });
-    }
-
     render() {
         return (
             <div>
-                <Header />
-                <LoadingMask active={this.state.loading} />
-                <Grid fluid>
-                    <Row>
-                        <Col xs={12} >
+                <ContainerComponent showHeader={true}
+                    loadinMask={this.state.loading}
+                    renderOneFullColGrid={true}
+                    middle={
+                        <div>
                             <RaisedButton label="Cargar información" 
                                 primary={true} 
                                 style={{marginTop:'30px',width:'100%'}}
@@ -73,24 +62,20 @@ class LoansList extends Component {
                                     onChange={e => this.handleUpdateLoad(e.target.files[0])}
                                     style={{ display: 'none' }} />
                             </RaisedButton>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={12} >
                             <LoanListComponent all={true} 
                                 applicantColumn={true}/>
-                        </Col>
-                    </Row>
-                </Grid>
+                        </div>
+                    }
+                />
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={this.handleRequestClose}
-                    />
+                    onRequestClose={(event) => this.setState({openMessage:false})}
+                />
             </div>
         );
     }
 }
 
-export default LoansList;
+export default LoansListPage;

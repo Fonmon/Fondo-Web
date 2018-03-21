@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Utils, {TOKEN_KEY} from '../utils/Utils';
-import {HOST_APP} from '../utils/Constants';
 import Snackbar from 'material-ui/Snackbar';
-import banner from '../resources/images/banner.png';
-import '../resources/styles/Login.css';
 
-class Login extends Component{
+import ContainerComponent from '../base/ContainerComponent';
+import Utils, {TOKEN_KEY} from '../../utils/Utils';
+import {HOST_APP} from '../../utils/Constants';
+import banner from '../../resources/images/banner.png';
+import '../../resources/styles/Login.css';
+
+class LoginPage extends ContainerComponent {
 
     constructor(){
         super();
@@ -16,17 +18,25 @@ class Login extends Component{
             email: '',
             password: '',
             openMessage: false,
-            errorMessage: ''
+            errorMessage: '',
+            loading: false
         }
+    }
+
+    forgotPassword(event){
+        Utils.redirectTo(HOST_APP+'password_reset');
     }
 
     submit(event){
         let scope = this;
+        this.setState({loading:true});
         Utils.authenticate(this.state.email.toLowerCase(),this.state.password)
             .then(function (response){
+                scope.setState({loading:false});
                 localStorage.setItem(TOKEN_KEY,response.data.token);
                 Utils.redirectTo('/home');
             }).catch(function(error){
+                scope.setState({loading:false});
                 if(!error.response){
                     scope.showMessageError('Error de conexión, inténtalo más tarde.');
                 }else if(error.response.status === 400){
@@ -37,28 +47,10 @@ class Login extends Component{
             });
     }
 
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
-    }
-
-    forgotPassword(event){
-        Utils.redirectTo(HOST_APP+'password_reset');
-    }
-
-    handleKeyPress(event){
-        if(event.key === 'Enter')
-            this.submit();
-    }
-
-    handleRequestClose = () => {
-        this.setState({
-            openMessage: false
-        });
-    }
-
     render(){
         return (
             <div className="Login">
+                <ContainerComponent loadingMask={this.state.loading} />
                 <img className="banner" src={banner} alt=""/>
                 <Paper className="LoginForm" zDepth={5}>
                     <h2>Iniciar Sesión</h2>
@@ -69,7 +61,7 @@ class Login extends Component{
                         required={true}
                         onChange = {(event,newValue) => this.setState({email:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
-                        />
+                    />
                     <TextField hintText="Ingresa tu contraseña"
                         className="LoginFields"
                         floatingLabelText="Contraseña"
@@ -77,29 +69,29 @@ class Login extends Component{
                         required={true}
                         onChange = {(event,newValue) => this.setState({password:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
-                        /><br/>
+                    /><br/>
                     <RaisedButton 
                         className="LoginFields"
                         label="Ingresar" 
                         primary={true} 
                         onClick={(event) => this.submit(event)}
-                        /><br/>
+                    /><br/>
                     <RaisedButton 
                         className="LoginFields"
                         label="¿Olvidaste tu contraseña?" 
                         secondary={true} 
                         onClick={(event) => this.forgotPassword(event)}
-                        />
+                    />
                     <Snackbar
                         open={this.state.openMessage}
                         message={this.state.errorMessage}
                         autoHideDuration={4000}
-                        onRequestClose={this.handleRequestClose}
-                        />
+                        onRequestClose={(event) => this.setState({openMessage: false})}
+                    />
                 </Paper>
             </div>
         );
     }
 }
 
-export default Login;
+export default LoginPage;

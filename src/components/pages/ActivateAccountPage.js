@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Utils from '../utils/Utils';
-import {HOST_APP} from '../utils/Constants';
 import Snackbar from 'material-ui/Snackbar';
-import LoadingMask from './LoadingMask';
-import banner from '../resources/images/banner.png';
-import '../resources/styles/Login.css';
 
-class ActivateAccount extends Component{
+import ContainerComponent from '../base/ContainerComponent';
+import Utils from '../../utils/Utils';
+import banner from '../../resources/images/banner.png';
+import '../../resources/styles/Login.css';
+
+class ActivateAccountPage extends ContainerComponent{
 
     constructor(){
         super();
@@ -80,29 +80,10 @@ class ActivateAccount extends Component{
         }
     }
 
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
-    }
-
-    forgotPassword(event){
-        Utils.redirectTo(HOST_APP+'password_reset');
-    }
-
-    handleKeyPress(event){
-        if(event.key === 'Enter')
-            this.submit();
-    }
-
-    handleRequestClose = () => {
-        this.setState({
-            openMessage: false
-        });
-    }
-
     render(){
         return (
             <div className="Login">
-                <LoadingMask active={this.state.loading} />
+                <ContainerComponent loadingMask={this.state.loading} />
                 <img className="banner" src={banner} alt=""/>
                 <Paper className="LoginForm" zDepth={5}>
                     <h2>Activación de cuenta</h2>
@@ -115,7 +96,7 @@ class ActivateAccount extends Component{
                         errorText={this.state.errorIdentification}
                         onChange = {(event,newValue) => this.setState({identification:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
-                        />
+                    />
                     <TextField hintText="Ingresa tu contraseña"
                         className="LoginFields"
                         floatingLabelText="Nueva contraseña"
@@ -125,7 +106,7 @@ class ActivateAccount extends Component{
                         style={{width:'100%'}}
                         onChange = {(event,newValue) => this.setState({password:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
-                        />
+                    />
                     <TextField hintText="Ingresa tu contraseña"
                         className="LoginFields"
                         floatingLabelText="Repite contraseña"
@@ -135,24 +116,24 @@ class ActivateAccount extends Component{
                         style={{width:'100%'}}
                         onChange = {(event,newValue) => this.setState({repeatPsw:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
-                        />
+                    />
                     <RaisedButton 
                         className="LoginFields"
                         label="Activar" 
                         primary={true} 
                         style={{width:'100%'}}
                         onClick={(event) => this.submit(event)}
-                        />
+                    />
                     <Snackbar
                         open={this.state.openMessage}
                         message={this.state.errorMessage}
                         autoHideDuration={4000}
-                        onRequestClose={this.handleRequestClose}
-                        />
+                        onRequestClose={(event) => this.setState({openMessage:false})}
+                    />
                 </Paper>
             </div>
         );
     }
 }
 
-export default ActivateAccount;
+export default ActivateAccountPage;

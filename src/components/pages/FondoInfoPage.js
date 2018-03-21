@@ -1,21 +1,22 @@
-import React, { Component } from 'react';
-import Header from './Header';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import React from 'react';
 import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
-import {HOST_APP} from '../utils/Constants';
 
 // templates
-import history from '../resources/templates/history.json';
-import visionMision from '../resources/templates/visionMision.json';
-import statutes from '../resources/templates/statutes.json';
-import regulation from '../resources/templates/regulation.json';
-import directive from '../resources/images/directive.jpg';
-import proceedings from '../resources/templates/proceedings.json';
-import power from '../resources/templates/power.json';
+import history from '../../resources/templates/history.json';
+import visionMision from '../../resources/templates/visionMision.json';
+import statutes from '../../resources/templates/statutes.json';
+import regulation from '../../resources/templates/regulation.json';
+import directive from '../../resources/images/directive.jpg';
+import proceedings from '../../resources/templates/proceedings.json';
+import power from '../../resources/templates/power.json';
 
-class FondoInfo extends Component{
+import ContainerComponent from '../base/ContainerComponent';
+import {HOST_APP} from '../../utils/Constants';
+
+class FondoInfoPage extends ContainerComponent{
+
     constructor(){
         super();
         this.state = {
@@ -60,23 +61,21 @@ class FondoInfo extends Component{
     render(){
         return (
             <div>
-                <Header />
-                <Grid fluid>
-                    <Row>
-                        <Col smOffset={3} xs={12} md={6} lg={6} >
-                            <Paper className="UserInfo" zDepth={5}>
-                                <h2 style={{textAlign:'center'}}>Información del fondo</h2>
-                                <MenuItem onClick={this.handlerClick.bind(this,history)} primaryText="Historia del fondo" />
-                                <MenuItem onClick={this.handlerClick.bind(this,visionMision)} primaryText="Visión y misión" />
-                                <MenuItem onClick={this.handlerClick.bind(this,statutes)} primaryText="Estatutos" />
-                                <MenuItem onClick={this.handlerClick.bind(this,regulation)} primaryText="Reglamento mesa directiva" />
-                                <MenuItem onClick={this.handlerClickImg.bind(this,"Mesa directiva",directive)} primaryText="Mesa directiva" />
-                                <MenuItem onClick={this.handlerClick.bind(this,power)} primaryText="Poder asamblea" />
-                                <MenuItem onClick={this.handlerClick.bind(this,proceedings)} primaryText="Copias de actas" />
-                            </Paper>
-                        </Col>
-                    </Row>
-                </Grid>
+                <ContainerComponent showHeader={true}
+                    renderOneMidColGrid={true}
+                    middle={
+                        <Paper className="UserInfo" zDepth={5}>
+                            <h2 style={{textAlign:'center'}}>Información del fondo</h2>
+                            <MenuItem onClick={this.handlerClick.bind(this,history)} primaryText="Historia del fondo" />
+                            <MenuItem onClick={this.handlerClick.bind(this,visionMision)} primaryText="Visión y misión" />
+                            <MenuItem onClick={this.handlerClick.bind(this,statutes)} primaryText="Estatutos" />
+                            <MenuItem onClick={this.handlerClick.bind(this,regulation)} primaryText="Reglamento mesa directiva" />
+                            <MenuItem onClick={this.handlerClickImg.bind(this,"Mesa directiva",directive)} primaryText="Mesa directiva" />
+                            <MenuItem onClick={this.handlerClick.bind(this,power)} primaryText="Poder asamblea" />
+                            <MenuItem onClick={this.handlerClick.bind(this,proceedings)} primaryText="Copias de actas" />
+                        </Paper>
+                    }
+                />
                 <Dialog
                     title={this.state.dialogTitle}
                     modal={false}
@@ -102,4 +101,4 @@ class FondoInfo extends Component{
     }
 }
 
-export default FondoInfo;
+export default FondoInfoPage;

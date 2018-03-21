@@ -6,8 +6,9 @@ import Snackbar from 'material-ui/Snackbar';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
-import Utils from '../utils/Utils';
-import LoadingMask from './LoadingMask';
+
+import Utils from '../../utils/Utils';
+import LoadingMaskComponent from '../base/LoadingMaskComponent';
 
 class CreateUserDialog extends Component{
 
@@ -107,7 +108,7 @@ class CreateUserDialog extends Component{
                     onRequestClose={this.handleClose}
                     open={this.state.creationOpen}>
                         <div>
-                            <LoadingMask active={this.state.loading} />
+                            <LoadingMaskComponent active={this.state.loading} />
                             <TextField hintText="Ingresa el Documento de identidad"
                                 floatingLabelText="Identificación"
                                 required={true}
