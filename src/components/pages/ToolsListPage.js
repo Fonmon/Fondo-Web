@@ -2,13 +2,13 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 
 import ContainerComponent from '../base/ContainerComponent';
-import {SimulationIcon} from '../../utils/SvgIcons';
+import {SimulationIcon,ProjectionIcon} from '../../utils/SvgIcons';
 import '../../resources/styles/Tools.css';
 
 const ListTools = (
     [
         {image: SimulationIcon, ref:'tool/simulation', text:'Simulador'},
-        {image: null, ref:null, text:'Próximamente'},
+        {image: ProjectionIcon, ref:'tool/projection', text:'Proyección de pago'},
         {image: null, ref:null, text:'Próximamente'},
         {image: null, ref:null, text:'Próximamente'},
         {image: null, ref:null, text:'Próximamente'}
