@@ -3,6 +3,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import HeaderComponent from './HeaderComponent';
 import LoadingMaskComponent from './LoadingMaskComponent';
+import Utils from '../../utils/Utils';
 
 class ContainerComponent extends Component{
 
@@ -24,6 +25,27 @@ class ContainerComponent extends Component{
     handleKeyPress(event){
         if(event.key === 'Enter')
             this.submit();
+    }
+
+    handleRequestError(error,messages=[]){
+        if(!error.response){
+            this.showMessageError('Error de conexión, inténtalo más tarde.');
+            return;
+        }else if(error.response.status === 401){
+            Utils.clearStorage();
+            return;
+        }else if(error.response.status === 404){
+            Utils.redirectTo('/error');
+            return;
+        }else{
+            for(let message of messages){
+                if(message.status === error.response.status){
+                    this.showMessageError(message.message);
+                    return;
+                }
+            }
+        }
+        this.showMessageError(error.message);
     }
 
     render(){

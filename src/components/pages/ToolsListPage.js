@@ -5,7 +5,7 @@ import ContainerComponent from '../base/ContainerComponent';
 import {SimulationIcon,ProjectionIcon} from '../../utils/SvgIcons';
 import '../../resources/styles/Tools.css';
 
-const ListTools = (
+const listTools = (
     [
         {image: SimulationIcon, ref:'tool/simulation', text:'Simulador'},
         {image: ProjectionIcon, ref:'tool/projection', text:'Proyección de pago'},
@@ -22,7 +22,7 @@ class ToolsListPage extends ContainerComponent{
             <ContainerComponent showHeader={true}
                 renderListColGrid={true}
                 colsWidth={4}
-                items={ListTools.map((tool,i)=>{
+                items={listTools.map((tool,i)=>{
                     return (
                         <Paper className={"ToolsCard " + (tool.ref ? "Active" : "Soon")}>
                             {tool.ref &&

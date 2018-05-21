@@ -56,8 +56,9 @@ class Utils{
     }
 
     static formatDateDisplay(date){
-        let dateRet = new Date(this.formatDate(date));
-        return dateRet.toDateString();
+        const dateRet = new Date(this.formatDate(date));
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        return dateRet.toLocaleDateString('es',options);
     }
 
     static formatDate(date){
@@ -84,8 +85,8 @@ class Utils{
         });
     }
 
-    static getLoans(page,all_loans,state){
-        return axios.get(`${HOST_APP}api/loan?page=${page}&all_loans=${all_loans}&state=${state}`,{
+    static getLoans(page,all_loans,state,paginate = true){
+        return axios.get(`${HOST_APP}api/loan?page=${page}&all_loans=${all_loans}&state=${state}&paginate=${paginate}`,{
             headers: {
                 'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
             }
