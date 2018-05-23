@@ -18,11 +18,9 @@ export default class ProjectionPage extends ContainerComponent {
             openMessage: false,
             loanId: null,
             loanIds: [],
-            fromDate: null,
             toDate: null,
             loanIdError: '',
             toDateError: '',
-            fromDateError: '',
             errorMessage: ''
         }
     }
@@ -44,12 +42,6 @@ export default class ProjectionPage extends ContainerComponent {
     onSubmit(){
         let isError = false;
         const requiredField = 'Campo requerido';
-        if(!this.state.fromDate){
-            this.setState({fromDateError:requiredField});
-            isError = true;
-        }else{
-            this.setState({fromDateError:''});
-        }
         if(!this.state.toDate){
             this.setState({toDateError:requiredField});
             isError = true;
@@ -62,12 +54,11 @@ export default class ProjectionPage extends ContainerComponent {
         }else{
             this.setState({loanIdError: ''});
         }
-        const toDate = new Date(this.state.toDate);
-        const fromDate = new Date(this.state.fromDate);
-        if(!isError && fromDate >= toDate){
-            this.showMessageError('"Desde" debe ser menor a "Hasta');
-            isError = true;
-        }
+        // const toDate = new Date(this.state.toDate);
+        // if(!isError && fromDate >= toDate){
+        //     this.showMessageError('"Desde" debe ser menor a "Hasta');
+        //     isError = true;
+        // }
 
         if(!isError){
 
@@ -97,15 +88,6 @@ export default class ProjectionPage extends ContainerComponent {
                                         )
                                     })}
                                 </SelectField>
-                                <DatePicker floatingLabelText="Desde"
-                                    autoOk={true}
-                                    style={{width:'100%'}}
-                                    locale={'es'}
-                                    errorText={this.state.fromDateError}
-                                    DateTimeFormat={Intl.DateTimeFormat}
-                                    formatDate={date => Utils.formatDateDisplay(date)}
-                                    onChange = {(event,newValue) => this.setState({fromDate:Utils.formatDate(newValue)})}
-                                />
                                 <DatePicker floatingLabelText="Hasta"
                                     autoOk={true}
                                     style={{width:'100%'}}
