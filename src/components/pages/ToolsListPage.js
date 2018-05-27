@@ -8,7 +8,7 @@ import '../../resources/styles/Tools.css';
 const listTools = (
     [
         {image: SimulationIcon, ref:'tool/simulation', text:'Simulador'},
-        {image: ProjectionIcon, ref:'tool/projection', text:'Proyección de pago'},
+        {image: ProjectionIcon, ref:'tool/projection', text:'Proyección pago'},
         {image: null, ref:null, text:'Próximamente'},
         {image: null, ref:null, text:'Próximamente'},
         {image: null, ref:null, text:'Próximamente'}

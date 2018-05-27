@@ -9,6 +9,14 @@ import Snackbar from 'material-ui/Snackbar';
 import ContainerComponent from '../../base/ContainerComponent';
 import Utils from '../../../utils/Utils';
 
+const styleColumn = {
+    flex: '50%'
+}
+
+const styleRow = {
+    display: 'flex'
+}
+
 export default class ProjectionPage extends ContainerComponent {
 
     constructor(){
@@ -19,9 +27,12 @@ export default class ProjectionPage extends ContainerComponent {
             loanId: null,
             loanIds: [],
             toDate: null,
+            fromDate: new Date(),
             loanIdError: '',
             toDateError: '',
-            errorMessage: ''
+            errorMessage: '',
+            loanDetail: null,
+            result: null
         }
     }
 
@@ -54,15 +65,41 @@ export default class ProjectionPage extends ContainerComponent {
         }else{
             this.setState({loanIdError: ''});
         }
-        // const toDate = new Date(this.state.toDate);
-        // if(!isError && fromDate >= toDate){
-        //     this.showMessageError('"Desde" debe ser menor a "Hasta');
-        //     isError = true;
-        // }
 
-        if(!isError){
-
+        const toDate = new Date(this.state.toDate)
+        if(!isError && toDate < this.state.fromDate){
+            this.setState({toDateError:'Fecha debe ser mayor a la fecha de desembolso del crédito actual.'});
+            return isError = true;
         }
+        // TODO: validate toDate and fromDate
+        if(!isError){
+            const scope = this;
+            this.setState({loading:true});
+            Utils.loanApps(this.state.loanId,'paymentProjection',{'to_date':this.state.toDate})
+                .then(response => {
+                    scope.setState({loading:false});
+                    scope.setState({result:response.data});
+                }).catch(error => {
+                    scope.setState({loading:false});
+                    scope.handleRequestError(error);
+                });
+        }
+    }
+
+    onLoanChange(event,index,newValue){
+        const scope = this;
+        this.setState({loanId:newValue,loading:true});
+        Utils.getLoan(newValue)
+            .then(response => {
+                scope.setState({loading:false});
+                scope.setState({
+                    fromDate: new Date(response.data.loan.disbursement_date),
+                    loanDetail: response.data.loan_detail
+                });
+            }).catch(error => {
+                scope.setState({loading:false});
+                scope.handleRequestError(error);
+            });
     }
 
     render(){
@@ -70,8 +107,8 @@ export default class ProjectionPage extends ContainerComponent {
             <div>
                 <ContainerComponent showHeader={true}
                     loadingMask={this.state.loading}
-                    renderOneMidColGrid={true}
-                    middle={
+                    renderTwoColGrid={true}
+                    left={
                         <div>
                             <Paper className="UserInfo" zDepth={5}>
                                 <h3 style={{textAlign:'center'}}>Proyección de pago</h3>
@@ -79,7 +116,7 @@ export default class ProjectionPage extends ContainerComponent {
                                     style={{width:'100%'}}
                                     value={this.state.loanId}
                                     errorText={this.state.loanIdError}
-                                    onChange = {(event,index,newValue) => this.setState({loanId:newValue})}
+                                    onChange = {this.onLoanChange.bind(this)}
                                 >
                                     {this.state.loanIds.map(loanId => {
                                         return (
@@ -88,7 +125,17 @@ export default class ProjectionPage extends ContainerComponent {
                                         )
                                     })}
                                 </SelectField>
-                                <DatePicker floatingLabelText="Hasta"
+                                {this.state.loanDetail && 
+                                    <div>
+                                        <span className="Labels"><strong>Valor capital:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.capital_balance)}</span><br/>
+                                        <span className="Labels"><strong>Valor intereses:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.interests)}</span><br/>
+                                        <span className="Labels"><strong>Valor pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
+                                        <span className="Labels"><strong>Valor pago mínimo:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.minimum_payment)}</span><br/>
+                                        <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br/>
+                                    </div>
+                                }
+                                <DatePicker floatingLabelText="Nueva fecha de pago"
+                                    minDate={this.state.fromDate}
                                     autoOk={true}
                                     style={{width:'100%'}}
                                     locale={'es'}
@@ -104,6 +151,20 @@ export default class ProjectionPage extends ContainerComponent {
                                     onClick={this.onSubmit.bind(this)}
                                 />
                             </Paper>
+                        </div>
+                    }
+                    right={
+                        <div>
+                            {this.state.result &&
+                                <Paper style={styleRow} className="UserInfo" zDepth={5}>
+                                    <div style={styleColumn}>
+                                        <strong>Valor Capital</strong><br/>${Utils.parseNumberMoney(this.state.result.capital_balance)}
+                                    </div>
+                                    <div style={styleColumn}>
+                                        <strong>Intereses</strong><br/>${Utils.parseNumberMoney(this.state.result.interests)}
+                                    </div>
+                                </Paper>
+                            }
                         </div>
                     }
                 />
