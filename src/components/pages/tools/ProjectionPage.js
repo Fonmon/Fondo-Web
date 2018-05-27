@@ -71,7 +71,7 @@ export default class ProjectionPage extends ContainerComponent {
             this.setState({toDateError:'Fecha debe ser mayor a la fecha de desembolso del crédito actual.'});
             return isError = true;
         }
-        // TODO: validate toDate and fromDate
+
         if(!isError){
             const scope = this;
             this.setState({loading:true});
