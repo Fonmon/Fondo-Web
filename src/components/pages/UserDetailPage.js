@@ -49,15 +49,7 @@ class UserDetailPage extends ContainerComponent{
                 scope.setState({loading:false});
             }).catch(function(error){
                 scope.setState({loading:false});
-                if(!error.response){
-                    scope.showMessageError('Error de conexión, inténtalo más tarde.');
-                }else if(error.response.status === 404){
-                    Utils.redirectTo('/error');
-                }else if(error.response.status === 401){
-                    Utils.clearStorage();
-                }else{
-                    scope.showMessageError(error.message);
-                }
+                scope.handleRequestError(error);
             });
     }
 
@@ -83,16 +75,10 @@ class UserDetailPage extends ContainerComponent{
                     scope.showMessageError('Cambios guardados');
                 }).catch(function(error){
                     scope.setState({loading:false});
-                    if(!error.response){
-                        scope.showMessageError('Error de conexión, inténtalo más tarde.');
-                    }else if(error.response.status === 404){
-                        Utils.redirectTo('/error');
-                    }else if(error.response.status === 409){
-                        scope.showMessageError('Email/Documento de identidad ya existe.');
-                    }else if(error.response.status === 401){
-                        Utils.clearStorage();
-                    }else
-                        scope.showMessageError(error.message);
+                    scope.handleRequestError(error,[{
+                        status: 409,
+                        message: 'Email/Documento de identidad ya existe.'
+                    }]);
                 })
         }
     }

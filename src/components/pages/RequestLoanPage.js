@@ -71,15 +71,10 @@ class RequestLoanPage extends ContainerComponent{
                     Utils.redirectTo(`/loan/${id}`);
                 }).catch(function(error){
                     scope.setState({loading:false});
-                    if(!error.response){
-                        scope.showMessageError('Error de conexión, inténtalo más tarde.');
-                    }else if(error.response.status === 406){
-                        scope.showMessageError(error.response.data.message);
-                    }else if(error.response.status === 401){
-                        Utils.clearStorage();
-                    }else{
-                        scope.showMessageError(error.message);
-                    }
+                    scope.handleRequestError(error,[{
+                        status: 406,
+                        message: error.response.data.message
+                    }]);
                 });
         }
     }
@@ -116,11 +111,13 @@ class RequestLoanPage extends ContainerComponent{
                                 <MenuItem value={0} primaryText="Mensual" />
                                 <MenuItem value={1} primaryText="Única" />
                             </SelectField>
-                            <DatePicker hintText="Fecha de desembolso"
+                            <DatePicker floatingLabelText="Fecha de desembolso"
                                 minDate={new Date()}
                                 autoOk={true}
                                 style={{width:'100%'}}
+                                DateTimeFormat={Intl.DateTimeFormat}
                                 errorText={this.state.disbursement_date_error}
+                                locale={'es'}
                                 formatDate={date => Utils.formatDateDisplay(date)}
                                 onChange = {(event,newValue) => this.setState({disbursement_date:Utils.formatDate(newValue)})}
                             />

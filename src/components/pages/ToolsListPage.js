@@ -2,13 +2,13 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 
 import ContainerComponent from '../base/ContainerComponent';
-import {SimulationIcon} from '../../utils/SvgIcons';
+import {SimulationIcon,ProjectionIcon} from '../../utils/SvgIcons';
 import '../../resources/styles/Tools.css';
 
-const ListTools = (
+const listTools = (
     [
         {image: SimulationIcon, ref:'tool/simulation', text:'Simulador'},
-        {image: null, ref:null, text:'Próximamente'},
+        {image: ProjectionIcon, ref:'tool/projection', text:'Proyección pago'},
         {image: null, ref:null, text:'Próximamente'},
         {image: null, ref:null, text:'Próximamente'},
         {image: null, ref:null, text:'Próximamente'}
@@ -22,7 +22,7 @@ class ToolsListPage extends ContainerComponent{
             <ContainerComponent showHeader={true}
                 renderListColGrid={true}
                 colsWidth={4}
-                items={ListTools.map((tool,i)=>{
+                items={listTools.map((tool,i)=>{
                     return (
                         <Paper className={"ToolsCard " + (tool.ref ? "Active" : "Soon")}>
                             {tool.ref &&

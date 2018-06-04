@@ -5,8 +5,13 @@ export const TOKEN_KEY = "TOKEN_FONDO_KEY";
 export const ID_KEY = "USER_ID";
 export const ROLE_KEY = "USER_ROLE";
 
+const requestOpt = {
+    headers: {
+        'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
+    }
+}
 class Utils{
-
+    
     static isAuthenticated(){
         let token = localStorage.getItem(TOKEN_KEY);
         return token ? true : false;
@@ -56,8 +61,9 @@ class Utils{
     }
 
     static formatDateDisplay(date){
-        let dateRet = new Date(this.formatDate(date));
-        return dateRet.toDateString();
+        const dateRet = new Date(this.formatDate(date));
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        return dateRet.toLocaleDateString('es',options);
     }
 
     static formatDate(date){
@@ -77,85 +83,45 @@ class Utils{
     }
 
     static getUsers(page){
-        return axios.get(`${HOST_APP}api/user?page=${page}`,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+        return axios.get(`${HOST_APP}api/user?page=${page}`,requestOpt);
     }
 
-    static getLoans(page,all_loans,state){
-        return axios.get(`${HOST_APP}api/loan?page=${page}&all_loans=${all_loans}&state=${state}`,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+    static getLoans(page,all_loans,state,paginate = true){
+        return axios.get(`${HOST_APP}api/loan?page=${page}&all_loans=${all_loans}&state=${state}&paginate=${paginate}`,requestOpt);
     }
 
     static removeUser(id){
-        return axios.delete(`${HOST_APP}api/user/${id}`,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+        return axios.delete(`${HOST_APP}api/user/${id}`,requestOpt);
     }
 
     static createUser(obj){
-        return axios.post(`${HOST_APP}api/user/`,obj,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        })
+        return axios.post(`${HOST_APP}api/user/`,obj,requestOpt);
     }
 
     static getUser(id){
-        return axios.get(`${HOST_APP}api/user/${id}`,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+        return axios.get(`${HOST_APP}api/user/${id}`,requestOpt);
     }
 
     static updateUser(id,obj){
-        return axios.patch(`${HOST_APP}api/user/${id}`,obj,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+        return axios.patch(`${HOST_APP}api/user/${id}`,obj,requestOpt);
     }
 
     static createLoan(obj){
-        return axios.post(`${HOST_APP}api/loan/`,obj,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+        return axios.post(`${HOST_APP}api/loan/`,obj,requestOpt);
     }
 
     static updateLoan(id,state){
         return axios.patch(`${HOST_APP}api/loan/${id}`,{
                 'state':state
-            },{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+            },requestOpt);
     }
 
     static getLoan(id){
-        return axios.get(`${HOST_APP}api/loan/${id}`,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+        return axios.get(`${HOST_APP}api/loan/${id}`,requestOpt);
     }
 
     static logout(){
-        return axios.post(`${HOST_APP}api/logout/`,{},{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+        return axios.post(`${HOST_APP}api/logout/`,{},requestOpt);
     }
 
     static activateAccount(id,obj){
@@ -163,19 +129,15 @@ class Utils{
     }
 
     static updateUsersLoad(obj){
-        return axios.patch(`${HOST_APP}api/user/`,obj,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+        return axios.patch(`${HOST_APP}api/user/`,obj,requestOpt);
     }
 
     static updateLoansLoad(obj){
-        return axios.patch(`${HOST_APP}api/loan/`,obj,{
-            headers: {
-                'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
-            }
-        });
+        return axios.patch(`${HOST_APP}api/loan/`,obj,requestOpt);
+    }
+
+    static loanApps(id, app, body){
+        return axios.post(`${HOST_APP}api/loan/${id}/${app}`, body, requestOpt);
     }
 }
 

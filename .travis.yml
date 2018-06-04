@@ -16,8 +16,7 @@ deploy:
     on:
       branch: master
   - provider: script
-    script: sh $TRAVIS_BUILD_DIR/scripts/trigger-deploy.sh $TRAVIS_COMMIT i-08237ed5d217d9b91 $TRAVIS_BRANCH
+    script: sh $TRAVIS_BUILD_DIR/scripts/trigger-deploy.sh $TRAVIS_COMMIT i-025148658658cc498 $TRAVIS_BRANCH
     skip_cleanup: true
     on:
       branch: develop
-

@@ -45,13 +45,7 @@ class HomePage extends ContainerComponent {
                 scope.setState({loading:false});
             }).catch(function(error){
                 scope.setState({loading:false});
-                if(!error.response){
-                    scope.showMessageError('Error de conexión, inténtalo más tarde.');
-                }else if(error.response.status === 401){
-                    Utils.clearStorage();
-                }else{
-                    scope.showMessageError(error.message);
-                }
+                scope.handleRequestError(error);
             });
     }
 

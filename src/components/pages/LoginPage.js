@@ -37,13 +37,10 @@ class LoginPage extends ContainerComponent {
                 Utils.redirectTo('/home');
             }).catch(function(error){
                 scope.setState({loading:false});
-                if(!error.response){
-                    scope.showMessageError('Error de conexión, inténtalo más tarde.');
-                }else if(error.response.status === 400){
-                    scope.showMessageError('Email o contraseña incorrectos.');
-                }else{
-                    scope.showMessageError(error);
-                }
+                scope.handleRequestError(error,[{
+                    status: 400,
+                    message: 'Email o contraseña incorrectos.'
+                }]);
             });
     }
 
