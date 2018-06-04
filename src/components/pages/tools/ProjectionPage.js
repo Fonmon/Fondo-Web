@@ -163,6 +163,11 @@ export default class ProjectionPage extends ContainerComponent {
                                     <div style={styleColumn}>
                                         <strong>Intereses</strong><br/>${Utils.parseNumberMoney(this.state.result.interests)}
                                     </div>
+                                    <div style={styleColumn}>
+                                        <strong>Total a pagar</strong><br/>${Utils.parseNumberMoney(
+                                            this.state.result.capital_balance + this.state.result.interests
+                                        )}
+                                    </div>
                                 </Paper>
                             }
                         </div>
