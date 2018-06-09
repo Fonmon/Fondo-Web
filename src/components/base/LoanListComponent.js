@@ -131,6 +131,7 @@ class LoanListComponent extends Component{
                     </TableHeader>
                     <TableBody
                         displayRowCheckbox={false}
+                        showRowHover={true}
                         >
                         {this.state.loans.map((loan,i) => {
                             return (<TableRow key={i}>

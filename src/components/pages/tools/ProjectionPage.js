@@ -109,49 +109,47 @@ export default class ProjectionPage extends ContainerComponent {
                     loadingMask={this.state.loading}
                     renderTwoColGrid={true}
                     left={
-                        <div>
-                            <Paper className="UserInfo" zDepth={5}>
-                                <h3 style={{textAlign:'center'}}>Proyección de pago</h3>
-                                <SelectField floatingLabelText="Crédito"
-                                    style={{width:'100%'}}
-                                    value={this.state.loanId}
-                                    errorText={this.state.loanIdError}
-                                    onChange = {this.onLoanChange.bind(this)}
-                                >
-                                    {this.state.loanIds.map(loanId => {
-                                        return (
-                                            <MenuItem key={loanId} value={loanId}
-                                                primaryText={`Crédito número ${loanId}`} />
-                                        )
-                                    })}
-                                </SelectField>
-                                {this.state.loanDetail && 
-                                    <div>
-                                        <span className="Labels"><strong>Valor capital:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.capital_balance)}</span><br/>
-                                        <span className="Labels"><strong>Valor intereses:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.interests)}</span><br/>
-                                        <span className="Labels"><strong>Valor pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
-                                        <span className="Labels"><strong>Valor pago mínimo:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.minimum_payment)}</span><br/>
-                                        <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br/>
-                                    </div>
-                                }
-                                <DatePicker floatingLabelText="Nueva fecha de pago"
-                                    minDate={this.state.fromDate}
-                                    autoOk={true}
-                                    style={{width:'100%'}}
-                                    locale={'es'}
-                                    errorText={this.state.toDateError}
-                                    DateTimeFormat={Intl.DateTimeFormat}
-                                    formatDate={date => Utils.formatDateDisplay(date)}
-                                    onChange = {(event,newValue) => this.setState({toDate:Utils.formatDate(newValue)})}
-                                />
-                                <RaisedButton
-                                    style={{width:'100%'}}
-                                    primary={true}
-                                    label="Calcular"
-                                    onClick={this.onSubmit.bind(this)}
-                                />
-                            </Paper>
-                        </div>
+                        <Paper className="UserInfo" zDepth={5}>
+                            <h3 style={{textAlign:'center'}}>Proyección de pago</h3>
+                            <SelectField floatingLabelText="Crédito"
+                                style={{width:'100%'}}
+                                value={this.state.loanId}
+                                errorText={this.state.loanIdError}
+                                onChange = {this.onLoanChange.bind(this)}
+                            >
+                                {this.state.loanIds.map(loanId => {
+                                    return (
+                                        <MenuItem key={loanId} value={loanId}
+                                            primaryText={`Crédito número ${loanId}`} />
+                                    )
+                                })}
+                            </SelectField>
+                            {this.state.loanDetail && 
+                                <div>
+                                    <span className="Labels"><strong>Valor capital:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.capital_balance)}</span><br/>
+                                    <span className="Labels"><strong>Valor intereses:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.interests)}</span><br/>
+                                    <span className="Labels"><strong>Valor pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
+                                    <span className="Labels"><strong>Valor pago mínimo:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.minimum_payment)}</span><br/>
+                                    <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br/>
+                                </div>
+                            }
+                            <DatePicker floatingLabelText="Nueva fecha de pago"
+                                minDate={this.state.fromDate}
+                                autoOk={true}
+                                style={{width:'100%'}}
+                                locale={'es'}
+                                errorText={this.state.toDateError}
+                                DateTimeFormat={Intl.DateTimeFormat}
+                                formatDate={date => Utils.formatDateDisplay(date)}
+                                onChange = {(event,newValue) => this.setState({toDate:Utils.formatDate(newValue)})}
+                            />
+                            <RaisedButton
+                                style={{width:'100%'}}
+                                primary={true}
+                                label="Calcular"
+                                onClick={this.onSubmit.bind(this)}
+                            />
+                        </Paper>
                     }
                     right={
                         <div>

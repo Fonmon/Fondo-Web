@@ -37,6 +37,10 @@ class Utils{
         return this.isAdmin() || this.isPresident() || this.isTreasurer();
     }
 
+    static isAuthorizedEdit(){
+        return this.isAdmin() || this.isTreasurer();
+    }
+
     static currentId(){
         return localStorage.getItem(ID_KEY);
     }

@@ -57,10 +57,6 @@ class UserDetailPage extends ContainerComponent{
         return (Utils.isAdmin() || Utils.currentId() === `${this.state.id}`);
     }
 
-    allowToEditFinance(){
-        return (Utils.isAdmin() || Utils.isTreasurer());
-    }
-
     handleUpdate(){
         let user = this.state.user;
         let scope = this;
@@ -99,7 +95,7 @@ class UserDetailPage extends ContainerComponent{
                             secondary={true} 
                             style={{marginTop: '30px',width:'100%'}}
                             onClick={this.handleUpdate.bind(this)}
-                            disabled={!this.allowToEditPersonal() && !this.allowToEditFinance()} />
+                            disabled={!this.allowToEditPersonal() && !Utils.isAuthorizedEdit()} />
                     }
                     orderRenderTwoColGrid={1}
                     renderTwoColGrid={true}
@@ -163,7 +159,7 @@ class UserDetailPage extends ContainerComponent{
                                 value={this.state.user.contributions}
                                 style={{width:'100%'}}
                                 type='number'
-                                disabled={!this.allowToEditFinance()}
+                                disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('contributions',newValue)}
                             />
                             <TextField floatingLabelText="Saldo de aportes"
@@ -171,7 +167,7 @@ class UserDetailPage extends ContainerComponent{
                                 value={this.state.user.balance_contributions}
                                 style={{width:'100%'}}
                                 type='number'
-                                disabled={!this.allowToEditFinance()}
+                                disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('balance_contributions',newValue)}
                             />
                             <TextField floatingLabelText="Cupo total"
@@ -179,7 +175,7 @@ class UserDetailPage extends ContainerComponent{
                                 value={this.state.user.total_quota}
                                 style={{width:'100%'}}
                                 type='number'
-                                disabled={!this.allowToEditFinance()}
+                                disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('total_quota',newValue)}
                             />
                             <TextField floatingLabelText="Cupo utilizado"
@@ -187,7 +183,7 @@ class UserDetailPage extends ContainerComponent{
                                 value={this.state.user.utilized_quota}
                                 style={{width:'100%'}}
                                 type='number'
-                                disabled={!this.allowToEditFinance()}
+                                disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('utilized_quota',newValue)}
                             />
                             <TextField floatingLabelText="Actualizado"
