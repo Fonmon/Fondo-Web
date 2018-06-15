@@ -66,7 +66,7 @@ class Utils{
 
     static formatDateDisplay(date){
         const dateRet = new Date(this.formatDate(date));
-        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return dateRet.toLocaleDateString('es',options);
     }
 
