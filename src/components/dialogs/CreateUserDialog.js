@@ -106,53 +106,52 @@ class CreateUserDialog extends Component{
                     modal={false}
                     autoScrollBodyContent={true}
                     onRequestClose={this.handleClose}
-                    open={this.state.creationOpen}>
-                        <div>
-                            <LoadingMaskComponent active={this.state.loading} />
-                            <TextField hintText="Ingresa el Documento de identidad"
-                                floatingLabelText="Identificación"
-                                required={true}
-                                style={{width:'100%'}}
-                                type='number'
-                                onChange = {(event,newValue) => this.setState({identification:newValue})}
-                                /><br/>
-                            <TextField hintText="Ingresa los nombres"
-                                floatingLabelText="Nombres"
-                                required={true}
-                                style={{width:'100%'}}
-                                onChange = {(event,newValue) => this.setState({first_name:newValue})}
-                                /><br/>
-                            <TextField hintText="Ingresa los apellidos"
-                                floatingLabelText="Apellidos"
-                                required={true}
-                                style={{width:'100%'}}
-                                onChange = {(event,newValue) => this.setState({last_name:newValue})}
-                                /><br/>
-                            <TextField hintText="Ingresa el email"
-                                floatingLabelText="Email"
-                                style={{width:'100%'}}
-                                required={true}
-                                onChange = {(event,newValue) => this.setState({email:newValue})}
-                                />
-                            <SelectField
-                                floatingLabelText="Rol"
-                                value={this.state.role}
-                                style={{width:'100%'}}
-                                onChange={(event,index,value) => this.setState({role:value})}
-                                >
-                                <MenuItem value={3} primaryText="Miembro" />
-                                <MenuItem value={2} primaryText="Tesorero" />
-                                <MenuItem value={1} primaryText="Presidente" />
-                                <MenuItem value={0} primaryText="Administrador" />
-                            </SelectField>
-                        </div>
+                    open={this.state.creationOpen}
+                >
+                    <LoadingMaskComponent active={this.state.loading} />
+                    <TextField hintText="Ingresa el Documento de identidad"
+                        floatingLabelText="Identificación"
+                        required={true}
+                        style={{width:'100%'}}
+                        type='number'
+                        onChange = {(event,newValue) => this.setState({identification:newValue})}
+                        /><br/>
+                    <TextField hintText="Ingresa los nombres"
+                        floatingLabelText="Nombres"
+                        required={true}
+                        style={{width:'100%'}}
+                        onChange = {(event,newValue) => this.setState({first_name:newValue})}
+                        /><br/>
+                    <TextField hintText="Ingresa los apellidos"
+                        floatingLabelText="Apellidos"
+                        required={true}
+                        style={{width:'100%'}}
+                        onChange = {(event,newValue) => this.setState({last_name:newValue})}
+                        /><br/>
+                    <TextField hintText="Ingresa el email"
+                        floatingLabelText="Email"
+                        style={{width:'100%'}}
+                        required={true}
+                        onChange = {(event,newValue) => this.setState({email:newValue})}
+                        />
+                    <SelectField
+                        floatingLabelText="Rol"
+                        value={this.state.role}
+                        style={{width:'100%'}}
+                        onChange={(event,index,value) => this.setState({role:value})}
+                    >
+                        <MenuItem value={3} primaryText="Miembro" />
+                        <MenuItem value={2} primaryText="Tesorero" />
+                        <MenuItem value={1} primaryText="Presidente" />
+                        <MenuItem value={0} primaryText="Administrador" />
+                    </SelectField>
                 </Dialog>
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
                     onRequestClose={this.handleRequestClose}
-                    />
+                />
             </div>
         );
     }

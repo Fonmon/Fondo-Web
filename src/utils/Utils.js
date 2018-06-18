@@ -125,7 +125,7 @@ class Utils{
     }
 
     static logout(){
-        return axios.post(`${HOST_APP}api/logout/`,{},requestOpt);
+        return axios.post(`${HOST_APP}api/user/logout/`,{},requestOpt);
     }
 
     static activateAccount(id,obj){
@@ -142,6 +142,18 @@ class Utils{
 
     static loanApps(id, app, body){
         return axios.post(`${HOST_APP}api/loan/${id}/${app}`, body, requestOpt);
+    }
+
+    static getActivityYears(){
+        return axios.get(`${HOST_APP}api/activity/year`,requestOpt);
+    }
+
+    static getActivities(idYear){
+        return axios.get(`${HOST_APP}api/activity/year/${idYear}`,requestOpt);
+    }
+
+    static createActivityYear(){
+        return axios.post(`${HOST_APP}api/activity/year`,{},requestOpt);
     }
 }
 
