@@ -8,6 +8,7 @@ import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 
 import ContainerComponent from '../base/ContainerComponent';
+import CurrencyField from '../fields/CurrencyField';
 import Utils from '../../utils/Utils';
 
 class RequestLoanPage extends ContainerComponent{
@@ -16,7 +17,7 @@ class RequestLoanPage extends ContainerComponent{
         this.state = {
             openMessage:false,
             errorMessage:'',
-            value:0,
+            value:null,
             payment:0,
             timelimit:0,
             fee:0,
@@ -88,10 +89,11 @@ class RequestLoanPage extends ContainerComponent{
                     middle={
                         <Paper className="UserInfo" zDepth={5}>
                             <h2 style={{textAlign:'center'}}>Solicitud de crédito</h2>
-                            <TextField floatingLabelText="Valor a solicitar"
+                            <CurrencyField floatingLabelText="Valor a solicitar"
                                 required={true}
                                 style={{width:'100%'}}
                                 type='number'
+                                value={this.state.value}
                                 errorText={this.state.value_error}
                                 onChange = {(event,newValue) => this.setState({value:newValue})}
                             />

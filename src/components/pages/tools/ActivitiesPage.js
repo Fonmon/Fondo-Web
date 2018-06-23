@@ -10,9 +10,14 @@ import {
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import Snackbar from 'material-ui/Snackbar';
+import TextField from 'material-ui/TextField';
+import DatePicker from 'material-ui/DatePicker';
+import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
 
 import ContainerComponent from '../../base/ContainerComponent';
 import CreateActivityDialog from '../../dialogs/CreateActivityDialog';
+import CurrencyField from '../../fields/CurrencyField';
 import Utils from '../../../utils/Utils';
 
 export default class ActivitiesPage extends ContainerComponent{
@@ -20,13 +25,15 @@ export default class ActivitiesPage extends ContainerComponent{
         super();
         this.state = {
             openMessage: false,
+            removeOpen: false,
+            prevIndex: -1,
             errorMessage: '',
             loading: false,
             creationOpen: false,
-            currentYearId: 0,
-            currentYear: 0,
+            year: {},
             years: [],
-            activities: []
+            activities: [],
+            activity: null
         }
     }
 
@@ -40,19 +47,11 @@ export default class ActivitiesPage extends ContainerComponent{
         Utils.getActivityYears()
             .then( response => {
                 if(response.status === 204){
-                    scope.setState({
-                        years:[],
-                        currentYearId:0,
-                        currentYear:0
-                    });
+                    scope.setState({years:[],year: {}});
                 }else{
                     const years = response.data,
                           year = years[0].id;
-                    scope.setState({
-                        years:years,
-                        currentYearId:year,
-                        currentYear: years[0].year
-                    });
+                    scope.setState({years:years,year: years[0]});
                     return Utils.getActivities(year);
                 }
             }).then(response => this.handleRequestActivities(response))
@@ -65,11 +64,7 @@ export default class ActivitiesPage extends ContainerComponent{
     handleRequestActivities(response){
         this.setState({loading: false});
         if(response)
-            this.setState({activities:response.data});
-    }
-
-    onAddNewActivity(){
-        this.setState({creationOpen: true});
+            this.setState({activities:response.data,prevIndex:-1,activity:null});
     }
 
     onNewYear(){
@@ -88,20 +83,89 @@ export default class ActivitiesPage extends ContainerComponent{
             })
     }
 
-    onActivitySelect(rows){
-        // if(rows.length){
-        //     this.setState({activateDetail:true});
-        // }else
-        //     this.setState({activateDetail:false});
+    onActivitySelect = (rows) => {
+        let prevIndex = -1;
+        if(this.state.prevIndex >= 0)
+            this.state.activities[this.state.prevIndex].selected = false;
+        if(rows.length){
+            const id = this.state.activities[rows[0]].id;
+            this.state.activities[rows[0]].selected = true;
+            this.getActivity(id);
+            prevIndex = rows[0];
+        }else{
+            this.setState({activity: null});
+        }
+        this.setState({prevIndex: prevIndex})
+    }
+
+    getActivity = (id) => {
+        const scope = this;
+        scope.setState({loading: true});
+        Utils.getActivity(id)
+            .then(response => {
+                scope.setState({loading:false, activity: response.data});
+            }).catch(error => {
+                scope.setState({loading:false});
+                scope.handleRequestError(error);
+            });
     }
 
     onYearChange = (event, index, value) => {
-        const year = this.state.years[index].year;
-        this.setState({currentYearId:value, currentYear:year});
-        // load activities from value
+        const yearSelected = this.state.years[index],
+              scope = this;
+        scope.setState({loading: true, year:yearSelected});
+        Utils.getActivities(yearSelected.id)
+            .then(response => this.handleRequestActivities(response))
+            .catch( error => {
+                scope.setState({loading: false});
+                scope.handleRequestError(error);
+            });
+    }
+
+    handleActivityCreation = () => {
+        const scope = this;
+        scope.setState({loading: true, creationOpen: false});
+        Utils.getActivities(this.state.year.id)
+            .then(response => this.handleRequestActivities(response))
+            .catch( error => {
+                scope.setState({loading: false});
+                scope.handleRequestError(error);
+            });
+    }
+
+    setStateCustom(key,value){
+        this.setState({activity:{...this.state.activity,[key]:value}});
+    }
+
+    onDeleteActivity = () => {
+        const scope = this;
+        scope.setState({loading: true, removeOpen: false});
+        Utils.deleteActivity(this.state.activity.id)
+            .then(response => Utils.getActivities(scope.state.year.id))
+            .then(response => this.handleRequestActivities(response))
+            .catch(error => {
+                scope.setState({loading: false});
+                scope.handleRequestError(error);
+            });
+    }
+
+    onSaveActivity = () => {
+        console.log(this.state.activity);
     }
 
     render(){
+        const actions = [
+            <FlatButton
+                label="No"
+                primary={true}
+                onClick={() => this.setState({removeOpen:false})}
+            />,
+            <RaisedButton
+                label="Si"
+                primary={true}
+                onClick={this.onDeleteActivity}
+            />,
+        ];
         return (
             <div>
                 <ContainerComponent showHeader={true}
@@ -111,7 +175,7 @@ export default class ActivitiesPage extends ContainerComponent{
                     left={
                         <Paper className="UserInfo" zDepth={5}>
                             <h3 style={{textAlign:'center'}}>Actividades</h3>
-                            <DropDownMenu value={this.state.currentYearId}
+                            <DropDownMenu value={this.state.year.id}
                                 onChange={this.onYearChange}>
                                 {this.state.years.map((year, index) => {
                                     return <MenuItem key={year.id} value={year.id} primaryText={year.year} />
@@ -120,7 +184,7 @@ export default class ActivitiesPage extends ContainerComponent{
                             {Utils.isAdmin() &&
                                 <RaisedButton style={{
                                         width:'100%',
-                                        paddingBottom:10
+                                        marginBottom:10
                                     }}
                                     secondary={true}
                                     label='Nuevo año de actividades'
@@ -131,7 +195,7 @@ export default class ActivitiesPage extends ContainerComponent{
                                 <RaisedButton style={{width:'100%'}}
                                     primary={true}
                                     label='Agregar Actividad'
-                                    onClick={this.onAddNewActivity.bind(this)}
+                                    onClick={() => this.setState({creationOpen: true})}
                                 />
                             }
                             <Table fixedHeader={false}
@@ -139,12 +203,13 @@ export default class ActivitiesPage extends ContainerComponent{
                                 bodyStyle={{overflowX: undefined, overflowY: undefined}}
                                 selectable={true}
                                 onRowSelection={(rows) => this.onActivitySelect(rows)}
+                                height='300px'
                             >
                                 <TableBody displayRowCheckbox={true}
                                     deselectOnClickaway={false}
                                     showRowHover={true}>
                                     {this.state.activities.map((activity, index) => {
-                                        return (<TableRow key={activity.id}>
+                                        return (<TableRow key={activity.id} selected={activity.selected}>
                                             <TableRowColumn>{activity.name}</TableRowColumn>
                                         </TableRow>)
                                     })}
@@ -157,6 +222,46 @@ export default class ActivitiesPage extends ContainerComponent{
                         <div>
                             <Paper className="UserInfo" zDepth={5}>
                                 <h3 style={{textAlign:'center'}}>Detalle de actividad</h3>
+                                {this.state.activity &&
+                                    <div>
+                                        {(Utils.isAdmin() || Utils.isPresident()) &&
+                                            <div>
+                                                <RaisedButton label="Guardar" 
+                                                    primary={true} 
+                                                    onClick={this.onSaveActivity}
+                                                    style={{width:'100%'}} />
+                                                <RaisedButton label="Eliminar" 
+                                                    secondary={true}
+                                                    onClick={() => this.setState({removeOpen:true})}
+                                                    style={{marginTop: '10px',width:'100%'}} />
+                                            </div>
+                                        }
+                                        <TextField floatingLabelText="Nombre"
+                                            required={true}
+                                            value={this.state.activity.name}
+                                            style={{width:'100%'}}
+                                            disabled={!Utils.isAdmin() && !Utils.isPresident()}
+                                            onChange = {(event,newValue) => this.setStateCustom('name',newValue)}
+                                        />
+                                        <CurrencyField floatingLabelText="Valor"
+                                            disabled={!Utils.isAdmin() && !Utils.isPresident()}
+                                            style={{width:'100%'}}
+                                            onChange = {(event,newValue) => this.setStateCustom('value',newValue)} 
+                                            value={this.state.activity.value}
+                                        />
+                                        <DatePicker floatingLabelText="Fecha de la actividad"
+                                            minDate={new Date(this.state.year.year,0,1)}
+                                            maxDate={new Date(this.state.year.year,11,31)}
+                                            autoOk={true}
+                                            value={Utils.convertToDate(this.state.activity.date)}
+                                            style={{width:'100%'}}
+                                            DateTimeFormat={Intl.DateTimeFormat}
+                                            locale={'es'}
+                                            formatDate={date => Utils.formatDateDisplay(date)}
+                                            onChange = {(event,newValue) => this.setStateCustom('date',Utils.formatDate(newValue))}
+                                        />
+                                    </div>
+                                }
                             </Paper>
                         </div>
                     }
@@ -168,7 +273,18 @@ export default class ActivitiesPage extends ContainerComponent{
                     onRequestClose={(event) => this.setState({openMessage: false})}
                 />
                 <CreateActivityDialog creationOpen={this.state.creationOpen} 
-                    year={this.state.currentYear}/>
+                    year={this.state.year}
+                    onClose={() => this.setState({creationOpen: false})}
+                    onActivityCreated={this.handleActivityCreation}/>
+                <Dialog
+                    title="Confirmación"
+                    actions={actions}
+                    modal={false}
+                    onRequestClose={() => this.setState({removeOpen:false})}
+                    open={this.state.removeOpen}
+                >
+                    ¿Seguro que desea eliminar esta actividad?
+                </Dialog>
             </div>
         );
     }

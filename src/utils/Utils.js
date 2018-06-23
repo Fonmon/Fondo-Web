@@ -56,7 +56,7 @@ class Utils{
         let j = 0;
         for(let i = valueArray.length-1;i>=0;i--,j++){
             if(j === 3){
-                newValue.unshift('.');
+                newValue.unshift(',');
                 j=0;
             }
             newValue.unshift(valueArray[i]);
@@ -72,6 +72,11 @@ class Utils{
 
     static formatDate(date){
         return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    }
+
+    static convertToDate(dateStr){
+        const [year,month,day] = dateStr.split('-');
+        return new Date(year, month - 1, day);
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -152,8 +157,20 @@ class Utils{
         return axios.get(`${HOST_APP}api/activity/year/${idYear}`,requestOpt);
     }
 
+    static getActivity(id){
+        return axios.get(`${HOST_APP}api/activity/${id}`,requestOpt);
+    }
+
+    static deleteActivity(id){
+        return axios.delete(`${HOST_APP}api/activity/${id}`,requestOpt);
+    }
+
     static createActivityYear(){
         return axios.post(`${HOST_APP}api/activity/year`,{},requestOpt);
+    }
+
+    static createActivity(idYear, activity){
+        return axios.post(`${HOST_APP}api/activity/year/${idYear}`,activity,requestOpt);
     }
 }
 

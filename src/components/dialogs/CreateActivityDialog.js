@@ -1,22 +1,27 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
+import Snackbar from 'material-ui/Snackbar';
 
 import Utils from '../../utils/Utils';
+import ContainerComponent from '../base/ContainerComponent';
 import LoadingMaskComponent from '../base/LoadingMaskComponent';
+import CurrencyField from '../fields/CurrencyField';
 
-export default class CreateActivityDialog extends Component{
+export default class CreateActivityDialog extends ContainerComponent{
     constructor(props){
         super(props);
         this.state = {
             creationOpen: false,
             name: '',
-            value: 0,
+            value: null,
             date: null,
-            loading: false
+            loading: false,
+            openMessage: false,
+            errorMessage: ''
         }
     }
 
@@ -25,11 +30,31 @@ export default class CreateActivityDialog extends Component{
     }
 
     handleClose = () => {
-        this.setState({creationOpen: false});
+        this.props.onClose();
     }
 
+    isFormValid = () => this.state.name && this.state.value && this.state.date
+
     handleCreateActivity(){
-        // TODO: validate all fields are filled
+        if(this.isFormValid()){
+            const activity = {
+                name: this.state.name,
+                value: this.state.value,
+                date: this.state.date
+            }, scope = this;
+            scope.setState({loading: true});
+            Utils.createActivity(this.props.year.id, activity)
+                .then(response => {
+                    scope.setState({loading: false});
+                    scope.props.onActivityCreated();
+                    scope.showMessageError('Actividad creada.')
+                }).catch(error => {
+                    scope.setState({loading: false});
+                    scope.handleRequestError(error);
+                });
+        }else{
+            this.showMessageError('Por favor llenar todos los campos.');
+        }
     }
     
     render(){
@@ -42,42 +67,49 @@ export default class CreateActivityDialog extends Component{
             <RaisedButton
                 label="Crear"
                 primary={true}
-                onClick={this.handleCreateActivity}
+                onClick={this.handleCreateActivity.bind(this)}
             />,
         ];
         return (
-            <Dialog title="Formulario creación de actividad"
-                actions={actions}
-                modal={false}
-                autoScrollBodyContent={true}
-                onRequestClose={this.handleClose}
-                open={this.state.creationOpen}
-            >
-                <LoadingMaskComponent active={this.state.loading} />
-                <TextField hintText="Ingresa el Nombre de la actividad"
-                    floatingLabelText="Nombre Actividad"
-                    required={true}
-                    style={{width:'100%'}}
-                    onChange = {(event,newValue) => this.setState({name:newValue})}
-                /><br/>
-                <TextField hintText="Ingresa el valor de la actividad"
-                    floatingLabelText="Valor"
-                    required={true}
-                    type="number"
-                    style={{width:'100%'}}
-                    onChange = {(event,newValue) => this.setState({value:newValue})}
-                /><br/>
-                <DatePicker floatingLabelText="Fecha de la actividad"
-                    minDate={new Date(this.props.year,0,1)}
-                    maxDate={new Date(this.props.year,11,31)}
-                    autoOk={true}
-                    style={{width:'100%'}}
-                    DateTimeFormat={Intl.DateTimeFormat}
-                    locale={'es'}
-                    formatDate={date => Utils.formatDateDisplay(date)}
-                    onChange = {(event,newValue) => this.setState({date:Utils.formatDate(newValue)})}
+            <div>
+                <Dialog title="Formulario creación de actividad"
+                    actions={actions}
+                    modal={false}
+                    autoScrollBodyContent={true}
+                    onRequestClose={this.handleClose}
+                    open={this.state.creationOpen}
+                >
+                    <LoadingMaskComponent active={this.state.loading} />
+                    <TextField hintText="Ingresa el Nombre de la actividad"
+                        floatingLabelText="Nombre Actividad"
+                        required={true}
+                        style={{width:'100%'}}
+                        onChange = {(event,newValue) => this.setState({name:newValue})}
+                    /><br/>
+                    <CurrencyField value={this.state.value}
+                        floatingLabelText="Valor"
+                        required={true}
+                        style={{width:'100%'}}
+                        onChange = {(event,newValue) => this.setState({value:newValue})}
+                    /><br/>
+                    <DatePicker floatingLabelText="Fecha de la actividad"
+                        minDate={new Date(this.props.year.year,0,1)}
+                        maxDate={new Date(this.props.year.year,11,31)}
+                        autoOk={true}
+                        style={{width:'100%'}}
+                        DateTimeFormat={Intl.DateTimeFormat}
+                        locale={'es'}
+                        formatDate={date => Utils.formatDateDisplay(date)}
+                        onChange = {(event,newValue) => this.setState({date:Utils.formatDate(newValue)})}
+                    />
+                </Dialog>
+                <Snackbar
+                    open={this.state.openMessage}
+                    message={this.state.errorMessage}
+                    autoHideDuration={4000}
+                    onRequestClose={() => this.setState({openMessage: false})}
                 />
-            </Dialog>
+            </div>
         )
     }
 }

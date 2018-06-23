@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -8,10 +8,10 @@ import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import Utils from '../../utils/Utils';
+import ContainerComponent from '../base/ContainerComponent';
 import LoadingMaskComponent from '../base/LoadingMaskComponent';
 
-class CreateUserDialog extends Component{
-
+class CreateUserDialog extends ContainerComponent{
     constructor(props){
         super(props);
         this.state = {
@@ -31,12 +31,8 @@ class CreateUserDialog extends Component{
         this.setState(nextProps);
     }
 
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
-    }
-
     handleClose = () => {
-        this.setState({creationOpen: false});
+        this.props.onClose();
     }
 
     handleRequestClose = () => {
@@ -64,22 +60,14 @@ class CreateUserDialog extends Component{
             Utils.createUser(user)
                 .then(function(response){
                     scope.setState({loading:false});
-                    scope.setState({
-                        creationOpen: false
-                    });
                     scope.showMessageError('Usuario creado.');
                     scope.props.onUserCreated()
                 }).catch(function(error){
                     scope.setState({loading:false});
-                    if(!error.response){
-                        scope.showMessageError('Error de conexión, inténtalo más tarde.');
-                    }else if(error.response.status === 409){
-                        scope.showMessageError('Email/Documento de identidad ya existe.');
-                    }else if(error.response.status === 401){
-                        Utils.clearStorage();
-                    }else{
-                        scope.showMessageError(error.message);
-                    }
+                    scope.handleRequestError(error, [{
+                        status: 409,
+                        message: 'Email/Documento de identidad ya existe.'
+                    }]);
                 });
         }
     }

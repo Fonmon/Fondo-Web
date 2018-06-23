@@ -39,7 +39,6 @@ const ButtonsActions = (props) => {
 }
 
 class UsersListPage extends ContainerComponent{
-
     constructor(){
         super();
         this.state = {
@@ -236,12 +235,14 @@ class UsersListPage extends ContainerComponent{
                     actions={actions}
                     modal={false}
                     onRequestClose={this.handleClose}
-                    open={this.state.removeOpen}>
+                    open={this.state.removeOpen}
+                >
                     ¿Seguro que desea eliminar este usuario?
                 </Dialog>
                 <CreateUserDialog 
                     onUserCreated={this.callbackUserCreated}
-                    creationOpen={this.state.createUserDialog} />
+                    creationOpen={this.state.createUserDialog}
+                    onClose={() => this.setState({createUserDialog: false})} />
             </div>
         );
     }
