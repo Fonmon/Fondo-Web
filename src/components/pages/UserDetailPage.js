@@ -7,6 +7,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
 import ContainerComponent from '../base/ContainerComponent';
+import CurrencyField from '../fields/CurrencyField';
 import Utils from '../../utils/Utils';
 import '../../resources/styles/UserDetail.css';
 
@@ -154,35 +155,31 @@ class UserDetailPage extends ContainerComponent{
                     right={
                         <Paper className="UserInfo" zDepth={5}>
                             <h2>Información financiera</h2>
-                            <TextField floatingLabelText="Aportes"
+                            <CurrencyField floatingLabelText="Aportes"
                                 required={true}
                                 value={this.state.user.contributions}
                                 style={{width:'100%'}}
-                                type='number'
                                 disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('contributions',newValue)}
                             />
-                            <TextField floatingLabelText="Saldo de aportes"
+                            <CurrencyField floatingLabelText="Saldo de aportes"
                                 required={true}
                                 value={this.state.user.balance_contributions}
                                 style={{width:'100%'}}
-                                type='number'
                                 disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('balance_contributions',newValue)}
                             />
-                            <TextField floatingLabelText="Cupo total"
+                            <CurrencyField floatingLabelText="Cupo total"
                                 required={true}
                                 value={this.state.user.total_quota}
                                 style={{width:'100%'}}
-                                type='number'
                                 disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('total_quota',newValue)}
                             />
-                            <TextField floatingLabelText="Cupo utilizado"
+                            <CurrencyField floatingLabelText="Cupo utilizado"
                                 required={true}
                                 value={this.state.user.utilized_quota}
                                 style={{width:'100%'}}
-                                type='number'
                                 disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('utilized_quota',newValue)}
                             />

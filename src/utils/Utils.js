@@ -169,6 +169,10 @@ class Utils{
         return axios.post(`${HOST_APP}api/activity/year`,{},requestOpt);
     }
 
+    static updateActivity(id, type, data){
+        return axios.patch(`${HOST_APP}api/activity/${id}?patch=${type}`,data,requestOpt);
+    }
+
     static createActivity(idYear, activity){
         return axios.post(`${HOST_APP}api/activity/year/${idYear}`,activity,requestOpt);
     }
