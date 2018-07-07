@@ -13,6 +13,7 @@ import {
 } from 'material-ui/Table';
 
 import ContainerComponent from '../../base/ContainerComponent';
+import CurrencyField from '../../fields/CurrencyField';
 import Utils from '../../../utils/Utils';
 
 class LoanData {
@@ -23,7 +24,6 @@ class LoanData {
 }
 
 class SimulationPage extends ContainerComponent{
-
     constructor(){
         super();
         this.state = {
@@ -74,17 +74,14 @@ class SimulationPage extends ContainerComponent{
                     <div>
                         <Paper className="UserInfo" zDepth={5}>
                             <h3 style={{textAlign:'center'}}>Simulador de crédito</h3>
-                            <TextField floatingLabelText="Valor a solicitar"
-                                required={true}
+                            <CurrencyField floatingLabelText="Valor a solicitar"
                                 style={{width:'100%'}}
-                                type='number'
-                                min={0}
+                                value={this.state.value}
                                 errorText={this.state.value_error}
                                 onChange = {(event,newValue) => this.setState({value:Number(newValue)})}
                             />
                             <TextField hintText="Valor en meses"
                                 floatingLabelText="Plazo"
-                                required={true}
                                 style={{width:'100%'}}
                                 type='number'
                                 min={1}

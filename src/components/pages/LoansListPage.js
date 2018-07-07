@@ -50,9 +50,10 @@ class LoansListPage extends ContainerComponent {
                             <RaisedButton label="Cargar información" 
                                 primary={true} 
                                 style={{marginTop:'30px',width:'100%'}}
-                                disabled={!Utils.isAuthorized()}
+                                disabled={!Utils.isAuthorizedEdit()}
                                 containerElement='label'>
-                                <input type="file" 
+                                <input type="file"
+                                    disabled={!Utils.isAuthorizedEdit()} 
                                     onChange={e => this.handleUpdateLoad(e.target.files[0])}
                                     style={{ display: 'none' }} />
                             </RaisedButton>

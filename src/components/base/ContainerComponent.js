@@ -6,7 +6,6 @@ import LoadingMaskComponent from './LoadingMaskComponent';
 import Utils from '../../utils/Utils';
 
 class ContainerComponent extends Component{
-
     constructor(props){
         super(props);
         this.state = {
@@ -29,19 +28,15 @@ class ContainerComponent extends Component{
 
     handleRequestError(error,messages=[]){
         if(!error.response){
-            this.showMessageError('Error de conexión, inténtalo más tarde.');
-            return;
+            return this.showMessageError('Error de conexión, inténtalo más tarde.');
         }else if(error.response.status === 401){
-            Utils.clearStorage();
-            return;
+            return Utils.clearStorage();
         }else if(error.response.status === 404){
-            Utils.redirectTo('/error');
-            return;
+            return Utils.redirectTo('/error');
         }else{
             for(let message of messages){
                 if(message.status === error.response.status){
-                    this.showMessageError(message.message);
-                    return;
+                    return this.showMessageError(message.message);
                 }
             }
         }

@@ -39,7 +39,6 @@ const ButtonsActions = (props) => {
 }
 
 class UsersListPage extends ContainerComponent{
-
     constructor(){
         super();
         this.state = {
@@ -163,9 +162,10 @@ class UsersListPage extends ContainerComponent{
                         <RaisedButton label="Cargar información" 
                             primary={true} 
                             style={{marginTop:'30px',width:'100%'}}
-                            disabled={!Utils.isAuthorized()}
+                            disabled={!Utils.isAuthorizedEdit()}
                             containerElement='label'>
-                            <input type="file" 
+                            <input type="file"
+                                disabled={!Utils.isAuthorizedEdit()} 
                                 onChange={e => this.handleUpdateLoad(e.target.files[0])}
                                 style={{ display: 'none' }} />
                         </RaisedButton>
@@ -235,12 +235,14 @@ class UsersListPage extends ContainerComponent{
                     actions={actions}
                     modal={false}
                     onRequestClose={this.handleClose}
-                    open={this.state.removeOpen}>
+                    open={this.state.removeOpen}
+                >
                     ¿Seguro que desea eliminar este usuario?
                 </Dialog>
                 <CreateUserDialog 
                     onUserCreated={this.callbackUserCreated}
-                    creationOpen={this.state.createUserDialog} />
+                    creationOpen={this.state.createUserDialog}
+                    onClose={() => this.setState({createUserDialog: false})} />
             </div>
         );
     }

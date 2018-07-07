@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -8,10 +8,10 @@ import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import Utils from '../../utils/Utils';
+import ContainerComponent from '../base/ContainerComponent';
 import LoadingMaskComponent from '../base/LoadingMaskComponent';
 
-class CreateUserDialog extends Component{
-
+class CreateUserDialog extends ContainerComponent{
     constructor(props){
         super(props);
         this.state = {
@@ -31,12 +31,8 @@ class CreateUserDialog extends Component{
         this.setState(nextProps);
     }
 
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
-    }
-
     handleClose = () => {
-        this.setState({creationOpen: false});
+        this.props.onClose();
     }
 
     handleRequestClose = () => {
@@ -64,22 +60,14 @@ class CreateUserDialog extends Component{
             Utils.createUser(user)
                 .then(function(response){
                     scope.setState({loading:false});
-                    scope.setState({
-                        creationOpen: false
-                    });
                     scope.showMessageError('Usuario creado.');
                     scope.props.onUserCreated()
                 }).catch(function(error){
                     scope.setState({loading:false});
-                    if(!error.response){
-                        scope.showMessageError('Error de conexión, inténtalo más tarde.');
-                    }else if(error.response.status === 409){
-                        scope.showMessageError('Email/Documento de identidad ya existe.');
-                    }else if(error.response.status === 401){
-                        Utils.clearStorage();
-                    }else{
-                        scope.showMessageError(error.message);
-                    }
+                    scope.handleRequestError(error, [{
+                        status: 409,
+                        message: 'Email/Documento de identidad ya existe.'
+                    }]);
                 });
         }
     }
@@ -106,53 +94,49 @@ class CreateUserDialog extends Component{
                     modal={false}
                     autoScrollBodyContent={true}
                     onRequestClose={this.handleClose}
-                    open={this.state.creationOpen}>
-                        <div>
-                            <LoadingMaskComponent active={this.state.loading} />
-                            <TextField hintText="Ingresa el Documento de identidad"
-                                floatingLabelText="Identificación"
-                                required={true}
-                                style={{width:'100%'}}
-                                type='number'
-                                onChange = {(event,newValue) => this.setState({identification:newValue})}
-                                /><br/>
-                            <TextField hintText="Ingresa los nombres"
-                                floatingLabelText="Nombres"
-                                required={true}
-                                style={{width:'100%'}}
-                                onChange = {(event,newValue) => this.setState({first_name:newValue})}
-                                /><br/>
-                            <TextField hintText="Ingresa los apellidos"
-                                floatingLabelText="Apellidos"
-                                required={true}
-                                style={{width:'100%'}}
-                                onChange = {(event,newValue) => this.setState({last_name:newValue})}
-                                /><br/>
-                            <TextField hintText="Ingresa el email"
-                                floatingLabelText="Email"
-                                style={{width:'100%'}}
-                                required={true}
-                                onChange = {(event,newValue) => this.setState({email:newValue})}
-                                />
-                            <SelectField
-                                floatingLabelText="Rol"
-                                value={this.state.role}
-                                style={{width:'100%'}}
-                                onChange={(event,index,value) => this.setState({role:value})}
-                                >
-                                <MenuItem value={3} primaryText="Miembro" />
-                                <MenuItem value={2} primaryText="Tesorero" />
-                                <MenuItem value={1} primaryText="Presidente" />
-                                <MenuItem value={0} primaryText="Administrador" />
-                            </SelectField>
-                        </div>
+                    open={this.state.creationOpen}
+                >
+                    <LoadingMaskComponent active={this.state.loading} />
+                    <TextField hintText="Ingresa el Documento de identidad"
+                        floatingLabelText="Identificación"
+                        style={{width:'100%'}}
+                        type='number'
+                        onChange = {(event,newValue) => this.setState({identification:newValue})}
+                        /><br/>
+                    <TextField hintText="Ingresa los nombres"
+                        floatingLabelText="Nombres"
+                        style={{width:'100%'}}
+                        onChange = {(event,newValue) => this.setState({first_name:newValue})}
+                        /><br/>
+                    <TextField hintText="Ingresa los apellidos"
+                        floatingLabelText="Apellidos"
+                        style={{width:'100%'}}
+                        onChange = {(event,newValue) => this.setState({last_name:newValue})}
+                        /><br/>
+                    <TextField hintText="Ingresa el email"
+                        floatingLabelText="Email"
+                        style={{width:'100%'}}
+                        type="email"
+                        onChange = {(event,newValue) => this.setState({email:newValue})}
+                        />
+                    <SelectField
+                        floatingLabelText="Rol"
+                        value={this.state.role}
+                        style={{width:'100%'}}
+                        onChange={(event,index,value) => this.setState({role:value})}
+                    >
+                        <MenuItem value={3} primaryText="Miembro" />
+                        <MenuItem value={2} primaryText="Tesorero" />
+                        <MenuItem value={1} primaryText="Presidente" />
+                        <MenuItem value={0} primaryText="Administrador" />
+                    </SelectField>
                 </Dialog>
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
                     onRequestClose={this.handleRequestClose}
-                    />
+                />
             </div>
         );
     }

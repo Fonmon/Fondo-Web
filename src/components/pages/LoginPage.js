@@ -55,7 +55,6 @@ class LoginPage extends ContainerComponent {
                         className="LoginFields"
                         floatingLabelText="Email"
                         type="email"
-                        required={true}
                         onChange = {(event,newValue) => this.setState({email:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
                     />
@@ -63,7 +62,6 @@ class LoginPage extends ContainerComponent {
                         className="LoginFields"
                         floatingLabelText="Contraseña"
                         type="password"
-                        required={true}
                         onChange = {(event,newValue) => this.setState({password:newValue})}
                         onKeyPress = {(event) => this.handleKeyPress(event)}
                     /><br/>

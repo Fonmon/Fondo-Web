@@ -11,7 +11,6 @@ const requestOpt = {
     }
 }
 class Utils{
-    
     static isAuthenticated(){
         let token = localStorage.getItem(TOKEN_KEY);
         return token ? true : false;
@@ -37,6 +36,10 @@ class Utils{
         return this.isAdmin() || this.isPresident() || this.isTreasurer();
     }
 
+    static isAuthorizedEdit(){
+        return this.isAdmin() || this.isTreasurer();
+    }
+
     static currentId(){
         return localStorage.getItem(ID_KEY);
     }
@@ -52,7 +55,7 @@ class Utils{
         let j = 0;
         for(let i = valueArray.length-1;i>=0;i--,j++){
             if(j === 3){
-                newValue.unshift('.');
+                newValue.unshift(',');
                 j=0;
             }
             newValue.unshift(valueArray[i]);
@@ -62,12 +65,17 @@ class Utils{
 
     static formatDateDisplay(date){
         const dateRet = new Date(this.formatDate(date));
-        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return dateRet.toLocaleDateString('es',options);
     }
 
     static formatDate(date){
         return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    }
+
+    static convertToDate(dateStr){
+        const [year,month,day] = dateStr.split('-');
+        return new Date(year, month - 1, day);
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -121,7 +129,7 @@ class Utils{
     }
 
     static logout(){
-        return axios.post(`${HOST_APP}api/logout/`,{},requestOpt);
+        return axios.post(`${HOST_APP}api/user/logout/`,{},requestOpt);
     }
 
     static activateAccount(id,obj){
@@ -138,6 +146,34 @@ class Utils{
 
     static loanApps(id, app, body){
         return axios.post(`${HOST_APP}api/loan/${id}/${app}`, body, requestOpt);
+    }
+
+    static getActivityYears(){
+        return axios.get(`${HOST_APP}api/activity/year`,requestOpt);
+    }
+
+    static getActivities(idYear){
+        return axios.get(`${HOST_APP}api/activity/year/${idYear}`,requestOpt);
+    }
+
+    static getActivity(id){
+        return axios.get(`${HOST_APP}api/activity/${id}`,requestOpt);
+    }
+
+    static deleteActivity(id){
+        return axios.delete(`${HOST_APP}api/activity/${id}`,requestOpt);
+    }
+
+    static createActivityYear(){
+        return axios.post(`${HOST_APP}api/activity/year`,{},requestOpt);
+    }
+
+    static updateActivity(id, type, data){
+        return axios.patch(`${HOST_APP}api/activity/${id}?patch=${type}`,data,requestOpt);
+    }
+
+    static createActivity(idYear, activity){
+        return axios.post(`${HOST_APP}api/activity/year/${idYear}`,activity,requestOpt);
     }
 }
 

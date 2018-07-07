@@ -8,10 +8,8 @@ import {
     TableRow,
     TableRowColumn,
 } from 'material-ui/Table';
-import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import Pagination from 'material-ui-pagination';
-import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
@@ -56,11 +54,7 @@ class LoanListComponent extends Component{
                 }
             });
     }
-
-    onEdit(id){
-        Utils.redirectTo(`/loan/${id}`);
-    }
-
+    
     getStateType(value){
         if(value === 0)
             return 'Esperando aprobación';
@@ -71,11 +65,11 @@ class LoanListComponent extends Component{
         if(value === 3)
             return 'Finalizada';
     }
-
+    
     onRowSelection(rows){
         if(rows.length){
-            let id = this.state.loans[rows[0]].id;
-            this.onEdit(id);
+            const id = this.state.loans[rows[0]].id;
+            Utils.redirectTo(`/loan/${id}`);
         }
     }
 
@@ -126,11 +120,11 @@ class LoanListComponent extends Component{
                             <TableHeaderColumn>Valor</TableHeaderColumn>
                             <TableHeaderColumn>Fecha creación</TableHeaderColumn>
                             <TableHeaderColumn>Estado</TableHeaderColumn>
-                            <TableHeaderColumn>Acción</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
                     <TableBody
                         displayRowCheckbox={false}
+                        showRowHover={true}
                         >
                         {this.state.loans.map((loan,i) => {
                             return (<TableRow key={i}>
@@ -141,9 +135,6 @@ class LoanListComponent extends Component{
                                 <TableRowColumn>${Utils.parseNumberMoney(loan.value)}</TableRowColumn>
                                 <TableRowColumn>{loan.created_at}</TableRowColumn>
                                 <TableRowColumn>{this.getStateType(loan.state)}</TableRowColumn>
-                                <TableRowColumn >
-                                    <IconButton onClick={this.onEdit.bind(this,loan.id)}><ActionOpenInNew /></IconButton>
-                                </TableRowColumn>
                             </TableRow>);
                         })}
                     </TableBody>
