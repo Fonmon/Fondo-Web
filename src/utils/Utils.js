@@ -11,7 +11,6 @@ const requestOpt = {
     }
 }
 class Utils{
-    
     static isAuthenticated(){
         let token = localStorage.getItem(TOKEN_KEY);
         return token ? true : false;

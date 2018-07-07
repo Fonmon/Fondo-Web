@@ -99,27 +99,24 @@ class CreateUserDialog extends ContainerComponent{
                     <LoadingMaskComponent active={this.state.loading} />
                     <TextField hintText="Ingresa el Documento de identidad"
                         floatingLabelText="Identificación"
-                        required={true}
                         style={{width:'100%'}}
                         type='number'
                         onChange = {(event,newValue) => this.setState({identification:newValue})}
                         /><br/>
                     <TextField hintText="Ingresa los nombres"
                         floatingLabelText="Nombres"
-                        required={true}
                         style={{width:'100%'}}
                         onChange = {(event,newValue) => this.setState({first_name:newValue})}
                         /><br/>
                     <TextField hintText="Ingresa los apellidos"
                         floatingLabelText="Apellidos"
-                        required={true}
                         style={{width:'100%'}}
                         onChange = {(event,newValue) => this.setState({last_name:newValue})}
                         /><br/>
                     <TextField hintText="Ingresa el email"
                         floatingLabelText="Email"
                         style={{width:'100%'}}
-                        required={true}
+                        type="email"
                         onChange = {(event,newValue) => this.setState({email:newValue})}
                         />
                     <SelectField

@@ -90,7 +90,6 @@ class ActivateAccountPage extends ContainerComponent{
                     <TextField hintText="Escribe tu documento de identidad"
                         className="LoginFields"
                         floatingLabelText="Documento de identidad"
-                        required={true}
                         type="number"
                         style={{width:'100%'}}
                         errorText={this.state.errorIdentification}
@@ -101,7 +100,6 @@ class ActivateAccountPage extends ContainerComponent{
                         className="LoginFields"
                         floatingLabelText="Nueva contraseña"
                         type="password"
-                        required={true}
                         errorText={this.state.errorPassword}
                         style={{width:'100%'}}
                         onChange = {(event,newValue) => this.setState({password:newValue})}
@@ -111,7 +109,6 @@ class ActivateAccountPage extends ContainerComponent{
                         className="LoginFields"
                         floatingLabelText="Repite contraseña"
                         type="password"
-                        required={true}
                         errorText={this.state.errorRepeatPsw}
                         style={{width:'100%'}}
                         onChange = {(event,newValue) => this.setState({repeatPsw:newValue})}

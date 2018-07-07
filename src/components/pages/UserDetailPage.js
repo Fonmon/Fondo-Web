@@ -106,7 +106,6 @@ class UserDetailPage extends ContainerComponent{
                             <h2>Información personal</h2>
                             <TextField hintText="Ingresa el Documento de identidad"
                                 floatingLabelText="Identificación"
-                                required={true}
                                 value={this.state.user.identification}
                                 style={{width:'100%'}}
                                 type='number'
@@ -115,7 +114,6 @@ class UserDetailPage extends ContainerComponent{
                             />
                             <TextField hintText="Ingresa tus nombres"
                                 floatingLabelText="Nombres"
-                                required={true}
                                 value={this.state.user.first_name}
                                 style={{width:'100%'}}
                                 disabled={!this.allowToEditPersonal()}
@@ -123,7 +121,6 @@ class UserDetailPage extends ContainerComponent{
                             />
                             <TextField hintText="Ingresa tus apellidos"
                                 floatingLabelText="Apellidos"
-                                required={true}
                                 value={this.state.user.last_name}
                                 style={{width:'100%'}}
                                 disabled={!this.allowToEditPersonal()}
@@ -131,7 +128,6 @@ class UserDetailPage extends ContainerComponent{
                             />
                             <TextField hintText="Ingresa tu email"
                                 floatingLabelText="Email"
-                                required={true}
                                 value={this.state.user.email}
                                 style={{width:'100%'}}
                                 disabled={!this.allowToEditPersonal()}
@@ -156,28 +152,24 @@ class UserDetailPage extends ContainerComponent{
                         <Paper className="UserInfo" zDepth={5}>
                             <h2>Información financiera</h2>
                             <CurrencyField floatingLabelText="Aportes"
-                                required={true}
                                 value={this.state.user.contributions}
                                 style={{width:'100%'}}
                                 disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('contributions',newValue)}
                             />
                             <CurrencyField floatingLabelText="Saldo de aportes"
-                                required={true}
                                 value={this.state.user.balance_contributions}
                                 style={{width:'100%'}}
                                 disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('balance_contributions',newValue)}
                             />
                             <CurrencyField floatingLabelText="Cupo total"
-                                required={true}
                                 value={this.state.user.total_quota}
                                 style={{width:'100%'}}
                                 disabled={!Utils.isAuthorizedEdit()}
                                 onChange = {(event,newValue) => this.setStateCustom('total_quota',newValue)}
                             />
                             <CurrencyField floatingLabelText="Cupo utilizado"
-                                required={true}
                                 value={this.state.user.utilized_quota}
                                 style={{width:'100%'}}
                                 disabled={!Utils.isAuthorizedEdit()}

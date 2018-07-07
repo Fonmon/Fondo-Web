@@ -82,7 +82,6 @@ class SimulationPage extends ContainerComponent{
                             />
                             <TextField hintText="Valor en meses"
                                 floatingLabelText="Plazo"
-                                required={true}
                                 style={{width:'100%'}}
                                 type='number'
                                 min={1}

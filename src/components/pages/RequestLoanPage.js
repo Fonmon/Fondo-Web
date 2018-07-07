@@ -90,7 +90,6 @@ class RequestLoanPage extends ContainerComponent{
                         <Paper className="UserInfo" zDepth={5}>
                             <h2 style={{textAlign:'center'}}>Solicitud de crédito</h2>
                             <CurrencyField floatingLabelText="Valor a solicitar"
-                                required={true}
                                 style={{width:'100%'}}
                                 type='number'
                                 value={this.state.value}
@@ -99,7 +98,6 @@ class RequestLoanPage extends ContainerComponent{
                             />
                             <TextField hintText="Valor en meses"
                                 floatingLabelText="Plazo"
-                                required={true}
                                 style={{width:'100%'}}
                                 type='number'
                                 errorText={this.state.timelimit_error}

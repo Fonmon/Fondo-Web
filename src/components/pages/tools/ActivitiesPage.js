@@ -302,7 +302,6 @@ export default class ActivitiesPage extends ContainerComponent{
                                             </div>
                                         }
                                         <TextField floatingLabelText="Nombre"
-                                            required={true}
                                             value={this.state.activity.name}
                                             style={{width:'100%'}}
                                             disabled={!Utils.isAdmin() && !Utils.isPresident()}

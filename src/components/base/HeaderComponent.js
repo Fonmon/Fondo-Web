@@ -85,7 +85,6 @@ const SidebarMenus = () => {
 }
 
 class HeaderComponent extends Component{
-
     constructor(props){
         super(props);
         this.state = {
@@ -98,12 +97,16 @@ class HeaderComponent extends Component{
     handleTitleClick = () => (Utils.redirectTo("/home"))
 
     handleSignOut(){
-        Utils.logout()
-            .then(function(response){
-                Utils.clearStorage();
-            }).catch(function(error){
-                console.log(error);
-            });
+        if(Utils.isAuthenticated()){
+            Utils.logout()
+                .then(function(response){
+                    Utils.clearStorage();
+                }).catch(function(error){
+                    console.log(error);
+                });
+        }else{
+            Utils.clearStorage();
+        }
     }
 
     render(){

@@ -82,13 +82,11 @@ export default class CreateActivityDialog extends ContainerComponent{
                     <LoadingMaskComponent active={this.state.loading} />
                     <TextField hintText="Ingresa el Nombre de la actividad"
                         floatingLabelText="Nombre Actividad"
-                        required={true}
                         style={{width:'100%'}}
                         onChange = {(event,newValue) => this.setState({name:newValue})}
                     /><br/>
                     <CurrencyField value={this.state.value}
                         floatingLabelText="Valor"
-                        required={true}
                         style={{width:'100%'}}
                         onChange = {(event,newValue) => this.setState({value:newValue})}
                     /><br/>
