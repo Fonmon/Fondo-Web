@@ -97,16 +97,17 @@ class HeaderComponent extends Component{
     handleTitleClick = () => (Utils.redirectTo("/home"))
 
     handleSignOut(){
-        if(Utils.isAuthenticated()){
-            Utils.logout()
-                .then(function(response){
-                    Utils.clearStorage();
-                }).catch(function(error){
-                    console.log(error);
-                });
-        }else{
-            Utils.clearStorage();
-        }
+        // if(Utils.isAuthenticated()){
+        //     Utils.logout()
+        //         .then(function(response){
+        //             Utils.clearStorage();
+        //         }).catch(function(error){
+        //             console.log(error);
+        //         });
+        // }else{
+        //     Utils.clearStorage();
+        // }
+        Utils.clearStorage();
     }
 
     render(){
