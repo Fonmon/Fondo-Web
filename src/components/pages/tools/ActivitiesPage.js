@@ -51,6 +51,7 @@ export default class ActivitiesPage extends ContainerComponent{
             activities: [],
             activity: null
         }
+        this.createActivityKey = 1;
     }
 
     componentDidMount(){
@@ -140,6 +141,7 @@ export default class ActivitiesPage extends ContainerComponent{
 
     handleActivityCreation = () => {
         const scope = this;
+        this.createActivityKey++;
         scope.setState({loading: true, creationOpen: false});
         Utils.getActivities(this.state.year.id)
             .then(response => this.handleRequestActivities(response))
@@ -380,8 +382,12 @@ export default class ActivitiesPage extends ContainerComponent{
                 />
                 <CreateActivityDialog creationOpen={this.state.creationOpen} 
                     year={this.state.year}
-                    onClose={() => this.setState({creationOpen: false})}
-                    onActivityCreated={this.handleActivityCreation}/>
+                    onClose={() => {
+                        this.createActivityKey++;
+                        this.setState({creationOpen: false})
+                    }}
+                    onActivityCreated={this.handleActivityCreation}
+                    key={this.createActivityKey}/>
                 <Dialog
                     title="Confirmación"
                     actions={actions}

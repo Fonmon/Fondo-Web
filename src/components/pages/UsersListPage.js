@@ -52,6 +52,7 @@ class UsersListPage extends ContainerComponent{
             totalPages: 1,
             loading:false
         }
+        this.createUserKey = 1;
     }
 
     componentDidMount = () => {
@@ -127,6 +128,7 @@ class UsersListPage extends ContainerComponent{
     }
 
     callbackUserCreated = () => {
+        this.createUserKey++;
         this.setState({createUserDialog: false});
         this.getUsers(1);
     }
@@ -239,10 +241,13 @@ class UsersListPage extends ContainerComponent{
                 >
                     ¿Seguro que desea eliminar este usuario?
                 </Dialog>
-                <CreateUserDialog 
+                <CreateUserDialog key={this.createUserKey}
                     onUserCreated={this.callbackUserCreated}
                     creationOpen={this.state.createUserDialog}
-                    onClose={() => this.setState({createUserDialog: false})} />
+                    onClose={() => {
+                        this.createUserKey++;
+                        this.setState({createUserDialog: false})
+                    }} />
             </div>
         );
     }
