@@ -1,11 +1,11 @@
 import React from 'react';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import Snackbar from 'material-ui/Snackbar';
+import Button from '@material-ui/core/Button';
+import ContentAdd from '@material-ui/icons/Add';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import ContainerComponent from '../base/ContainerComponent';
 import FinanceInfoComponent from '../base/FinanceInfoComponent';
-import LoanListComponent from '../base/LoanListComponent';
+// import LoanListComponent from '../base/LoanListComponent';
 import Utils,{ID_KEY,ROLE_KEY} from '../../utils/Utils';
 
 class HomePage extends ContainerComponent {
@@ -60,26 +60,27 @@ class HomePage extends ContainerComponent {
                         <FinanceInfoComponent financeInfo={this.state.financeInfo}/>
                     }
                     rightWidth={8}
-                    right={
-                        <LoanListComponent all={false} 
-                            applicantColumn={false}/>
-                    }
+                    // right={
+                    //     <LoanListComponent all={false} 
+                    //         applicantColumn={false}/>
+                    // }
                 />
-                <FloatingActionButton 
-                    secondary={true} 
+                <Button variant='fab' 
+                    color="secondary"
                     style={{
                         right: 20,
                         bottom:20,
                         position:'fixed'
                     }}
-                    href="/request-loan">
+                    href="/request-loan"
+                >
                     <ContentAdd />
-                </FloatingActionButton>
+                </Button>
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={(event) => this.setState({openMessage: false})}
+                    onClose={(event) => this.setState({openMessage: false})}
                 />
             </div>
         );
