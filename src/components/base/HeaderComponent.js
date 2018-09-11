@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core';
 
+import ContentAdd from '@material-ui/icons/Add';
 import MenuIcon from '@material-ui/icons/Menu';
 import PowerOff from '@material-ui/icons/PowerSettingsNew';
 
@@ -24,21 +25,21 @@ const SidebarMenus = () => {
     let currentId = `/user/${Utils.currentId()}`;
     let items = (
         <div>
-            <MenuItem href="/home">Inicio</MenuItem>
-            <MenuItem href={currentId}>Mi Perfil</MenuItem>
-            <MenuItem href="/tools">Herramientas</MenuItem>
-            <MenuItem href="/info">Información del fondo</MenuItem>
+            <MenuItem component='a' href="/home">Inicio</MenuItem>
+            <MenuItem component='a' href={currentId}>Mi Perfil</MenuItem>
+            <MenuItem component='a' href="/tools">Herramientas</MenuItem>
+            <MenuItem component='a' href="/info">Información del fondo</MenuItem>
         </div>
     );
     if (Utils.isAuthorized()) {
         items = (
             <div>
-                <MenuItem href="/home">Inicio</MenuItem>
-                <MenuItem href={currentId} >Mi Perfil</MenuItem>
-                <MenuItem href="/users">Usuarios</MenuItem>
-                <MenuItem href="/loans">Solicitudes de créditos</MenuItem>
-                <MenuItem href="/tools">Herramientas</MenuItem>
-                <MenuItem href="/info">Información del fondo</MenuItem>
+                <MenuItem component='a' href="/home">Inicio</MenuItem>
+                <MenuItem component='a' href={currentId} >Mi Perfil</MenuItem>
+                <MenuItem component='a' href="/users">Usuarios</MenuItem>
+                <MenuItem component='a' href="/loans">Solicitudes de créditos</MenuItem>
+                <MenuItem component='a' href="/tools">Herramientas</MenuItem>
+                <MenuItem component='a' href="/info">Información del fondo</MenuItem>
             </div>
         );
     }
@@ -83,6 +84,11 @@ class HeaderComponent extends Component {
                             Fondo Montañez
                         </Typography>
                         <section className={classes.rightToolbar}>
+                            <IconButton color="inherit" 
+                                href="/request-loan"
+                            >
+                                <ContentAdd />
+                            </IconButton>
                             <IconButton color="inherit" 
                                 onClick={this.handleSignOut}
                             >

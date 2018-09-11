@@ -13,7 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import ContentRemoveCircleOutline from 'material-ui/svg-icons/content/remove-circle-outline';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import Divider from 'material-ui/Divider';
-import Pagination from 'material-ui-pagination';
+// import Pagination from 'material-ui-pagination';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -217,12 +217,12 @@ class UsersListPage extends ContainerComponent{
                                 </TableBody>
                             </Table>
                             <Divider />
-                            <center><Pagination
+                            {/* <center><Pagination
                                 total = { this.state.totalPages }
                                 current = { this.state.currentPage }
                                 display = { 10 }
                                 onChange = { number => this.getUsers(number) }
-                            /></center>  
+                            /></center>   */}
                         </Paper>
                     }
                 />

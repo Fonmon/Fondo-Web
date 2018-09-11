@@ -1,16 +1,34 @@
-import React from 'react';
-import TextField from 'material-ui/TextField';
+import React, { Component } from 'react';
+import TextField from '@material-ui/core/TextField';
 import NumberFormat from 'react-number-format';
 
-export default class CurrencyField extends TextField{
-    render(){
+function NumberFormatCustom(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat {...other}
+            getInputRef={inputRef}
+            onValueChange={values => {
+                onChange({
+                    target: {
+                        value: values.value,
+                    },
+                });
+            }}
+            thousandSeparator
+            prefix="$"
+        />
+    );
+}
+
+export default class CurrencyField extends Component {
+    render() {
         return (
-            <TextField {...this.props} >
-                <NumberFormat value={this.props.value} 
-                    thousandSeparator={true} 
-                    prefix={'$'}
-                    onValueChange={(values) => this.props.onChange(null,values.floatValue)} />
-            </TextField>
+            <TextField {...this.props}
+                InputProps={{
+                    inputComponent: NumberFormatCustom,
+                }}
+            />
         )
     }
 }
