@@ -1,11 +1,14 @@
 import React from 'react';
-import TextField from 'material-ui/TextField';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import Snackbar from 'material-ui/Snackbar';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 
 import Utils from '../../utils/Utils';
 import ContainerComponent from '../base/ContainerComponent';
@@ -74,68 +77,70 @@ class CreateUserDialog extends ContainerComponent{
 
     render(){
         const actions = [
-            <FlatButton
-                label="Cancelar"
-                primary={true}
+            <Button color='primary' key="cancel"
                 onClick={this.handleClose}
-            />,
-            <RaisedButton
-                label="Crear"
-                primary={true}
+            >
+                Cancelar
+            </Button>,
+            <Button color="primary" key="create"
+                variant="contained"
                 onClick={this.handleCreateUser}
-            />,
+            >
+                Crear
+            </Button>,
         ];
 
         return (
             <div>
-                <Dialog
-                    title="Formulario creación de usuario"
-                    actions={actions}
-                    modal={false}
-                    autoScrollBodyContent={true}
-                    onRequestClose={this.handleClose}
+                <Dialog aria-labelledby="creation-dialog-title"
                     open={this.state.creationOpen}
                 >
-                    <LoadingMaskComponent active={this.state.loading} />
-                    <TextField hintText="Ingresa el Documento de identidad"
-                        floatingLabelText="Identificación"
-                        style={{width:'100%'}}
-                        type='number'
-                        onChange = {(event,newValue) => this.setState({identification:newValue})}
-                        /><br/>
-                    <TextField hintText="Ingresa los nombres"
-                        floatingLabelText="Nombres"
-                        style={{width:'100%'}}
-                        onChange = {(event,newValue) => this.setState({first_name:newValue})}
-                        /><br/>
-                    <TextField hintText="Ingresa los apellidos"
-                        floatingLabelText="Apellidos"
-                        style={{width:'100%'}}
-                        onChange = {(event,newValue) => this.setState({last_name:newValue})}
-                        /><br/>
-                    <TextField hintText="Ingresa el email"
-                        floatingLabelText="Email"
-                        style={{width:'100%'}}
-                        type="email"
-                        onChange = {(event,newValue) => this.setState({email:newValue})}
-                        />
-                    <SelectField
-                        floatingLabelText="Rol"
-                        value={this.state.role}
-                        style={{width:'100%'}}
-                        onChange={(event,index,value) => this.setState({role:value})}
-                    >
-                        <MenuItem value={3} primaryText="Miembro" />
-                        <MenuItem value={2} primaryText="Tesorero" />
-                        <MenuItem value={1} primaryText="Presidente" />
-                        <MenuItem value={0} primaryText="Administrador" />
-                    </SelectField>
+                    <DialogTitle id="creation-dialog-title">Formulario creación de usuario</DialogTitle>
+                    <DialogContent>
+                        <LoadingMaskComponent active={this.state.loading} />
+                        <TextField placeholder="Ingresa el Documento de identidad"
+                            label="Identificación"
+                            style={{width:'100%'}}
+                            type='number'
+                            onChange = {(event) => this.setState({identification:event.target.value})}
+                        /><br/><br/>
+                        <TextField placeholder="Ingresa los nombres"
+                            label="Nombres"
+                            style={{width:'100%'}}
+                            onChange = {(event) => this.setState({first_name:event.target.value})}
+                        /><br/><br/>
+                        <TextField placeholder="Ingresa los apellidos"
+                            label="Apellidos"
+                            style={{width:'100%'}}
+                            onChange = {(event) => this.setState({last_name:event.target.value})}
+                        /><br/><br/>
+                        <TextField placeholder="Ingresa el email"
+                            label="Email"
+                            style={{width:'100%'}}
+                            type="email"
+                            onChange = {(event) => this.setState({email:event.target.value})}
+                        /><br/><br/>
+                        <InputLabel htmlFor="role">Rol</InputLabel>
+                        <Select value={this.state.role}
+                            inputProps={{
+                                id:"role"
+                            }}
+                            style={{width:'100%'}}
+                            onChange={(event) => this.setState({role:event.target.value})}
+                        >
+                            <MenuItem value={3}>Miembro</MenuItem>
+                            <MenuItem value={2}>Tesorero</MenuItem>
+                            <MenuItem value={1}>Presidente</MenuItem>
+                            <MenuItem value={0}>Administrador</MenuItem>
+                        </Select>
+                    </DialogContent>
+                    <DialogActions>{actions}</DialogActions>
                 </Dialog>
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={this.handleRequestClose}
+                    onClose={this.handleRequestClose}
                 />
             </div>
         );

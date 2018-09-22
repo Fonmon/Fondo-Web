@@ -7,10 +7,10 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
-// import DatePicker from '@material-ui/core/DatePicker';
 
 import ContainerComponent from '../base/ContainerComponent';
 import CurrencyField from '../fields/CurrencyField';
+import DateField from '../fields/DateField'
 import Utils from '../../utils/Utils';
 
 class RequestLoanPage extends ContainerComponent {
@@ -27,7 +27,6 @@ class RequestLoanPage extends ContainerComponent {
             disbursement_date: null,
             value_error: '',
             timelimit_error: '',
-            disbursement_date_error: '',
             loading: false
         }
     }
@@ -36,7 +35,7 @@ class RequestLoanPage extends ContainerComponent {
         let isError = false;
         if (!this.state.disbursement_date) {
             isError = true;
-            this.setState({ disbursement_date_error: 'Campo requerido' });
+            this.setState({ openMessage: true, errorMessage: 'Fecha de desembolso requerida o inválida' });
         } else
             this.setState({ disbursement_date_error: '' });
         if (!this.state.timelimit) {
@@ -57,8 +56,11 @@ class RequestLoanPage extends ContainerComponent {
             this.setState({ value_error: '' });
         if (!isError) {
             let scope = this;
-            this.setState({ loading: true });
-            this.setState({ value_error: '', disbursement_date_error: '', timelimit_error: '' });
+            this.setState({ 
+                loading: true,
+                value_error: '', 
+                timelimit_error: ''
+            });
             let loan = {
                 value: Number(this.state.value),
                 timelimit: Number(this.state.timelimit),
@@ -124,16 +126,10 @@ class RequestLoanPage extends ContainerComponent {
                                     </Select>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField 
-                                        type="date"
-                                        min={new Date()}
-                                        autoOk={true}
+                                    <DateField min={Utils.formatDate(new Date())}
+                                        label="Fecha de desembolso"
                                         style={{ width: '100%' }}
-                                        DateTimeFormat={Intl.DateTimeFormat}
-                                        errorText={this.state.disbursement_date_error}
-                                        locale={'es'}
-                                        formatDate={date => Utils.formatDateDisplay(date)}
-                                        onChange={(event, newValue) => this.setState({ disbursement_date: Utils.formatDate(newValue) })}
+                                        onChange={(event) => this.setState({ disbursement_date: event.target.value })}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -170,8 +166,7 @@ class RequestLoanPage extends ContainerComponent {
                         </Paper>
                     }
                 />
-                <Snackbar
-                    open={this.state.openMessage}
+                <Snackbar open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
                     onClose={(event) => this.setState({ openMessage: false })}

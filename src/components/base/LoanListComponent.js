@@ -46,8 +46,6 @@ class LoanListComponent extends Component{
                     loans:response.data.list,
                     loading:false
                 });
-                // scope.setState({});
-                // scope.setState({});
             }).catch(function(error){
                 scope.setState({loading:false});
                 if(!error.response){
@@ -86,7 +84,6 @@ class LoanListComponent extends Component{
         return (
             <Paper className="TableLoan" elevation={20}>
                 <LoadingMaskComponent active={this.state.loading} />
-                {/**/}
                 <Toolbar style={{background: 'white', overflow: 'hidden'}}> 
                     <InputLabel htmlFor="filter" style={{marginRight: 10}}>Filtrar por: </InputLabel>
                     <Select value={this.state.filterValue}
@@ -157,12 +154,6 @@ class LoanListComponent extends Component{
                     labelDisplayedRows={({from, to, count}) => `${from}-${to} de ${count}`}
                     onChangePage={(event, page) => this.getLoanList( page+1,this.state.filterValue )}
                 />
-                {/* <center><Pagination
-                    total = { this.state.totalPages }
-                    current = { this.state.currentPage }
-                    display = { 10 }
-                    onChange = { number => this.getLoanList( number,this.state.filterValue ) }
-                    /></center> */}
             </Paper>
         );
     }

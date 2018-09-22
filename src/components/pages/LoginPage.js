@@ -58,6 +58,7 @@ class LoginPage extends ContainerComponent {
                                 placeholder="Ingresa tu email"
                                 margin="normal"
                                 type="email"
+                                style={{width: '70%'}}
                                 onChange={(event) => this.setState({ email: event.target.value })}
                                 onKeyPress={(event) => this.handleKeyPress(event)}
                             />
@@ -66,6 +67,7 @@ class LoginPage extends ContainerComponent {
                             <TextField label="Contraseña"
                                 placeholder="Ingresa tu contraseña"
                                 type="password"
+                                style={{width: '70%'}}
                                 onChange={(event) => this.setState({ password: event.target.value })}
                                 onKeyPress={(event) => this.handleKeyPress(event)}
                             />
@@ -84,8 +86,7 @@ class LoginPage extends ContainerComponent {
                                 onClick={(event) => this.forgotPassword(event)}
                             />
                         </Grid>
-                        <Snackbar
-                            open={this.state.openMessage}
+                        <Snackbar open={this.state.openMessage}
                             message={this.state.errorMessage}
                             autoHideDuration={4000}
                             onClose={(event) => this.setState({ openMessage: false })}

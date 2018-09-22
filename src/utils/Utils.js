@@ -70,7 +70,8 @@ class Utils{
     }
 
     static formatDate(date){
-        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+        let month = "0" + (date.getMonth() + 1)
+        return date.getFullYear() + "-" + month.slice(-2) + "-" + date.getDate();
     }
 
     static convertToDate(dateStr){
