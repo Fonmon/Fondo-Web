@@ -1,29 +1,33 @@
 import React from 'react';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import {
     Table,
     TableBody,
-    TableHeader,
-    TableHeaderColumn,
+    TableHead,
     TableRow,
-    TableRowColumn,
-} from 'material-ui/Table';
-import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import Snackbar from 'material-ui/Snackbar';
-import TextField from 'material-ui/TextField';
-import DatePicker from 'material-ui/DatePicker';
-import FlatButton from 'material-ui/FlatButton';
-import Dialog from 'material-ui/Dialog';
-import IconButton from 'material-ui/IconButton';
-import DoneIcon from 'material-ui/svg-icons/action/done';
-import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
-import OmitIcon from  'material-ui/svg-icons/editor/money-off';
+    TableCell,
+} from '@material-ui/core';
+import MenuItem from '@material-ui/core/MenuItem';
+import Snackbar from '@material-ui/core/Snackbar';
+import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox'
+import IconButton from '@material-ui/core/IconButton';
+import Select from '@material-ui/core/Select';
+import Grid from '@material-ui/core/Grid'
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+
+import DoneIcon from '@material-ui/icons/Done';
+import CancelIcon from '@material-ui/icons/Cancel';
+import OmitIcon from  '@material-ui/icons/MoneyOff';
 
 import ContainerComponent from '../../base/ContainerComponent';
 import CreateActivityDialog from '../../dialogs/CreateActivityDialog';
 import CurrencyField from '../../fields/CurrencyField';
+import DateField from '../../fields/DateField';
 import Utils from '../../../utils/Utils';
 
 const ButtonsActions = (props) => {
@@ -46,7 +50,9 @@ export default class ActivitiesPage extends ContainerComponent{
             errorMessage: '',
             loading: false,
             creationOpen: false,
-            year: {},
+            year: {
+                id: ""
+            },
             years: [],
             activities: [],
             activity: null
@@ -64,7 +70,7 @@ export default class ActivitiesPage extends ContainerComponent{
         Utils.getActivityYears()
             .then( response => {
                 if(response.status === 204){
-                    scope.setState({years:[],year: {}});
+                    scope.setState({years:[],year: { id: '' }});
                 }else{
                     const years = response.data,
                           year = years[0].id;
@@ -100,19 +106,23 @@ export default class ActivitiesPage extends ContainerComponent{
             })
     }
 
-    onActivitySelect = (rows) => {
+    onActivitySelect = (event, index) => {
         let prevIndex = -1;
+        const activities = this.state.activities;
         if(this.state.prevIndex >= 0)
-            this.state.activities[this.state.prevIndex].selected = false;
-        if(rows.length){
-            const id = this.state.activities[rows[0]].id;
-            this.state.activities[rows[0]].selected = true;
+            activities[this.state.prevIndex].selected = false;
+        if(index >= 0){
+            const id = this.state.activities[index].id;
+            activities[index].selected = true;
             this.getActivity(id);
-            prevIndex = rows[0];
+            prevIndex = index;
         }else{
             this.setState({activity: null});
         }
-        this.setState({prevIndex: prevIndex})
+        this.setState({
+            prevIndex: prevIndex,
+            activities
+        })
     }
 
     getActivity = (id) => {
@@ -127,8 +137,8 @@ export default class ActivitiesPage extends ContainerComponent{
             });
     }
 
-    onYearChange = (event, index, value) => {
-        const yearSelected = this.state.years[index],
+    onYearChange = (event) => {
+        const yearSelected = this.getYear(event.target.value),
               scope = this;
         scope.setState({loading: true, year:yearSelected});
         Utils.getActivities(yearSelected.id)
@@ -137,6 +147,10 @@ export default class ActivitiesPage extends ContainerComponent{
                 scope.setState({loading: false});
                 scope.handleRequestError(error);
             });
+    }
+
+    getYear(yearId) {
+        return this.state.years.find( year => year.id === yearId)
     }
 
     handleActivityCreation = () => {
@@ -219,16 +233,13 @@ export default class ActivitiesPage extends ContainerComponent{
 
     render(){
         const actions = [
-            <FlatButton
-                label="No"
-                primary={true}
+            <Button color="primary" key={1}
                 onClick={() => this.setState({removeOpen:false})}
-            />,
-            <RaisedButton
-                label="Si"
-                primary={true}
+            >No</Button>,
+            <Button color="primary"
+                variant="contained" key={2}
                 onClick={this.onDeleteActivity}
-            />,
+            >Si</Button>,
         ];
         return (
             <div>
@@ -237,54 +248,61 @@ export default class ActivitiesPage extends ContainerComponent{
                     renderTwoColGrid={true}
                     leftWidth={4}
                     left={
-                        <Paper className="UserInfo" zDepth={5}>
+                        <Paper className="UserInfo" elevation={20}>
                             <h3 style={{textAlign:'center'}}>Actividades</h3>
-                            <DropDownMenu value={this.state.year.id}
-                                onChange={this.onYearChange}>
+                            <Select value={this.state.year.id}
+                                onChange={this.onYearChange}
+                            >
                                 {this.state.years.map((year, index) => {
-                                    return <MenuItem key={year.id} value={year.id} primaryText={year.year} />
+                                    return <MenuItem key={year.id} value={year.id}>{year.year}</MenuItem>
                                 })}
-                            </DropDownMenu>
+                            </Select><br /><br />
                             {Utils.isAdmin() &&
-                                <RaisedButton style={{
+                                <Button style={{
                                         width:'100%',
                                         marginBottom:10
                                     }}
-                                    secondary={true}
-                                    label='Nuevo año de actividades'
+                                    variant="contained"
+                                    color="secondary"
                                     onClick={this.onNewYear.bind(this)}
-                                />
+                                >
+                                    Nuevo año de actividades
+                                </Button>
                             }
                             {(Utils.isAdmin() || Utils.isPresident()) &&
-                                <RaisedButton style={{width:'100%'}}
-                                    primary={true}
-                                    label='Agregar Actividad'
+                                <Button style={{width:'100%'}}
+                                    color="primary"
+                                    variant="contained"
                                     onClick={() => this.setState({creationOpen: true})}
-                                />
+                                >
+                                    Agregar Actividad
+                                </Button>
                             }
-                            <Table fixedHeader={false}
-                                style={{ tableLayout: 'auto'}}
-                                bodyStyle={{overflowX: undefined, overflowY: undefined}}
-                                selectable={true}
-                                onRowSelection={(rows) => this.onActivitySelect(rows)}
-                                height='300px'
-                            >
-                                <TableBody displayRowCheckbox={true}
-                                    deselectOnClickaway={false}
-                                    showRowHover={true}>
-                                    {this.state.activities.map((activity, index) => {
-                                        return (<TableRow key={activity.id} selected={activity.selected}>
-                                            <TableRowColumn>{activity.name}</TableRowColumn>
-                                        </TableRow>)
-                                    })}
-                                </TableBody>
-                            </Table>
+                            <div style={{ overflowX: 'auto'}}>
+                                <Table>
+                                    <TableBody>
+                                        {this.state.activities.map((activity, index) => {
+                                            return (
+                                                <TableRow key={activity.id} hover
+                                                    selected={activity.selected === true}
+                                                    onClick={(event) => this.onActivitySelect(event, index)}
+                                                >
+                                                    <TableCell padding="checkbox">
+                                                        <Checkbox checked={activity.selected === true}/>
+                                                        {activity.name}
+                                                    </TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </Paper>
                     }
                     rightWidth={8}
                     right={
                         <div>
-                            <Paper className="UserInfo" zDepth={5}>
+                            <Paper className="UserInfo" elevation={20}>
                                 <h3 style={{textAlign:'center'}}>Detalle de actividad</h3>
                                 {!this.state.activity &&
                                     <h4 style={{textAlign:'center', fontWeight:'normal'}}>Ninguna actividad seleccionada</h4>
@@ -293,92 +311,98 @@ export default class ActivitiesPage extends ContainerComponent{
                                     <div>
                                         {(Utils.isAdmin() || Utils.isPresident()) &&
                                             <div>
-                                                <RaisedButton label="Guardar" 
-                                                    primary={true} 
+                                                <Button color="primary"
+                                                    variant="contained"
                                                     onClick={this.onSaveActivity}
-                                                    style={{width:'100%'}} />
-                                                <RaisedButton label="Eliminar" 
-                                                    secondary={true}
+                                                    style={{width:'100%'}}
+                                                >
+                                                    Guardar
+                                                </Button>
+                                                <Button color="secondary"
+                                                    variant="contained"
                                                     onClick={() => this.setState({removeOpen:true})}
-                                                    style={{marginTop: '10px',width:'100%'}} />
+                                                    style={{marginTop: '10px',width:'100%'}}
+                                                >
+                                                    Eliminar
+                                                </Button><br /><br />
                                             </div>
                                         }
-                                        <TextField floatingLabelText="Nombre"
-                                            value={this.state.activity.name}
-                                            style={{width:'100%'}}
-                                            disabled={!Utils.isAdmin() && !Utils.isPresident()}
-                                            onChange = {(event,newValue) => this.setStateCustom('name',newValue)}
-                                        />
-                                        <CurrencyField floatingLabelText="Valor"
-                                            disabled={!Utils.isAdmin() && !Utils.isPresident()}
-                                            style={{width:'100%'}}
-                                            onChange = {(event,newValue) => this.setStateCustom('value',newValue)} 
-                                            value={this.state.activity.value}
-                                        />
-                                        <DatePicker floatingLabelText="Fecha de la actividad"
-                                            minDate={new Date(this.state.year.year,0,1)}
-                                            maxDate={new Date(this.state.year.year,11,31)}
-                                            autoOk={true}
-                                            disabled={!Utils.isAdmin() && !Utils.isPresident()}
-                                            value={Utils.convertToDate(this.state.activity.date)}
-                                            style={{width:'100%'}}
-                                            DateTimeFormat={Intl.DateTimeFormat}
-                                            locale={'es'}
-                                            formatDate={date => Utils.formatDateDisplay(date)}
-                                            onChange = {(event,newValue) => this.setStateCustom('date',Utils.formatDate(newValue))}
-                                        />
+                                        <Grid container spacing={16}>
+                                            <Grid item xs={12}>
+                                                <TextField label="Nombre"
+                                                    value={this.state.activity.name}
+                                                    style={{width:'100%'}}
+                                                    disabled={!Utils.isAdmin() && !Utils.isPresident()}
+                                                    onChange = {(event) => this.setStateCustom('name',event.target.value)}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <CurrencyField label="Valor"
+                                                    disabled={!Utils.isAdmin() && !Utils.isPresident()}
+                                                    style={{width:'100%'}}
+                                                    onChange = {(event) => this.setStateCustom('value',event.target.value)} 
+                                                    value={this.state.activity.value}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <DateField label="Fecha de la actividad" 
+                                                    style={{width:'100%'}}
+                                                    value={this.state.activity.date}
+                                                    onChange = {(event) => this.setStateCustom('date',event.target.value)}
+                                                    min={Utils.formatDate(new Date(this.state.year.year,0,1))}
+                                                    max={Utils.formatDate(new Date(this.state.year.year,11,31))}
+                                                />
+                                            </Grid>
+                                        </Grid>
                                     </div>
                                 }
                             </Paper>
-                            <Paper className="UserInfo" zDepth={5}>
+                            <Paper className="UserInfo" elevation={20}>
                                 <h3 style={{textAlign:'center'}}>Lista de miembros</h3>
                                 {!this.state.activity &&
                                     <h4 style={{textAlign:'center', fontWeight:'normal'}}>Ninguna actividad seleccionada</h4>
                                 }
                                 {this.state.activity &&
-                                    <Table fixedHeader={false} 
-                                        style={{ tableLayout: 'auto' }}
-                                        bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
-                                        selectable={false}>
-                                        <TableHeader
-                                            adjustForCheckbox={false}
-                                            displaySelectAll={false}>
-                                            <TableRow>
-                                                <TableHeaderColumn>Nombre</TableHeaderColumn>
-                                                <TableHeaderColumn>Estado</TableHeaderColumn>
-                                                {(Utils.isAdmin() || Utils.isPresident()) &&
-                                                    <TableHeaderColumn>Acciones</TableHeaderColumn>
-                                                }
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody
-                                            displayRowCheckbox={false}>
-                                            {this.state.activity.users.map((user,i) => {
-                                                return (<TableRow key={i}>
-                                                    <TableRowColumn>{user.user.full_name}</TableRowColumn>
-                                                    <TableRowColumn>{this.resolveState(user.state)}</TableRowColumn>
+                                    <div style={{ overflowX: 'auto'}}>
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>Nombre</TableCell>
+                                                    <TableCell>Estado</TableCell>
                                                     {(Utils.isAdmin() || Utils.isPresident()) &&
-                                                        <TableRowColumn >
-                                                            <ButtonsActions 
-                                                                id={user.id} 
-                                                                onClick={this.onUserAction}
-                                                            />
-                                                        </TableRowColumn>
+                                                        <TableCell>Acciones</TableCell>
                                                     }
-                                                </TableRow>);
-                                            })}
-                                        </TableBody>
-                                    </Table>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {this.state.activity.users.map((user,i) => {
+                                                    return (
+                                                        <TableRow key={i}>
+                                                            <TableCell>{user.user.full_name}</TableCell>
+                                                            <TableCell>{this.resolveState(user.state)}</TableCell>
+                                                            {(Utils.isAdmin() || Utils.isPresident()) &&
+                                                                <TableCell >
+                                                                    <ButtonsActions 
+                                                                        id={user.id} 
+                                                                        onClick={this.onUserAction}
+                                                                    />
+                                                                </TableCell>
+                                                            }
+                                                        </TableRow>
+                                                    );
+                                                })}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
                                 }
                             </Paper>
                         </div>
                     }
                 />
-                <Snackbar
-                    open={this.state.openMessage}
+                <Snackbar open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={(event) => this.setState({openMessage: false})}
+                    onClose={(_) => this.setState({openMessage: false})}
                 />
                 <CreateActivityDialog creationOpen={this.state.creationOpen} 
                     year={this.state.year}
@@ -387,15 +411,14 @@ export default class ActivitiesPage extends ContainerComponent{
                         this.setState({creationOpen: false})
                     }}
                     onActivityCreated={this.handleActivityCreation}
-                    key={this.createActivityKey}/>
-                <Dialog
-                    title="Confirmación"
-                    actions={actions}
-                    modal={false}
-                    onRequestClose={() => this.setState({removeOpen:false})}
+                    key={this.createActivityKey}
+                />
+                <Dialog aria-labelledby="confirmation-dialog-activity"
                     open={this.state.removeOpen}
                 >
-                    ¿Seguro que desea eliminar esta actividad?
+                    <DialogTitle id="confirmation-dialog-activity">Confirmación</DialogTitle>
+                    <DialogContent>¿Seguro que desea eliminar esta actividad?</DialogContent>
+                    <DialogActions>{actions}</DialogActions>
                 </Dialog>
             </div>
         );

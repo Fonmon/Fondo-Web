@@ -1,16 +1,17 @@
 import React from 'react';
-import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import Grid from '@material-ui/core/Grid'
 import {
     Table,
     TableBody,
-    TableHeader,
-    TableHeaderColumn,
+    TableHead,
     TableRow,
-    TableRowColumn,
-} from 'material-ui/Table';
+    TableCell,
+} from '@material-ui/core';
 
 import ContainerComponent from '../../base/ContainerComponent';
 import CurrencyField from '../../fields/CurrencyField';
@@ -72,60 +73,65 @@ class SimulationPage extends ContainerComponent{
                 renderOneMidColGrid={true}
                 middle={
                     <div>
-                        <Paper className="UserInfo" zDepth={5}>
+                        <Paper className="UserInfo" elevation={20}>
                             <h3 style={{textAlign:'center'}}>Simulador de crédito</h3>
-                            <CurrencyField floatingLabelText="Valor a solicitar"
-                                style={{width:'100%'}}
-                                value={this.state.value}
-                                errorText={this.state.value_error}
-                                onChange = {(event,newValue) => this.setState({value:Number(newValue)})}
-                            />
-                            <TextField hintText="Valor en meses"
-                                floatingLabelText="Plazo"
-                                style={{width:'100%'}}
-                                type='number'
-                                min={1}
-                                errorText={this.state.timelimit_error}
-                                onChange = {(event,newValue) => this.setState({timelimit:Number(newValue)})}
-                            />
-                            <SelectField
-                                floatingLabelText="Cuota"
-                                value={this.state.fee}
-                                style={{width:'100%'}}
-                                onChange={(event,index,value) => this.setState({fee:value})}>
-                                <MenuItem value={0} primaryText="Mensual" />
-                                <MenuItem value={1} primaryText="Única" />
-                            </SelectField>
+                            <Grid container spacing={16}>
+                                <Grid item xs={12}>
+                                    <CurrencyField label="Valor a solicitar"
+                                        style={{width:'100%'}}
+                                        value={this.state.value}
+                                        onChange = {(event) => this.setState({value:Number(event.target.value)})}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField placeholder="Valor en meses"
+                                        label="Plazo"
+                                        style={{width:'100%'}}
+                                        type='number'
+                                        min={1}
+                                        onChange = {(event) => this.setState({timelimit:Number(event.target.value)})}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <InputLabel htmlFor="fee" style={{marginRight: 10}}>Cuota</InputLabel>
+                                    <Select value={this.state.fee}
+                                        inputProps={{
+                                            id: "fee"
+                                        }}
+                                        style={{width:'100%'}}
+                                        onChange={(event) => this.setState({fee:event.target.value})}>
+                                        <MenuItem value={0}>Mensual</MenuItem>
+                                        <MenuItem value={1}>Única</MenuItem>
+                                    </Select>
+                                </Grid>
+                            </Grid>
                         </Paper>
-                        <Paper className="UserInfo" zDepth={5}>
-                            <Table fixedHeader={false}
-                                style={{ tableLayout: 'auto' }}
-                                bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
-                                selectable={false}>
-                                <TableHeader
-                                    adjustForCheckbox={false}
-                                    displaySelectAll={false}>
-                                    <TableRow>
-                                        <TableHeaderColumn>Cuota</TableHeaderColumn>
-                                        <TableHeaderColumn>Valor cuota</TableHeaderColumn>
-                                        <TableHeaderColumn>Valor intereses</TableHeaderColumn>
-                                        <TableHeaderColumn>Valor a pagar</TableHeaderColumn>
-                                        <TableHeaderColumn>Saldo</TableHeaderColumn>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody
-                                    displayRowCheckbox={false}>
-                                    {this.buildTable().map((loanData,i) => {
-                                        return (<TableRow key={i}>
-                                            <TableRowColumn>{i+1}</TableRowColumn>
-                                            <TableRowColumn>{loanData.fee_value}</TableRowColumn>
-                                            <TableRowColumn>{loanData.interests_value}</TableRowColumn>
-                                            <TableRowColumn>{loanData.payment_value}</TableRowColumn>
-                                            <TableRowColumn>{loanData.final_balance}</TableRowColumn>
-                                        </TableRow>);
-                                    })}
-                                </TableBody>
-                            </Table>
+                        <Paper className="UserInfo" elevation={20}>
+                            <div style={{ overflowX: 'auto'}}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Cuota</TableCell>
+                                            <TableCell>Valor cuota</TableCell>
+                                            <TableCell>Valor intereses</TableCell>
+                                            <TableCell>Valor a pagar</TableCell>
+                                            <TableCell>Saldo</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {this.buildTable().map((loanData,i) => {
+                                            return (
+                                                <TableRow key={i}>
+                                                    <TableCell>{i+1}</TableCell>
+                                                    <TableCell>{loanData.fee_value}</TableCell>
+                                                    <TableCell>{loanData.interests_value}</TableCell>
+                                                    <TableCell>{loanData.payment_value}</TableCell>
+                                                    <TableCell>{loanData.final_balance}</TableCell>
+                                                </TableRow>);
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </Paper>
                     </div>
                 }

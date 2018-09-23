@@ -14,9 +14,6 @@ img{
 .dialogContent{
     white-space: pre-line;    
 }
-.dialogImage{
-    padding-top:0 !important;
-}
 /* Absolute Center Spinner */
 .loading {
     position: fixed;

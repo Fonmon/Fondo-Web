@@ -1,7 +1,9 @@
 import React from 'react';
-import Paper from 'material-ui/Paper';
-import MenuItem from 'material-ui/MenuItem';
-import Dialog from 'material-ui/Dialog';
+import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 
 // templates
 import history from '../../resources/templates/history.json';
@@ -64,37 +66,36 @@ class FondoInfoPage extends ContainerComponent{
                 <ContainerComponent showHeader={true}
                     renderOneMidColGrid={true}
                     middle={
-                        <Paper className="UserInfo" zDepth={5}>
+                        <Paper className="UserInfo" elevation={20}>
                             <h2 style={{textAlign:'center'}}>Información del fondo</h2>
-                            <MenuItem onClick={this.handlerClick.bind(this,history)} primaryText="Historia del fondo" />
-                            <MenuItem onClick={this.handlerClick.bind(this,visionMision)} primaryText="Visión y misión" />
-                            <MenuItem onClick={this.handlerClick.bind(this,statutes)} primaryText="Estatutos" />
-                            <MenuItem onClick={this.handlerClick.bind(this,regulation)} primaryText="Reglamento mesa directiva" />
-                            <MenuItem onClick={this.handlerClickImg.bind(this,"Mesa directiva",directive)} primaryText="Mesa directiva" />
-                            <MenuItem onClick={this.handlerClick.bind(this,power)} primaryText="Poder asamblea" />
-                            <MenuItem onClick={this.handlerClick.bind(this,proceedings)} primaryText="Copias de actas" />
+                            <MenuItem onClick={this.handlerClick.bind(this,history)} >Historia del fondo</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this,visionMision)} >Visión y misión</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this,statutes)} >Estatutos</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this,regulation)} >Reglamento mesa directiva</MenuItem>
+                            <MenuItem onClick={this.handlerClickImg.bind(this,"Mesa directiva",directive)} >Mesa directiva</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this,power)} >Poder asamblea</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this,proceedings)} >Copias de actas</MenuItem>
                         </Paper>
                     }
                 />
-                <Dialog
-                    title={this.state.dialogTitle}
-                    modal={false}
-                    autoScrollBodyContent={true}
-                    contentStyle={{width:'95%',maxWidth:'none'}}
-                    onRequestClose={this.handleClose}
-                    open={this.state.dialogOpen}>
-                    <span dangerouslySetInnerHTML={{__html:this.state.dialogContent}} className="dialogContent">
-                    </span>
+                <Dialog onClose={this.handleClose}
+                    open={this.state.dialogOpen}
+                    aria-labelledby="dialog-text-info"
+                >
+                    <DialogTitle id="dialog-text-info">{this.state.dialogTitle}</DialogTitle>
+                    <DialogContent>
+                        <span dangerouslySetInnerHTML={{__html:this.state.dialogContent}} className="dialogContent">
+                        </span>
+                    </DialogContent>
                 </Dialog>
-                <Dialog
-                    title={this.state.dialogTitle}
-                    modal={false}
-                    autoScrollBodyContent={true}
-                    contentStyle={{width:'95%',maxWidth:'none'}}
-                    onRequestClose={this.handleCloseImg}
-                    className="dialogImage"
-                    open={this.state.dialogOpenImg}>
-                    <center><img src={this.state.dialogContent} alt="" /></center>
+                <Dialog aria-labelledby="dialog-img-info"
+                    onClose={this.handleCloseImg}
+                    open={this.state.dialogOpenImg}
+                >
+                    <DialogTitle id="dialog-img-info">{this.state.dialogTitle}</DialogTitle>
+                    <DialogContent>
+                        <center><img style={{width:'100%'}} src={this.state.dialogContent} alt="" /></center>
+                    </DialogContent>
                 </Dialog>
             </div>
         );

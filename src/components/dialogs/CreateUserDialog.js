@@ -23,15 +23,10 @@ class CreateUserDialog extends ContainerComponent{
             last_name: '',
             email: '',
             role:3,
-            creationOpen: false,
             openMessage: false,
             errorMessage: '',
             loading:false
         }
-    }
-
-    componentWillReceiveProps(nextProps){
-        this.setState(nextProps);
     }
 
     handleClose = () => {
@@ -93,7 +88,7 @@ class CreateUserDialog extends ContainerComponent{
         return (
             <div>
                 <Dialog aria-labelledby="creation-dialog-title"
-                    open={this.state.creationOpen}
+                    open={this.props.creationOpen}
                 >
                     <DialogTitle id="creation-dialog-title">Formulario creación de usuario</DialogTitle>
                     <DialogContent>

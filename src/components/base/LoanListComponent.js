@@ -100,7 +100,7 @@ class LoanListComponent extends Component{
                     </Select>
                 </Toolbar>
                 <div style={{ overflowX: 'auto'}}>
-                    <Table >
+                    <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell 

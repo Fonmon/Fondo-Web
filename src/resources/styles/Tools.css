@@ -13,10 +13,11 @@
     cursor: pointer;
 }
 .ToolsLabel{
-    bottom: 0;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 .Soon{
-    padding: 20px 25px 30px;
     border-style: dotted;
     border-width: 4px;
 }
