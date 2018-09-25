@@ -71,11 +71,13 @@ class HeaderComponent extends Component {
             <div>
                 <AppBar position="static">
                     <Toolbar>
-                        <IconButton color="inherit"
-                            onClick={this.handleToggle}
-                        >
-                            <MenuIcon />
-                        </IconButton>
+                        {Utils.isAuthenticated() &&
+                            <IconButton color="inherit"
+                                onClick={this.handleToggle}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        }
                         <Typography variant="title"
                             color="inherit"
                             style={{ cursor: 'pointer' }}
@@ -83,18 +85,20 @@ class HeaderComponent extends Component {
                         >
                             Fondo Montañez
                         </Typography>
-                        <section className={classes.rightToolbar}>
-                            <IconButton color="inherit" 
-                                href="/request-loan"
-                            >
-                                <ContentAdd />
-                            </IconButton>
-                            <IconButton color="inherit" 
-                                onClick={this.handleSignOut}
-                            >
-                                <PowerOff />
-                            </IconButton>
-                        </section>
+                        {Utils.isAuthenticated() &&
+                            <section className={classes.rightToolbar}>
+                                <IconButton color="inherit" 
+                                    href="/request-loan"
+                                >
+                                    <ContentAdd />
+                                </IconButton>
+                                <IconButton color="inherit" 
+                                    onClick={this.handleSignOut}
+                                >
+                                    <PowerOff />
+                                </IconButton>
+                            </section>
+                        }
                     </Toolbar>
                 </AppBar>
                 <Drawer open={this.state.open}
