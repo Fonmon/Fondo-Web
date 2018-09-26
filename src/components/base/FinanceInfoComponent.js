@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Paper from 'material-ui/Paper';
+import Paper from '@material-ui/core/Paper';
 
 import Utils from '../../utils/Utils';
 import '../../resources/styles/FinanceInfo.css';
@@ -19,7 +19,7 @@ class FinanceInfoComponent extends Component {
 
     render(){
         return (
-            <Paper className="Info" zDepth={5}>
+            <Paper className="Info" elevation={20}>
                 <h2 style={{textAlign:'center'}}>Información financiera</h2>
                 <p>
                     <span className="Labels" ><strong>Aportes:</strong> <br />

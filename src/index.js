@@ -2,23 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './resources/styles/index.css';
 import registerServiceWorker from './registerServiceWorker';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter } from 'react-router-dom';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // Components
 import RouterMain from './components/RouterMain';
 
-const muiTheme = getMuiTheme({
+const muiTheme = createMuiTheme({
     palette: {
-          primary1Color: '#800000',
-          accent1Color: '#c83737'
+        primary: {
+            main: '#800000'
+        },
+        secondary: {
+            main: '#c83737'
+        }
     },
 });
 
 const Wrapper = () => (
     <BrowserRouter>
-        <MuiThemeProvider muiTheme={muiTheme}>
+        <MuiThemeProvider theme={muiTheme}>
             <RouterMain />
         </MuiThemeProvider>
     </BrowserRouter>
