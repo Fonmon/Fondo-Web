@@ -1,22 +1,23 @@
 import React from 'react';
-import Paper from 'material-ui/Paper';
+import Paper from '@material-ui/core/Paper';
 import {
     Table,
     TableBody,
-    TableHeader,
-    TableHeaderColumn,
+    TableHead,
     TableRow,
-    TableRowColumn,
-} from 'material-ui/Table';
-import Snackbar from 'material-ui/Snackbar';
-import IconButton from 'material-ui/IconButton';
-import ContentRemoveCircleOutline from 'material-ui/svg-icons/content/remove-circle-outline';
-import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
-import Divider from 'material-ui/Divider';
-import Pagination from 'material-ui-pagination';
-import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+    TableCell,
+    TablePagination
+} from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+
+import DeleteIcon from '@material-ui/icons/Delete';
+import OpenInNew from '@material-ui/icons/OpenInNew'
 
 import ContainerComponent from '../base/ContainerComponent';
 import Utils from '../../utils/Utils';
@@ -26,14 +27,14 @@ const ButtonsActions = (props) => {
     if(Utils.isAdmin())
         return (
             <div>
-                <IconButton onClick={props.onEdit.bind(this,props.id)}><ActionOpenInNew /></IconButton>
-                <IconButton onClick={props.onRemove.bind(this,props.id)}><ContentRemoveCircleOutline /></IconButton>
+                <IconButton onClick={props.onEdit.bind(this,props.id)}><OpenInNew /></IconButton>
+                <IconButton onClick={props.onRemove.bind(this,props.id)}><DeleteIcon /></IconButton>
             </div>
         );
     else
         return (
             <div>
-                <IconButton onClick={props.onEdit.bind(this,props.id)}><ActionOpenInNew /></IconButton>
+                <IconButton onClick={props.onEdit.bind(this,props.id)}><OpenInNew /></IconButton>
             </div>
         );
 }
@@ -49,6 +50,7 @@ class UsersListPage extends ContainerComponent{
             removeId: -1,
             createUserDialog: false,
             currentPage: 1,
+            count: 0,
             totalPages: 1,
             loading:false
         }
@@ -65,9 +67,12 @@ class UsersListPage extends ContainerComponent{
         this.setState({loading:true});
         Utils.getUsers(page)
             .then(function(response){
-                scope.setState({totalPages:response.data.num_pages});
-                scope.setState({users:response.data.list});
-                scope.setState({loading:false});
+                scope.setState({
+                    totalPages:response.data.num_pages,
+                    users: response.data.list,
+                    count: response.data.count,
+                    loading: false
+                });
             }).catch(function(error){
                 scope.setState({loading:false});
                 scope.handleRequestError(error);
@@ -135,16 +140,11 @@ class UsersListPage extends ContainerComponent{
     
     render(){
         const actions = [
-            <FlatButton
-                label="No"
-                primary={true}
-                onClick={this.handleClose}
-            />,
-            <RaisedButton
-                label="Si"
-                primary={true}
-                onClick={this.handleRemoveUser}
-            />,
+            <Button color="primary" key="no"
+                onClick={this.handleClose}>No</Button>,
+            <Button color="primary" key="si"
+                variant="contained"
+                onClick={this.handleRemoveUser}>Si</Button>,
         ];
         return (
             <div>
@@ -153,93 +153,112 @@ class UsersListPage extends ContainerComponent{
                     renderTwoColGrid={true}
                     leftWidth={6}
                     left={
-                        <RaisedButton label="Crear Usuario" 
-                            secondary={true} 
+                        <Button variant="contained"
+                            color="secondary" 
                             style={{marginTop: '30px',width:'100%'}}
                             onClick={this.handleCreateUserDialog}
-                            disabled={!Utils.isAdmin()} />
+                            disabled={!Utils.isAdmin()}
+                        >
+                            Crear Usuario
+                        </Button>
                     }
                     rightWidth={6}
                     right={
-                        <RaisedButton label="Cargar información" 
-                            primary={true} 
-                            style={{marginTop:'30px',width:'100%'}}
-                            disabled={!Utils.isAuthorizedEdit()}
-                            containerElement='label'>
+                        <div>
                             <input type="file"
+                                accept=".txt"
                                 disabled={!Utils.isAuthorizedEdit()} 
                                 onChange={e => this.handleUpdateLoad(e.target.files[0])}
-                                style={{ display: 'none' }} />
-                        </RaisedButton>
+                                style={{ display: 'none' }} 
+                                id="upload-file"
+                            />
+                            <label htmlFor="upload-file">
+                                <Button color="primary"
+                                    variant="contained"
+                                    style={{marginTop:'30px',width:'100%'}}
+                                    disabled={!Utils.isAuthorizedEdit()}
+                                    component="span"
+                                >
+                                    Cargar información
+                                    
+                                </Button>
+                            </label>
+                        </div>
                     }
                     renderOneFullColGrid={true}
                     middle={
-                        <Paper className="TableLoan" zDepth={5}>
-                            <Table fixedHeader={false} 
-                                style={{ tableLayout: 'auto' }}
-                                bodyStyle= {{ overflowX: undefined, overflowY: undefined }}
-                                selectable={false}>
-                                <TableHeader
-                                    adjustForCheckbox={false}
-                                    displaySelectAll={false}>
-                                    <TableRow>
-                                        <TableHeaderColumn 
-                                            colSpan="5"
-                                            style={{textAlign: 'center'}}>
-                                            Lista de usuarios
-                                        </TableHeaderColumn>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableHeaderColumn>ID</TableHeaderColumn>
-                                        <TableHeaderColumn>Nombre</TableHeaderColumn>
-                                        <TableHeaderColumn>Email</TableHeaderColumn>
-                                        <TableHeaderColumn>Rol</TableHeaderColumn>
-                                        <TableHeaderColumn>Acciones</TableHeaderColumn>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody
-                                    displayRowCheckbox={false}>
-                                    {this.state.users.map((user,i) => {
-                                        return (<TableRow key={i}>
-                                            <TableRowColumn>{user.id}</TableRowColumn>
-                                            <TableRowColumn>{user.full_name}</TableRowColumn>
-                                            <TableRowColumn>{user.email}</TableRowColumn>
-                                            <TableRowColumn>{user.role}</TableRowColumn>
-                                            <TableRowColumn >
-                                                <ButtonsActions 
-                                                    id={user.id} 
-                                                    onEdit={this.handleEditUser}
-                                                    onRemove={this.handleDialogRemoveUser}
-                                                />
-                                            </TableRowColumn>
-                                        </TableRow>);
-                                    })}
-                                </TableBody>
-                            </Table>
-                            <Divider />
-                            <center><Pagination
-                                total = { this.state.totalPages }
-                                current = { this.state.currentPage }
-                                display = { 10 }
-                                onChange = { number => this.getUsers(number) }
-                            /></center>  
+                        <Paper className="TableLoan" elevation={20}>
+                            <div style={{ overflowX: 'auto'}}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell 
+                                                colSpan='5'
+                                                style={{textAlign: 'center'}}
+                                            >
+                                                Lista de usuarios
+                                            </TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>ID</TableCell>
+                                            <TableCell>Nombre</TableCell>
+                                            <TableCell>Email</TableCell>
+                                            <TableCell>Rol</TableCell>
+                                            <TableCell>Acciones</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {this.state.users.map((user,i) => {
+                                            return (
+                                                <TableRow key={i}>
+                                                    <TableCell>{user.id}</TableCell>
+                                                    <TableCell>{user.full_name}</TableCell>
+                                                    <TableCell>{user.email}</TableCell>
+                                                    <TableCell>{user.role}</TableCell>
+                                                    <TableCell>
+                                                        <ButtonsActions 
+                                                            id={user.id} 
+                                                            onEdit={this.handleEditUser}
+                                                            onRemove={this.handleDialogRemoveUser}
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                            <TablePagination
+                                component="div"
+                                count={this.state.count}
+                                rowsPerPage={10}
+                                rowsPerPageOptions={[]}
+                                page={this.state.currentPage - 1}
+                                backIconButtonProps={{
+                                    'aria-label': 'Previous Page',
+                                }}
+                                nextIconButtonProps={{
+                                    'aria-label': 'Next Page',
+                                }}
+                                labelDisplayedRows={({from, to, count}) => `${from}-${to} de ${count}`}
+                                onChangePage={(_, page) => this.getUsers( page+1 )}
+                            />
                         </Paper>
                     }
                 />
-                <Snackbar
-                    open={this.state.openMessage}
+                <Snackbar open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={(event) => this.setState({openMessage: false})}
-                    />
-                <Dialog
-                    title="Confirmación"
-                    actions={actions}
-                    modal={false}
-                    onRequestClose={this.handleClose}
+                    onClose={(_) => this.setState({openMessage: false})}
+                />
+                <Dialog aria-labelledby="confirmation-dialog-title"
                     open={this.state.removeOpen}
                 >
-                    ¿Seguro que desea eliminar este usuario?
+                    <DialogTitle id="confirmation-dialog-title">Confirmación</DialogTitle>
+                    <DialogContent>
+                        ¿Seguro que desea eliminar este usuario?
+                    </DialogContent>
+                    <DialogActions>{actions}</DialogActions>
                 </Dialog>
                 <CreateUserDialog key={this.createUserKey}
                     onUserCreated={this.callbackUserCreated}
@@ -247,7 +266,8 @@ class UsersListPage extends ContainerComponent{
                     onClose={() => {
                         this.createUserKey++;
                         this.setState({createUserDialog: false})
-                    }} />
+                    }}
+                />
             </div>
         );
     }

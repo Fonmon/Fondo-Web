@@ -1,7 +1,5 @@
 import React from 'react';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import Snackbar from 'material-ui/Snackbar';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import ContainerComponent from '../base/ContainerComponent';
 import FinanceInfoComponent from '../base/FinanceInfoComponent';
@@ -65,21 +63,11 @@ class HomePage extends ContainerComponent {
                             applicantColumn={false}/>
                     }
                 />
-                <FloatingActionButton 
-                    secondary={true} 
-                    style={{
-                        right: 20,
-                        bottom:20,
-                        position:'fixed'
-                    }}
-                    href="/request-loan">
-                    <ContentAdd />
-                </FloatingActionButton>
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={(event) => this.setState({openMessage: false})}
+                    onClose={(event) => this.setState({openMessage: false})}
                 />
             </div>
         );

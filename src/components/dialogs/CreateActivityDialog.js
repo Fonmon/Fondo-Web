@@ -1,21 +1,22 @@
 import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import DatePicker from 'material-ui/DatePicker';
-import Snackbar from 'material-ui/Snackbar';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 
 import Utils from '../../utils/Utils';
 import ContainerComponent from '../base/ContainerComponent';
 import LoadingMaskComponent from '../base/LoadingMaskComponent';
 import CurrencyField from '../fields/CurrencyField';
+import DateField from '../fields/DateField';
 
 export default class CreateActivityDialog extends ContainerComponent{
     constructor(props){
         super(props);
         this.state = {
-            creationOpen: false,
             name: '',
             value: null,
             date: null,
@@ -23,10 +24,6 @@ export default class CreateActivityDialog extends ContainerComponent{
             openMessage: false,
             errorMessage: ''
         }
-    }
-
-    componentWillReceiveProps(nextProps){
-        this.setState(nextProps);
     }
 
     handleClose = () => {
@@ -46,8 +43,8 @@ export default class CreateActivityDialog extends ContainerComponent{
             Utils.createActivity(this.props.year.id, activity)
                 .then(response => {
                     scope.setState({loading: false});
-                    scope.props.onActivityCreated();
                     scope.showMessageError('Actividad creada.')
+                    scope.props.onActivityCreated();
                 }).catch(error => {
                     scope.setState({loading: false});
                     scope.handleRequestError(error);
@@ -59,53 +56,51 @@ export default class CreateActivityDialog extends ContainerComponent{
     
     render(){
         const actions = [
-            <FlatButton
-                label="Cancelar"
-                primary={true}
+            <Button key={1}
+                color="primary"
                 onClick={this.handleClose}
-            />,
-            <RaisedButton
-                label="Crear"
-                primary={true}
+            >
+                Cancelar
+            </Button>,
+            <Button key={2}
+                color="primary"
+                variant="contained"
                 onClick={this.handleCreateActivity.bind(this)}
-            />,
+            >
+                Crear
+            </Button>,
         ];
         return (
             <div>
-                <Dialog title="Formulario creación de actividad"
-                    actions={actions}
-                    modal={false}
-                    autoScrollBodyContent={true}
-                    onRequestClose={this.handleClose}
-                    open={this.state.creationOpen}
+                <Dialog aria-labelledby="creation-activity-dialog"
+                    open={this.props.creationOpen}
                 >
-                    <LoadingMaskComponent active={this.state.loading} />
-                    <TextField hintText="Ingresa el Nombre de la actividad"
-                        floatingLabelText="Nombre Actividad"
-                        style={{width:'100%'}}
-                        onChange = {(event,newValue) => this.setState({name:newValue})}
-                    /><br/>
-                    <CurrencyField value={this.state.value}
-                        floatingLabelText="Valor"
-                        style={{width:'100%'}}
-                        onChange = {(event,newValue) => this.setState({value:newValue})}
-                    /><br/>
-                    <DatePicker floatingLabelText="Fecha de la actividad"
-                        minDate={new Date(this.props.year.year,0,1)}
-                        maxDate={new Date(this.props.year.year,11,31)}
-                        autoOk={true}
-                        style={{width:'100%'}}
-                        DateTimeFormat={Intl.DateTimeFormat}
-                        locale={'es'}
-                        formatDate={date => Utils.formatDateDisplay(date)}
-                        onChange = {(event,newValue) => this.setState({date:Utils.formatDate(newValue)})}
-                    />
+                    <DialogTitle id="creation-activity-dialog">Formulario creación de actividad</DialogTitle>
+                    <DialogContent>
+                        <LoadingMaskComponent active={this.state.loading} />
+                        <TextField placeholder="Ingresa el Nombre de la actividad"
+                            label="Nombre Actividad"
+                            style={{width:'100%'}}
+                            onChange = {(event) => this.setState({name:event.target.value})}
+                        /><br/><br/>
+                        <CurrencyField value={this.state.value}
+                            label="Valor"
+                            style={{width:'100%'}}
+                            onChange = {(event) => this.setState({value:event.target.value})}
+                        /><br/><br/>
+                        <DateField label="Fecha de la actividad"
+                            style={{width:'100%'}}
+                            onChange = {(event) => this.setState({date: event.target.value})}
+                            min={Utils.formatDate(new Date(this.props.year.year,0,1))}
+                            max={Utils.formatDate(new Date(this.props.year.year,11,31))}
+                        />
+                    </DialogContent>
+                    <DialogActions>{actions}</DialogActions>
                 </Dialog>
-                <Snackbar
-                    open={this.state.openMessage}
+                <Snackbar open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={() => this.setState({openMessage: false})}
+                    onClose={() => this.setState({openMessage: false})}
                 />
             </div>
         )

@@ -1,8 +1,9 @@
 import React from 'react';
-import Snackbar from 'material-ui/Snackbar';
-import Paper from 'material-ui/Paper';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import Snackbar from '@material-ui/core/Snackbar';
+import Paper from '@material-ui/core/Paper';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel'
 
 import ContainerComponent from '../base/ContainerComponent';
 import Utils from '../../utils/Utils';
@@ -98,7 +99,7 @@ class LoanDetailPage extends ContainerComponent{
                     loadingMask={this.state.loading}
                     renderOneFullColGrid={true}
                     middle={
-                        <Paper className="UserInfo" zDepth={5}>
+                        <Paper className="UserInfo" elevation={20}>
                             <ContainerComponent orderRenderOneFullColGrid={0}
                                 renderOneFullColGrid={true}
                                 middle={
@@ -124,18 +125,20 @@ class LoanDetailPage extends ContainerComponent{
                                 rightWidth={6}
                                 right={
                                     <div>
-                                        <SelectField
-                                            floatingLabelText="Estado solicitud"
-                                            value={this.state.loan.state}
+                                        <InputLabel htmlFor="state">Estado solicitud</InputLabel>
+                                        <Select value={this.state.loan.state}
+                                            inputProps={{
+                                                id:"state"
+                                            }}
                                             style={{width:'100%'}}
-                                            onChange={(event,index,newValue) => this.updateState(newValue)}
+                                            onChange={(event) => this.updateState(event.target.value)}
                                             disabled={!(Utils.isAdmin() || Utils.isTreasurer()) || this.state.loan.state===3 ||  this.state.loan.state===2}
                                         >
-                                            <MenuItem value={0} primaryText="Esperando aprobación" />
-                                            <MenuItem value={1} primaryText="Aprobada" />
-                                            <MenuItem value={2} primaryText="Denegada" />
-                                            <MenuItem value={3} primaryText="Finalizada" />
-                                        </SelectField>
+                                            <MenuItem value={0}>Esperando aprobación</MenuItem>
+                                            <MenuItem value={1}>Aprobada</MenuItem>
+                                            <MenuItem value={2}>Denegada</MenuItem>
+                                            <MenuItem value={3}>Finalizada</MenuItem>
+                                        </Select>
                                         {this.state.loan.state === 1 && 
                                             <div>
                                                 <span className="Labels"><strong>Valor capital:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.capital_balance)}</span><br/>
@@ -151,12 +154,11 @@ class LoanDetailPage extends ContainerComponent{
                         </Paper>
                     }
                 />
-                <Snackbar
-                    open={this.state.openMessage}
+                <Snackbar open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={(event) => this.setState({openMessage: false})}
-                    />
+                    onClose={(_) => this.setState({openMessage: false})}
+                />
             </div>
         );
     }

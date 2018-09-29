@@ -1,8 +1,9 @@
 import React from 'react';
-import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import Grid from '@material-ui/core/Grid'
 
 import ContainerComponent from '../base/ContainerComponent';
 import Utils from '../../utils/Utils';
@@ -34,9 +35,10 @@ class ActivateAccountPage extends ContainerComponent{
 
     }
 
-    submit(event){
+    submit(_){
         let scope = this,
             error = false;
+        this.setState({errorIdentification:'',errorPassword:'',errorRepeatPsw:''});
         if(!this.state.identification){
             this.setState({errorIdentification:'Campo requerido'});
             error = true;
@@ -56,7 +58,6 @@ class ActivateAccountPage extends ContainerComponent{
         }else
             this.setState({errorRepeatPsw:''});
         if(!error){
-            this.setState({errorIdentification:'',errorPassword:'',errorRepeatPsw:''});
             this.setState({loading:true});
             let obj = {
                 key:this.state.key,
@@ -85,47 +86,60 @@ class ActivateAccountPage extends ContainerComponent{
             <div className="Login">
                 <ContainerComponent loadingMask={this.state.loading} />
                 <img className="banner" src={banner} alt=""/>
-                <Paper className="LoginForm" zDepth={5}>
+                <Paper className="LoginForm" elevation={20}>
                     <h2>Activación de cuenta</h2>
-                    <TextField hintText="Escribe tu documento de identidad"
-                        className="LoginFields"
-                        floatingLabelText="Documento de identidad"
-                        type="number"
-                        style={{width:'100%'}}
-                        errorText={this.state.errorIdentification}
-                        onChange = {(event,newValue) => this.setState({identification:newValue})}
-                        onKeyPress = {(event) => this.handleKeyPress(event)}
-                    />
-                    <TextField hintText="Ingresa tu contraseña"
-                        className="LoginFields"
-                        floatingLabelText="Nueva contraseña"
-                        type="password"
-                        errorText={this.state.errorPassword}
-                        style={{width:'100%'}}
-                        onChange = {(event,newValue) => this.setState({password:newValue})}
-                        onKeyPress = {(event) => this.handleKeyPress(event)}
-                    />
-                    <TextField hintText="Ingresa tu contraseña"
-                        className="LoginFields"
-                        floatingLabelText="Repite contraseña"
-                        type="password"
-                        errorText={this.state.errorRepeatPsw}
-                        style={{width:'100%'}}
-                        onChange = {(event,newValue) => this.setState({repeatPsw:newValue})}
-                        onKeyPress = {(event) => this.handleKeyPress(event)}
-                    />
-                    <RaisedButton 
-                        className="LoginFields"
-                        label="Activar" 
-                        primary={true} 
-                        style={{width:'100%'}}
-                        onClick={(event) => this.submit(event)}
-                    />
-                    <Snackbar
-                        open={this.state.openMessage}
+                    <Grid container spacing={16}>
+                        <Grid item xs={12}>
+                            <TextField placeholder="Escribe tu documento de identidad"
+                                className="LoginFields"
+                                label="Documento de identidad"
+                                type="number"
+                                style={{width:'100%'}}
+                                error={this.state.errorIdentification !== ''}
+                                helperText={this.state.errorIdentification}
+                                onChange = {(event) => this.setState({identification:event.target.value})}
+                                onKeyPress = {(event) => this.handleKeyPress(event)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField placeholder="Ingresa tu contraseña"
+                                className="LoginFields"
+                                label="Nueva contraseña"
+                                type="password"
+                                error={this.state.errorPassword !== ''}
+                                helperText={this.state.errorPassword}
+                                style={{width:'100%'}}
+                                onChange = {(event) => this.setState({password:event.target.value})}
+                                onKeyPress = {(event) => this.handleKeyPress(event)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField placeholder="Ingresa tu contraseña"
+                                className="LoginFields"
+                                label="Repite contraseña"
+                                type="password"
+                                error={this.state.errorRepeatPsw !== ''}
+                                helperText={this.state.errorRepeatPsw}
+                                style={{width:'100%'}}
+                                onChange = {(event) => this.setState({repeatPsw:event.target.value})}
+                                onKeyPress = {(event) => this.handleKeyPress(event)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button className="LoginFields"
+                                variant="contained"
+                                color="primary"
+                                style={{width:'100%'}}
+                                onClick={(event) => this.submit(event)}
+                            >
+                                Activar
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    <Snackbar open={this.state.openMessage}
                         message={this.state.errorMessage}
                         autoHideDuration={4000}
-                        onRequestClose={(event) => this.setState({openMessage:false})}
+                        onClose={(event) => this.setState({openMessage:false})}
                     />
                 </Paper>
             </div>

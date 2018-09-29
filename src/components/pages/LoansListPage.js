@@ -1,6 +1,6 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import ContainerComponent from '../base/ContainerComponent';
 import LoanListComponent from '../base/LoanListComponent';
@@ -47,26 +47,33 @@ class LoansListPage extends ContainerComponent {
                     renderOneFullColGrid={true}
                     middle={
                         <div>
-                            <RaisedButton label="Cargar información" 
-                                primary={true} 
-                                style={{marginTop:'30px',width:'100%'}}
-                                disabled={!Utils.isAuthorizedEdit()}
-                                containerElement='label'>
-                                <input type="file"
-                                    disabled={!Utils.isAuthorizedEdit()} 
-                                    onChange={e => this.handleUpdateLoad(e.target.files[0])}
-                                    style={{ display: 'none' }} />
-                            </RaisedButton>
+                            <input type="file"
+                                accept=".txt"
+                                disabled={!Utils.isAuthorizedEdit()} 
+                                onChange={e => this.handleUpdateLoad(e.target.files[0])}
+                                style={{ display: 'none' }} 
+                                id="upload-file"
+                            />
+                            <label htmlFor="upload-file">
+                                <Button color="primary"
+                                    variant="contained"
+                                    style={{marginTop:'30px',width:'100%'}}
+                                    disabled={!Utils.isAuthorizedEdit()}
+                                    component="span"
+                                >
+                                    Cargar información
+                                    
+                                </Button>
+                            </label>
                             <LoanListComponent all={true} 
                                 applicantColumn={true}/>
                         </div>
                     }
                 />
-                <Snackbar
-                    open={this.state.openMessage}
+                <Snackbar open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onRequestClose={(event) => this.setState({openMessage:false})}
+                    onClose={(event) => this.setState({openMessage:false})}
                 />
             </div>
         );
