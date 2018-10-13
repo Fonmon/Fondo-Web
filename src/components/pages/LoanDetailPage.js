@@ -3,10 +3,12 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel'
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
 
 import ContainerComponent from '../base/ContainerComponent';
-import Utils from '../../utils/Utils';
+import RefinanceDialog from '../dialogs/RefinanceDialog';
+import Utils, { ID_KEY } from '../../utils/Utils';
 
 class LoanDetailPage extends ContainerComponent{
     
@@ -34,8 +36,10 @@ class LoanDetailPage extends ContainerComponent{
                 total_payment:0,
                 minimum_payment:0,
                 payday_limit:''
-            }
+            },
+            refinanceDialog: false
         }
+        this.refinanceKey = 1;
     }
 
     componentDidMount = () =>{
@@ -43,15 +47,16 @@ class LoanDetailPage extends ContainerComponent{
     }
 
     getLoan(){
-        let id = this.props.match.params.id;
-        this.setState({id:id});
-        let scope = this;
-        this.setState({loading:true});
+        let id = this.props.match.params.id,
+            scope = this;
+        this.setState({id, loading: true});
         Utils.getLoan(id)
             .then(function(response){
-                scope.setState({loan:response.data.loan});
-                scope.setState({loanDetail:response.data.loan_detail})
-                scope.setState({loading:false});
+                scope.setState({
+                    loanDetail:response.data.loan_detail,
+                    loan:response.data.loan,
+                    loading:false
+                });
             }).catch(function(error){
                 scope.setState({loading:false});
                 scope.handleRequestError(error);
@@ -73,10 +78,12 @@ class LoanDetailPage extends ContainerComponent{
             this.setState({loading:true});
             Utils.updateLoan(this.state.loan.id,value)
                 .then(function(response){
-                    scope.setState({loading:false});
                     scope.showMessageError('Cambio de estado exitoso');
-                    scope.setState({loanDetail:response.data});
-                    scope.setState({loan:{...scope.state.loan,state:value}});
+                    scope.setState({
+                        loading:false,
+                        loanDetail:response.data,
+                        loan:{...scope.state.loan,state:value}
+                    });
                 }).catch(function(error){
                     scope.setState({loading:false});
                     scope.handleRequestError(error);
@@ -85,11 +92,24 @@ class LoanDetailPage extends ContainerComponent{
     }
 
     getPaymentType(value){
-        return value === 0 ? 'Efectivo':'Cuenta';
+        switch(value){
+            case 0:
+                return 'Efectivo'
+            case 1:
+                return 'Cuenta'
+            default:
+                return 'Refinanciado'
+        }
     }
 
     getFeeType(value){
         return value === 0 ? 'Mensual':'Única';
+    }
+
+    handleRefinancedLoanCreated = (new_loan_id) => {
+        this.refinanceKey++;
+        this.setState({ refinanceDialog: false })
+        Utils.redirectTo(`/loan/${new_loan_id}`)
     }
 
     render(){
@@ -103,7 +123,7 @@ class LoanDetailPage extends ContainerComponent{
                             <ContainerComponent orderRenderOneFullColGrid={0}
                                 renderOneFullColGrid={true}
                                 middle={
-                                    <h2 style={{textAlign:'center'}}>Solicitud de crédito</h2>
+                                    <h2 style={{textAlign:'center'}}>Solicitud de crédito { this.state.loan.is_refinanced ? 'refinanciado':'' }</h2>
                                 }
                                 orderRenderTwoColGrid={1}
                                 renderTwoColGrid={true}
@@ -119,6 +139,13 @@ class LoanDetailPage extends ContainerComponent{
                                         <span className="Labels"><strong>Tasa:</strong> {this.state.loan.rate*100}%</span><br/>
                                         <span className="Labels"><strong>Fecha de desembolso:</strong> {this.state.loan.disbursement_date}</span><br/>
                                         <span className="Labels"><strong>Abono en:</strong> {this.getPaymentType(this.state.loan.payment)}</span><br/>
+                                        {this.state.loan.refinanced_loan &&
+                                            <div>
+                                                <span className="Labels">
+                                                    <strong>Refinanciación:</strong> <a href={`/loan/${this.state.loan.refinanced_loan}`}>crédito #{this.state.loan.refinanced_loan}</a>
+                                                </span><br/>
+                                            </div>
+                                        }
                                         <span className="Labels"><strong>Información adicional:</strong> {this.state.loan.comments}</span><br/>
                                     </p>
                                 }
@@ -146,6 +173,14 @@ class LoanDetailPage extends ContainerComponent{
                                                 <span className="Labels"><strong>Valor pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
                                                 <span className="Labels"><strong>Valor pago mínimo:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.minimum_payment)}</span><br/>
                                                 <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br/>
+                                                {(this.state.loan.user_id.toString() === localStorage.getItem(ID_KEY) && !this.state.loan.refinanced_loan) &&
+                                                    <Button variant="contained"
+                                                        children="Refinanciar"
+                                                        color="primary"
+                                                        style={{width: '100%', top: '30px'}}
+                                                        onClick={(_) => this.setState({refinanceDialog: true})}
+                                                    />
+                                                }
                                             </div>
                                         }
                                     </div>
@@ -158,6 +193,15 @@ class LoanDetailPage extends ContainerComponent{
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
                     onClose={(_) => this.setState({openMessage: false})}
+                />
+                <RefinanceDialog key={this.refinanceKey}
+                    loan_id={this.state.loan.id}
+                    onLoanCreated={this.handleRefinancedLoanCreated}
+                    refinanceOpen={this.state.refinanceDialog}
+                    onClose={() => {
+                        this.refinanceKey++;
+                        this.setState({refinanceDialog: false})
+                    }}
                 />
             </div>
         );

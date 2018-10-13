@@ -57,7 +57,7 @@ class HomePage extends ContainerComponent {
                     left={
                         <FinanceInfoComponent financeInfo={this.state.financeInfo}/>
                     }
-                    rightWidth={8}
+                    rightWidth={9}
                     right={
                         <LoanListComponent all={false} 
                             applicantColumn={false}/>
