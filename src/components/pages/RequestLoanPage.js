@@ -36,8 +36,7 @@ class RequestLoanPage extends ContainerComponent {
         if (!this.state.disbursement_date) {
             isError = true;
             this.setState({ openMessage: true, errorMessage: 'Fecha de desembolso requerida o inválida' });
-        } else
-            this.setState({ disbursement_date_error: '' });
+        }
         if (!this.state.timelimit) {
             isError = true;
             this.setState({ timelimit_error: 'Campo requerido' });

@@ -214,7 +214,7 @@ class UsersListPage extends ContainerComponent{
                                                     <TableCell>{user.id}</TableCell>
                                                     <TableCell>{user.full_name}</TableCell>
                                                     <TableCell>{user.email}</TableCell>
-                                                    <TableCell>{user.role}</TableCell>
+                                                    <TableCell>{user.role_display}</TableCell>
                                                     <TableCell>
                                                         <ButtonsActions 
                                                             id={user.id} 

@@ -30,8 +30,8 @@ class HomePage extends ContainerComponent {
         this.setState({loading:true});
         Utils.getUser(-1)
             .then(function(response){
-                localStorage.setItem(ID_KEY,response.data.id);
-                localStorage.setItem(ROLE_KEY,response.data.role);
+                localStorage.setItem(ID_KEY,response.data.user.id);
+                localStorage.setItem(ROLE_KEY,response.data.user.role);
                 scope.setState({financeInfo:{
                     contributions: response.data.contributions,
                     balance_contributions: response.data.balance_contributions,
@@ -57,7 +57,7 @@ class HomePage extends ContainerComponent {
                     left={
                         <FinanceInfoComponent financeInfo={this.state.financeInfo}/>
                     }
-                    rightWidth={8}
+                    rightWidth={9}
                     right={
                         <LoanListComponent all={false} 
                             applicantColumn={false}/>

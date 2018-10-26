@@ -75,8 +75,10 @@ export default class ProjectionPage extends ContainerComponent {
             this.setState({loading:true});
             Utils.loanApps(this.state.loanId,'paymentProjection',{'to_date':this.state.toDate})
                 .then(response => {
-                    scope.setState({loading:false});
-                    scope.setState({result:response.data});
+                    scope.setState({
+                        loading: false,
+                        result: response.data
+                    });
                 }).catch(error => {
                     scope.setState({loading:false});
                     scope.handleRequestError(error);
