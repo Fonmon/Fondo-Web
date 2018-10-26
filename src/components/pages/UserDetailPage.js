@@ -22,12 +22,14 @@ class UserDetailPage extends ContainerComponent{
             errorMessage: '',
             id:0,
             loading:false,
-            user:{
-                identification:0,
-                first_name:'',
-                last_name:'',
-                email:'',
-                role:-1,
+            userInfo:{
+                user: {
+                    identification:0,
+                    first_name:'',
+                    last_name:'',
+                    email:'',
+                    role:-1
+                },
                 contributions:'',
                 balance_contributions:'',
                 total_quota:'',
@@ -43,13 +45,17 @@ class UserDetailPage extends ContainerComponent{
 
     getUser(){
         let id = this.props.match.params.id;
-        this.setState({id:id});
         let scope = this;
-        this.setState({loading:true});
+        this.setState({
+            id,
+            loading:true
+        });
         Utils.getUser(id)
             .then(function(response){
-                scope.setState({user:response.data});
-                scope.setState({loading:false});
+                scope.setState({
+                    userInfo:response.data,
+                    loading: false
+                });
             }).catch(function(error){
                 scope.setState({loading:false});
                 scope.handleRequestError(error);
@@ -61,7 +67,14 @@ class UserDetailPage extends ContainerComponent{
     }
 
     handleUpdate(){
-        let user = this.state.user;
+        const user = {
+            ...this.state.userInfo.user,
+            contributions: this.state.userInfo.contributions,
+            balance_contributions: this.state.userInfo.balance_contributions,
+            total_quota: this.state.userInfo.total_quota,
+            utilized_quota: this.state.userInfo.utilized_quota,
+            last_modified: this.state.userInfo.last_modified
+        };
         let scope = this;
         if(user.email === '' || user.identification === 0 || user.first_name === ''
             || user.last_name === '')
@@ -82,8 +95,12 @@ class UserDetailPage extends ContainerComponent{
         }
     }
 
-    setStateCustom(key,value){
-        this.setState({user:{...this.state.user,[key]:value}});
+    setStateFinanceInfo(key,value){
+        this.setState({userInfo:{...this.state.userInfo,[key]:value}});
+    }
+
+    setStateUserInfo(key,value){
+        this.setState({userInfo:{...this.state.userInfo, user:{...this.state.userInfo.user,[key]:value}}});
     }
 
     render(){
@@ -112,48 +129,48 @@ class UserDetailPage extends ContainerComponent{
                                 <Grid item xs={12}>
                                     <TextField placeholder="Ingresa el Documento de identidad"
                                         label="Identificación"
-                                        value={this.state.user.identification}
+                                        value={this.state.userInfo.user.identification}
                                         style={{width:'100%'}}
                                         type='number'
                                         disabled={!this.allowToEditPersonal()}
-                                        onChange = {(event) => this.setStateCustom('identification',Number(event.target.value))}
+                                        onChange = {(event) => this.setStateUserInfo('identification',Number(event.target.value))}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField placeholder="Ingresa tus nombres"
                                         label="Nombres"
-                                        value={this.state.user.first_name}
+                                        value={this.state.userInfo.user.first_name}
                                         style={{width:'100%'}}
                                         disabled={!this.allowToEditPersonal()}
-                                        onChange = {(event) => this.setStateCustom('first_name',event.target.value)}
+                                        onChange = {(event) => this.setStateUserInfo('first_name',event.target.value)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField placeholder="Ingresa tus apellidos"
                                         label="Apellidos"
-                                        value={this.state.user.last_name}
+                                        value={this.state.userInfo.user.last_name}
                                         style={{width:'100%'}}
                                         disabled={!this.allowToEditPersonal()}
-                                        onChange = {(event) => this.setStateCustom('last_name',event.target.value)}
+                                        onChange = {(event) => this.setStateUserInfo('last_name',event.target.value)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField placeholder="Ingresa tu email"
                                         label="Email"
-                                        value={this.state.user.email}
+                                        value={this.state.userInfo.user.email}
                                         style={{width:'100%'}}
                                         disabled={!this.allowToEditPersonal()}
-                                        onChange = {(event) => this.setStateCustom('email',event.target.value)}
+                                        onChange = {(event) => this.setStateUserInfo('email',event.target.value)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <InputLabel htmlFor="role">Rol</InputLabel>
-                                    <Select value={this.state.user.role}
+                                    <Select value={this.state.userInfo.user.role}
                                         inputProps={{
                                             id: "role"
                                         }}
                                         style={{width:'100%'}}
-                                        onChange={(event) => this.setStateCustom('role',event.target.value)}
+                                        onChange={(event) => this.setStateUserInfo('role',event.target.value)}
                                         disabled={!Utils.isAdmin()}
                                     >
                                         <MenuItem value={3}>Miembro</MenuItem>
@@ -172,39 +189,39 @@ class UserDetailPage extends ContainerComponent{
                             <Grid container spacing={16}>
                                 <Grid item xs={12}>
                                     <CurrencyField label="Aportes"
-                                        value={this.state.user.contributions}
+                                        value={this.state.userInfo.contributions}
                                         style={{width:'100%'}}
                                         disabled={!Utils.isAuthorizedEdit()}
-                                        onChange = {(event) => this.setStateCustom('contributions',event.target.value)}
+                                        onChange = {(event) => this.setStateFinanceInfo('contributions',event.target.value)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <CurrencyField label="Saldo de aportes"
-                                        value={this.state.user.balance_contributions}
+                                        value={this.state.userInfo.balance_contributions}
                                         style={{width:'100%'}}
                                         disabled={!Utils.isAuthorizedEdit()}
-                                        onChange = {(event) => this.setStateCustom('balance_contributions',event.target.value)}
+                                        onChange = {(event) => this.setStateFinanceInfo('balance_contributions',event.target.value)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <CurrencyField label="Cupo total"
-                                        value={this.state.user.total_quota}
+                                        value={this.state.userInfo.total_quota}
                                         style={{width:'100%'}}
                                         disabled={!Utils.isAuthorizedEdit()}
-                                        onChange = {(event) => this.setStateCustom('total_quota',event.target.value)}
+                                        onChange = {(event) => this.setStateFinanceInfo('total_quota',event.target.value)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <CurrencyField label="Cupo utilizado"
-                                        value={this.state.user.utilized_quota}
+                                        value={this.state.userInfo.utilized_quota}
                                         style={{width:'100%'}}
                                         disabled={!Utils.isAuthorizedEdit()}
-                                        onChange = {(event) => this.setStateCustom('utilized_quota',event.target.value)}
+                                        onChange = {(event) => this.setStateFinanceInfo('utilized_quota',event.target.value)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField label="Actualizado"
-                                        value={this.state.user.last_modified}
+                                        value={this.state.userInfo.last_modified}
                                         style={{width:'100%'}}
                                         disabled={true}
                                     />
