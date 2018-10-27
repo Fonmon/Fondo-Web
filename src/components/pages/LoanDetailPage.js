@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 
 import ContainerComponent from '../base/ContainerComponent';
 import RefinanceDialog from '../dialogs/RefinanceDialog';
-import Utils, { ID_KEY } from '../../utils/Utils';
+import Utils from '../../utils/Utils';
 
 class LoanDetailPage extends ContainerComponent{
     
@@ -173,7 +173,7 @@ class LoanDetailPage extends ContainerComponent{
                                                 <span className="Labels"><strong>Valor pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
                                                 <span className="Labels"><strong>Valor pago mínimo:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.minimum_payment)}</span><br/>
                                                 <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br/>
-                                                {(this.state.loan.user_id.toString() === localStorage.getItem(ID_KEY) && !this.state.loan.refinanced_loan) &&
+                                                {(this.state.loan.user_id.toString() === Utils.currentId() && !this.state.loan.refinanced_loan) &&
                                                     <Button variant="contained"
                                                         children="Refinanciar"
                                                         color="primary"
