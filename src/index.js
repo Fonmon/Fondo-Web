@@ -28,4 +28,17 @@ const Wrapper = () => (
 );
 
 ReactDOM.render(<Wrapper />, document.getElementById('root'));
-registerServiceWorker();
+registerServiceWorker({
+    onActivated: (registration) => {
+        console.log('worker activated')
+        if(!registration.pushManager) {
+            return console.log('Unable to install push manager')
+        }
+    },
+    onSuccess: (registration) => {
+        console.log('success callback', registration);
+    },
+    onUpdate: (registration) => {
+        console.log('update callback', registration);
+    },
+});
