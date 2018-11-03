@@ -141,7 +141,7 @@ class UserDetailPage extends ContainerComponent{
                 if (targetValue) {
                     Utils.pushManagerSubscribe();
                 } else {
-                    Utils.pushManagerUnsubscribe();
+                    Utils.pushManagerUnsubscribe(false);
                 }
                 scope.showMessageError('Cambios guardados');
             }).catch(function(error){
@@ -292,6 +292,7 @@ class UserDetailPage extends ContainerComponent{
                                         control={
                                             <Switch onChange={this.onNotifications}
                                                 checked={this.state.preferences.notifications}
+                                                disabled={Utils.currentId() !== this.state.id}
                                             />
                                         }
                                     />

@@ -117,16 +117,21 @@ class Utils{
             .catch(err => console.error("Registering subscription error: ", err));
     }
 
-    static async pushManagerUnsubscribe() {
+    static async pushManagerUnsubscribe(callService = true) {
         const registration = await navigator.serviceWorker.getRegistration();
         if(!registration.pushManager) return;
         const currentSubscription = await registration.pushManager.getSubscription();
         if (!currentSubscription) return;
 
         console.log('unsubscribing push manager');
-        currentSubscription.unsubscribe()
-            .then(() => this.unsubscribeNotifications(currentSubscription))
-            .catch(err => console.error("Unregistering subscription error: ", err));
+        if(callService) {
+            currentSubscription.unsubscribe()
+                .then(() => this.unsubscribeNotifications(currentSubscription))
+                .catch(err => console.error("Unregistering subscription error: ", err));
+        } else {
+            currentSubscription.unsubscribe()
+                .catch(err => console.error("Unregistering subscription error: ", err));
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////
