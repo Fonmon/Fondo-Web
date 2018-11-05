@@ -19,10 +19,11 @@ self.addEventListener('activate', () => {
 self.addEventListener('push', function(event) {
     console.log('[Service Worker] Push Received.');
     console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
-  
+
+    const content = JSON.parse(event.data.text());
     const title = 'Fondo Montañez';
     const options = {
-        body: event.data.text(),
+        body: content.body,
         icon: 'icons/logo_64.png',
         badge: 'icons/logo_16.png'
     };
