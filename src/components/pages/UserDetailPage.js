@@ -283,21 +283,23 @@ class UserDetailPage extends ContainerComponent{
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                            <ExpansionPanel expanded={this.state.expanded === 'preferences'} onChange={this.onExpand('preferences')}>
-                                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                                    <strong>Preferencias</strong>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-                                    <FormControlLabel label="Habilitar notificaciones"
-                                        control={
-                                            <Switch onChange={this.onNotifications}
-                                                checked={this.state.preferences.notifications}
-                                                disabled={Utils.currentId() !== this.state.id}
-                                            />
-                                        }
-                                    />
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
+                            {(Utils.currentId() === this.state.id || Utils.isAdmin()) &&
+                                <ExpansionPanel expanded={this.state.expanded === 'preferences'} onChange={this.onExpand('preferences')}>
+                                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                        <strong>Preferencias</strong>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                        <FormControlLabel label="Habilitar notificaciones"
+                                            control={
+                                                <Switch onChange={this.onNotifications}
+                                                    checked={this.state.preferences.notifications}
+                                                    disabled={Utils.currentId() !== this.state.id}
+                                                />
+                                            }
+                                        />
+                                    </ExpansionPanelDetails>
+                                </ExpansionPanel>
+                            }
                         </div>
                     }
                 />
