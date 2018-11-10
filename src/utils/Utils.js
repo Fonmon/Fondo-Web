@@ -4,6 +4,7 @@ import {HOST_APP} from './Constants';
 export const TOKEN_KEY = "TOKEN_FONDO_KEY";
 export const ID_KEY = "USER_ID";
 export const ROLE_KEY = "USER_ROLE";
+export const NOTIFICATIONS_KEY = "NOTIFICATIONS_FONMON";
 
 const requestOpt = {
     headers: {
@@ -38,6 +39,10 @@ class Utils{
 
     static isAuthorizedEdit(){
         return this.isAdmin() || this.isTreasurer();
+    }
+
+    static hasNotificationsEnabled() {
+        return localStorage.getItem(NOTIFICATIONS_KEY) === 'true';
     }
 
     static currentId(){
@@ -78,6 +83,55 @@ class Utils{
     static convertToDate(dateStr){
         const [year,month,day] = dateStr.split('-');
         return new Date(year, month - 1, day);
+    }
+
+    static urlB64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding)
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+      
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+      
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+    }
+
+    static async pushManagerSubscribe() {
+        const permission = await Notification.requestPermission();
+        if(permission === 'denied') return;
+        const registration = await navigator.serviceWorker.getRegistration();
+        if(!registration.pushManager) return;
+        const currentSubscription = await registration.pushManager.getSubscription();
+        if (currentSubscription) return;
+
+        console.log('subscribing push manager');
+        registration.pushManager.subscribe({
+            userVisibleOnly: true, //Always display notifications
+            applicationServerKey: this.urlB64ToUint8Array(process.env.REACT_APP_VAPID_PUBLIC_KEY)
+        })
+            .then(subscription => this.subscribeNotifications(subscription))
+            .catch(err => console.error("Registering subscription error: ", err));
+    }
+
+    static async pushManagerUnsubscribe(callService = true) {
+        const registration = await navigator.serviceWorker.getRegistration();
+        if(!registration.pushManager) return;
+        const currentSubscription = await registration.pushManager.getSubscription();
+        if (!currentSubscription) return;
+
+        console.log('unsubscribing push manager');
+        if(callService) {
+            currentSubscription.unsubscribe()
+                .then(() => this.unsubscribeNotifications(currentSubscription))
+                .catch(err => console.error("Unregistering subscription error: ", err));
+        } else {
+            currentSubscription.unsubscribe()
+                .catch(err => console.error("Unregistering subscription error: ", err));
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -176,6 +230,14 @@ class Utils{
 
     static createActivity(idYear, activity){
         return axios.post(`${HOST_APP}api/activity/year/${idYear}`,activity,requestOpt);
+    }
+
+    static subscribeNotifications(subscription){
+        return axios.post(`${HOST_APP}api/notification/subscribe`,subscription,requestOpt);
+    }
+
+    static unsubscribeNotifications(subscription){
+        return axios.post(`${HOST_APP}api/notification/unsubscribe`,subscription,requestOpt);
     }
 }
 

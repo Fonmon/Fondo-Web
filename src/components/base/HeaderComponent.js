@@ -63,7 +63,11 @@ class HeaderComponent extends Component {
 
     handleTitleClick = () => (Utils.redirectTo("/home"))
 
-    handleSignOut = () => Utils.clearStorage()
+    handleSignOut = () => {
+        Utils.pushManagerUnsubscribe()
+            .then(() => Utils.clearStorage())
+            .catch(() => Utils.clearStorage())
+    }
 
     render() {
         const classes = this.props.classes
