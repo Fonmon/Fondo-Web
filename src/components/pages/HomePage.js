@@ -36,6 +36,8 @@ class HomePage extends ContainerComponent {
 
                 if (Utils.hasNotificationsEnabled()) {
                     Utils.pushManagerSubscribe();
+                } else {
+                    Utils.pushManagerUnsubscribe(false)
                 }
 
                 scope.setState({
