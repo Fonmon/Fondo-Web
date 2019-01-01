@@ -83,6 +83,8 @@ class UserDetailPage extends ContainerComponent{
             obj = this.state.user;
             if(obj.email === '' || obj.identification === 0 || obj.first_name === '' || obj.last_name === '')
                 return this.showMessageError('Debe completar los campos faltantes.');
+            else if (!this.isEmailValid(obj.email))
+                return this.showMessageError('Ingrese un email válido.')
         } else if(this.state.expanded === 'finance') {
             obj = this.state.finance
         }
@@ -112,6 +114,11 @@ class UserDetailPage extends ContainerComponent{
 
     setStateUserInfo(key,value){
         this.setState({user:{...this.state.user,[key]:value}});
+    }
+
+    isEmailValid(email) {
+        const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return reg.test(email);
     }
 
     onExpand = panel => (event, expanded) => {
