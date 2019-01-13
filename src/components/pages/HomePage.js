@@ -4,7 +4,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import ContainerComponent from '../base/ContainerComponent';
 import FinanceInfoComponent from '../base/FinanceInfoComponent';
 import LoanListComponent from '../base/LoanListComponent';
-import Utils,{ID_KEY,ROLE_KEY,NOTIFICATIONS_KEY} from '../../utils/Utils';
+import Utils from '../../utils/Utils';
 
 class HomePage extends ContainerComponent {
 
@@ -30,16 +30,6 @@ class HomePage extends ContainerComponent {
         this.setState({loading:true});
         Utils.getUser(-1)
             .then(function(response){
-                localStorage.setItem(ID_KEY,response.data.user.id);
-                localStorage.setItem(ROLE_KEY,response.data.user.role);
-                localStorage.setItem(NOTIFICATIONS_KEY,response.data.preferences.notifications);
-
-                if (Utils.hasNotificationsEnabled()) {
-                    Utils.pushManagerSubscribe();
-                } else {
-                    Utils.pushManagerUnsubscribe(false)
-                }
-
                 scope.setState({
                     financeInfo: response.data.finance,
                     loading: false
