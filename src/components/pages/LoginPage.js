@@ -58,6 +58,7 @@ class LoginPage extends ContainerComponent {
                                 placeholder="Ingresa tu email"
                                 margin="normal"
                                 type="email"
+                                autoFocus={true}
                                 style={{width: '70%'}}
                                 onChange={(event) => this.setState({ email: event.target.value })}
                                 onKeyPress={(event) => this.handleKeyPress(event)}

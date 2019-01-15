@@ -106,7 +106,9 @@ class Utils{
         const registration = await navigator.serviceWorker.getRegistration();
         if(!registration.pushManager) return;
         const currentSubscription = await registration.pushManager.getSubscription();
-        if (currentSubscription) return;
+        if (currentSubscription) {
+            return this.subscribeNotifications(currentSubscription);
+        }
 
         console.log('subscribing push manager');
         registration.pushManager.subscribe({
