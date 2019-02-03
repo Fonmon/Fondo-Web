@@ -104,6 +104,7 @@ class Utils{
         const permission = await Notification.requestPermission();
         if(permission === 'denied') return;
         const registration = await navigator.serviceWorker.getRegistration();
+        if(!registration) return;
         if(!registration.pushManager) return;
         const currentSubscription = await registration.pushManager.getSubscription();
         if (currentSubscription) {
@@ -121,6 +122,7 @@ class Utils{
 
     static async pushManagerUnsubscribe(callService = true) {
         const registration = await navigator.serviceWorker.getRegistration();
+        if(!registration) return;
         if(!registration.pushManager) return;
         const currentSubscription = await registration.pushManager.getSubscription();
         if (!currentSubscription) return;
