@@ -17,6 +17,7 @@ export default class DateField extends Component {
                     max={this.props.max}
                     onChange={this.props.onChange}
                     value={this.props.value}
+                    disabled={this.props.disabled}
                 />
             </div>
         )

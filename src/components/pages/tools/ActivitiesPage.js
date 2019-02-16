@@ -51,7 +51,8 @@ export default class ActivitiesPage extends ContainerComponent{
             loading: false,
             creationOpen: false,
             year: {
-                id: ""
+                id: "",
+                enable: false
             },
             years: [],
             activities: [],
@@ -231,6 +232,10 @@ export default class ActivitiesPage extends ContainerComponent{
             .catch(error => this.handleUpdateActivity(null,error));
     }
 
+    ableToEdit = () => {
+        return Utils.isAdmin() || (this.state.year.enable && Utils.isPresident());
+    }
+
     render(){
         const actions = [
             <Button color="primary" key={1}
@@ -269,7 +274,7 @@ export default class ActivitiesPage extends ContainerComponent{
                                     Nuevo año de actividades
                                 </Button>
                             }
-                            {(Utils.isAdmin() || Utils.isPresident()) &&
+                            {this.ableToEdit() &&
                                 <Button style={{width:'100%'}}
                                     color="primary"
                                     variant="contained"
@@ -309,7 +314,7 @@ export default class ActivitiesPage extends ContainerComponent{
                                 }
                                 {this.state.activity &&
                                     <div>
-                                        {(Utils.isAdmin() || Utils.isPresident()) &&
+                                        {this.ableToEdit() &&
                                             <div>
                                                 <Button color="primary"
                                                     variant="contained"
@@ -332,13 +337,13 @@ export default class ActivitiesPage extends ContainerComponent{
                                                 <TextField label="Nombre"
                                                     value={this.state.activity.name}
                                                     style={{width:'100%'}}
-                                                    disabled={!Utils.isAdmin() && !Utils.isPresident()}
+                                                    disabled={!this.ableToEdit()}
                                                     onChange = {(event) => this.setStateCustom('name',event.target.value)}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <CurrencyField label="Valor"
-                                                    disabled={!Utils.isAdmin() && !Utils.isPresident()}
+                                                    disabled={!this.ableToEdit()}
                                                     style={{width:'100%'}}
                                                     onChange = {(event) => this.setStateCustom('value',event.target.value)} 
                                                     value={this.state.activity.value}
@@ -346,6 +351,7 @@ export default class ActivitiesPage extends ContainerComponent{
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <DateField label="Fecha de la actividad" 
+                                                    disabled={!this.ableToEdit()}
                                                     style={{width:'100%'}}
                                                     value={this.state.activity.date}
                                                     onChange = {(event) => this.setStateCustom('date',event.target.value)}
@@ -369,7 +375,7 @@ export default class ActivitiesPage extends ContainerComponent{
                                                 <TableRow>
                                                     <TableCell>Nombre</TableCell>
                                                     <TableCell>Estado</TableCell>
-                                                    {(Utils.isAdmin() || Utils.isPresident()) &&
+                                                    {this.ableToEdit() &&
                                                         <TableCell>Acciones</TableCell>
                                                     }
                                                 </TableRow>
@@ -380,7 +386,7 @@ export default class ActivitiesPage extends ContainerComponent{
                                                         <TableRow key={i}>
                                                             <TableCell>{user.user.full_name}</TableCell>
                                                             <TableCell>{this.resolveState(user.state)}</TableCell>
-                                                            {(Utils.isAdmin() || Utils.isPresident()) &&
+                                                            {this.ableToEdit() &&
                                                                 <TableCell >
                                                                     <ButtonsActions 
                                                                         id={user.id} 
