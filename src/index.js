@@ -64,7 +64,11 @@ if (Utils.isAuthenticated()) {
                 Utils.pushManagerUnsubscribe(false)
             }
 
-            loadApp(response.data.finance);
+            loadApp(
+                response.data.finance, 
+                response.data.preferences.primary_color, 
+                response.data.preferences.secondary_color
+            );
         }).catch(function (error) {
             console.error('Error on index.js: ', error);
             loadApp();

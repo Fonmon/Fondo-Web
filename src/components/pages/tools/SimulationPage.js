@@ -75,7 +75,7 @@ class SimulationPage extends ContainerComponent{
                     <div>
                         <Paper className="UserInfo" elevation={20}>
                             <h3 style={{textAlign:'center'}}>Simulador de crédito</h3>
-                            <Grid container spacing={16}>
+                            <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <CurrencyField label="Valor a solicitar"
                                         style={{width:'100%'}}

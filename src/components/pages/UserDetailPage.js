@@ -14,6 +14,7 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import ContainerComponent from '../base/ContainerComponent';
+import ColorPickerComponent from '../base/ColorPickerComponent';
 import CurrencyField from '../fields/CurrencyField';
 import Utils, {NOTIFICATIONS_KEY} from '../../utils/Utils';
 import '../../resources/styles/UserDetail.css';
@@ -43,7 +44,9 @@ class UserDetailPage extends ContainerComponent{
                 last_modified:''
             },
             preferences: {
-                notifications: false
+                notifications: false,
+                primary_color: '#800000',
+                secondary_color: '#c83737'
             }
         }
     }
@@ -127,14 +130,42 @@ class UserDetailPage extends ContainerComponent{
         });
     }
 
+    onColorChange = (color, type) => {
+        this.setState({
+            preferences:{...this.state.preferences, [`${type}_color`]: color}
+        });
+    }
+
+    onColorSave = () => {
+        this.setState({ loading: true });
+        const scope = this,
+            requestBody = {
+                type: this.state.expanded,
+                [this.state.expanded]: {
+                    notifications: this.state.preferences.notifications,
+                    primary_color: this.state.preferences.primary_color,
+                    secondary_color: this.state.preferences.secondary_color
+                }
+            };
+        Utils.updateUser(this.state.id, requestBody)
+            .then((response) => {
+                scope.setState({ loading: false });
+                scope.showMessageError('Cambios guardados. Actualizar página');
+            }).catch((error) => {
+                scope.setState({ loading:false });
+                scope.handleRequestError(error);
+            })
+    }
+
     onNotifications = (event) => {
-        // call endpoint
         this.setState({ loading: true });
         const targetValue = event.target.checked;
         let requestBody = {
             type: this.state.expanded,
             [this.state.expanded]: {
-                notifications: targetValue
+                notifications: targetValue,
+                primary_color: this.state.preferences.primary_color,
+                secondary_color: this.state.preferences.secondary_color
             }
         }, scope = this;
         
@@ -171,7 +202,7 @@ class UserDetailPage extends ContainerComponent{
                                     <strong>Información personal</strong>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    <Grid container spacing={16}>
+                                    <Grid container spacing={3}>
                                         <Button color="secondary" variant="contained"
                                             style={{width:'100%'}}
                                             onClick={this.handleUpdate.bind(this)}
@@ -240,7 +271,7 @@ class UserDetailPage extends ContainerComponent{
                                     <strong>Información financiera</strong>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                    <Grid container spacing={16}>
+                                    <Grid container spacing={3}>
                                         <Button color="secondary" variant="contained"
                                             style={{width:'100%'}}
                                             onClick={this.handleUpdate.bind(this)}
@@ -296,14 +327,40 @@ class UserDetailPage extends ContainerComponent{
                                         <strong>Preferencias</strong>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
-                                        <FormControlLabel label="Habilitar notificaciones"
-                                            control={
-                                                <Switch onChange={this.onNotifications}
-                                                    checked={this.state.preferences.notifications}
-                                                    disabled={Utils.currentId() !== this.state.id}
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12}>
+                                                <FormControlLabel label="Habilitar notificaciones"
+                                                    control={
+                                                        <Switch onChange={this.onNotifications}
+                                                            checked={this.state.preferences.notifications}
+                                                            disabled={Utils.currentId() !== this.state.id}
+                                                        />
+                                                    }
                                                 />
-                                            }
-                                        />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <FormControlLabel label=" Color primario"
+                                                    control={
+                                                        <ColorPickerComponent type = "primary"
+                                                            color={this.state.preferences.primary_color}
+                                                            onChange={this.onColorChange}
+                                                            onSave={this.onColorSave}
+                                                            disabled={Utils.currentId() !== this.state.id} />
+                                                    }
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <FormControlLabel label=" Color secundario"
+                                                    control={
+                                                        <ColorPickerComponent type = "secondary"
+                                                            color={this.state.preferences.secondary_color}
+                                                            onChange={this.onColorChange}
+                                                            onSave={this.onColorSave}
+                                                            disabled={Utils.currentId() !== this.state.id} />
+                                                    }
+                                                />
+                                            </Grid>
+                                        </Grid>
                                     </ExpansionPanelDetails>
                                 </ExpansionPanel>
                             }

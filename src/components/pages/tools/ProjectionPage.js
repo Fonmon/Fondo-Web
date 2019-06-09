@@ -115,7 +115,7 @@ export default class ProjectionPage extends ContainerComponent {
                     left={
                         <Paper className="UserInfo" elevation={20}>
                             <h3 style={{textAlign:'center'}}>Proyección de pago</h3>
-                            <Grid container spacing={16}>
+                            <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <InputLabel htmlFor="creditId">Crédito {this.state.loanIdError}</InputLabel>
                                     <Select style={{width:'100%'}}

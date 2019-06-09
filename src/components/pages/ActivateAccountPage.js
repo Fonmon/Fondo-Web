@@ -88,7 +88,7 @@ class ActivateAccountPage extends ContainerComponent{
                 <img className="banner" src={banner} alt=""/>
                 <Paper className="LoginForm" elevation={20}>
                     <h2>Activación de cuenta</h2>
-                    <Grid container spacing={16}>
+                    <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <TextField placeholder="Escribe tu documento de identidad"
                                 className="LoginFields"
