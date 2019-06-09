@@ -18,10 +18,10 @@ import ToolsListPage from './pages/ToolsListPage';
 
 import Utils from '../utils/Utils';
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const PrivateRoute = ({ component: Component, rProps, ...rest }) => (
     <Route {...rest} render={(props) => (
         Utils.isAuthenticated()
-        ? <Component {...props} />
+        ? <Component {...props} {...rProps}/>
         : <Redirect to='/login' />
     )} />
 );
@@ -42,22 +42,22 @@ const ManagementRoute = ({ component: Component, ...rest }) => (
     )} />
 );
 
-const RouterMain = () => (
+const RouterMain = (props) => (
     <main>
         <Switch>
             <Route exact path = '/error' component={NotFoundPage} />
             <NotValidRoute exact path='/' component={LoginPage}/>
             <NotValidRoute exact path='/login' component={LoginPage}/>
             <NotValidRoute exact path='/activate/:id/:key' component={ActivateAccountPage}/>
-            <PrivateRoute exact path='/home' component={HomePage} />
-            <PrivateRoute exact path='/user/:id' component={UserDetailPage} />
-            <PrivateRoute exact path='/request-loan' component={RequestLoanPage} />
-            <PrivateRoute exact path='/loan/:id' component={LoanDetailPage} />
-            <PrivateRoute exact path='/info' component={FondoInfoPage} />
-            <PrivateRoute exact path='/tools' component={ToolsListPage} />
-            <PrivateRoute exact path='/tool/simulation' component={SimulationPage} />
-            <PrivateRoute exact path='/tool/projection' component={ProjectionPage} />
-            <PrivateRoute exact path='/tool/activities' component={ActivitiesPage} />
+            <PrivateRoute rProps={props} exact path='/home' component={HomePage} />
+            <PrivateRoute rProps={props} exact path='/user/:id' component={UserDetailPage} />
+            <PrivateRoute rProps={props} exact path='/request-loan' component={RequestLoanPage} />
+            <PrivateRoute rProps={props} exact path='/loan/:id' component={LoanDetailPage} />
+            <PrivateRoute rProps={props} exact path='/info' component={FondoInfoPage} />
+            <PrivateRoute rProps={props} exact path='/tools' component={ToolsListPage} />
+            <PrivateRoute rProps={props} exact path='/tool/simulation' component={SimulationPage} />
+            <PrivateRoute rProps={props} exact path='/tool/projection' component={ProjectionPage} />
+            <PrivateRoute rProps={props} exact path='/tool/activities' component={ActivitiesPage} />
             <ManagementRoute exact path='/users' component={UsersListPage} />
             <ManagementRoute exact path='/loans' component={LoansListPage} />
             <Redirect to="/error" />
