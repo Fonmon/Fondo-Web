@@ -11,16 +11,8 @@ import ContainerComponent from '../../base/ContainerComponent';
 import DateField from '../../fields/DateField';
 import Utils from '../../../utils/Utils';
 
-const styleColumn = {
-    flex: '50%'
-}
-
-const styleRow = {
-    display: 'flex'
-}
-
 export default class ProjectionPage extends ContainerComponent {
-    constructor(){
+    constructor() {
         super();
         this.state = {
             loading: false,
@@ -37,23 +29,23 @@ export default class ProjectionPage extends ContainerComponent {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const scope = this;
-        this.setState({loading: true});
-        Utils.getLoans(1,false,1,false)
+        this.setState({ loading: true });
+        Utils.getLoans(1, false, 1, false)
             .then(response => {
                 const loans = response.data.list;
-                scope.setState({loanIds:loans.map(loan => loan.id)});
-                scope.setState({loading:false});
+                scope.setState({ loanIds: loans.map(loan => loan.id) });
+                scope.setState({ loading: false });
             }).catch(error => {
-                scope.setState({loading:false});
+                scope.setState({ loading: false });
                 scope.handleRequestError(error);
             });
     }
 
-    onSubmit(){
+    onSubmit() {
         let isError = false;
-        if(!this.state.toDate || this.state.loanId < 0){
+        if (!this.state.toDate || this.state.loanId < 0) {
             return this.setState({
                 openMessage: true,
                 errorMessage: 'Por favor completar todos los campos'
@@ -62,51 +54,51 @@ export default class ProjectionPage extends ContainerComponent {
 
         const toDate = new Date(this.state.toDate)
         const fromDate = new Date(this.state.fromDate)
-        if(!isError && toDate < fromDate){
+        if (!isError && toDate < fromDate) {
             this.setState({
                 openMessage: true,
-                errorMessage:'Fecha debe ser mayor a la fecha de desembolso del crédito actual.'
+                errorMessage: 'Fecha debe ser mayor a la fecha de desembolso del crédito actual.'
             });
             return isError = true;
         }
 
-        if(!isError){
+        if (!isError) {
             const scope = this;
-            this.setState({loading:true});
-            Utils.loanApps(this.state.loanId,'paymentProjection',{'to_date':this.state.toDate})
+            this.setState({ loading: true });
+            Utils.loanApps(this.state.loanId, 'paymentProjection', { 'to_date': this.state.toDate })
                 .then(response => {
                     scope.setState({
                         loading: false,
                         result: response.data
                     });
                 }).catch(error => {
-                    scope.setState({loading:false});
+                    scope.setState({ loading: false });
                     scope.handleRequestError(error);
                 });
         }
     }
 
-    onLoanChange(event){
+    onLoanChange(event) {
         const scope = this;
         const loanId = event.target.value;
-        if(loanId === -1)
+        if (loanId === -1)
             return
 
-        this.setState({loanId:loanId,loading:true});
+        this.setState({ loanId: loanId, loading: true });
         Utils.getLoan(loanId)
             .then(response => {
                 scope.setState({
-                    loading:false,
+                    loading: false,
                     fromDate: Utils.formatDate(new Date(response.data.loan.disbursement_date)),
                     loanDetail: response.data.loan_detail
                 });
             }).catch(error => {
-                scope.setState({loading:false});
+                scope.setState({ loading: false });
                 scope.handleRequestError(error);
             });
     }
 
-    render(){
+    render() {
         return (
             <div>
                 <ContainerComponent showHeader={true}
@@ -114,17 +106,17 @@ export default class ProjectionPage extends ContainerComponent {
                     renderTwoColGrid={true}
                     left={
                         <Paper className="UserInfo" elevation={20}>
-                            <h3 style={{textAlign:'center'}}>Proyección de pago</h3>
+                            <h3 style={{ textAlign: 'center' }}>Proyección de pago</h3>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <InputLabel htmlFor="creditId">Crédito {this.state.loanIdError}</InputLabel>
-                                    <Select style={{width:'100%'}}
+                                    <Select style={{ width: '100%' }}
                                         inputProps={{
                                             id: 'creditId'
                                         }}
                                         value={this.state.loanId}
                                         error={this.state.loanIdError !== ''}
-                                        onChange = {this.onLoanChange.bind(this)}
+                                        onChange={this.onLoanChange.bind(this)}
                                     >
                                         <MenuItem value={-1}><em>Ninguno</em></MenuItem>
                                         {this.state.loanIds.map(loanId => {
@@ -135,13 +127,13 @@ export default class ProjectionPage extends ContainerComponent {
                                     </Select>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {this.state.loanDetail && 
+                                    {this.state.loanDetail &&
                                         <div>
-                                            <span className="Labels"><strong>Valor capital:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.capital_balance)}</span><br/>
-                                            <span className="Labels"><strong>Valor intereses:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.interests)}</span><br/>
-                                            <span className="Labels"><strong>Valor pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br/>
-                                            <span className="Labels"><strong>Valor pago mínimo:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.minimum_payment)}</span><br/>
-                                            <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br/>
+                                            <span className="Labels"><strong>Valor capital:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.capital_balance)}</span><br />
+                                            <span className="Labels"><strong>Valor intereses:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.interests)}</span><br />
+                                            <span className="Labels"><strong>Valor pago total:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.total_payment)}</span><br />
+                                            <span className="Labels"><strong>Valor pago mínimo:</strong> ${Utils.parseNumberMoney(this.state.loanDetail.minimum_payment)}</span><br />
+                                            <span className="Labels"><strong>Fecha límite de pago:</strong> {this.state.loanDetail.payday_limit}</span><br />
                                         </div>
                                     }
                                 </Grid>
@@ -153,7 +145,7 @@ export default class ProjectionPage extends ContainerComponent {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button style={{width:'100%'}}
+                                    <Button style={{ width: '100%' }}
                                         color='primary'
                                         variant="contained"
                                         onClick={this.onSubmit.bind(this)}
@@ -167,18 +159,21 @@ export default class ProjectionPage extends ContainerComponent {
                     right={
                         <div>
                             {this.state.result &&
-                                <Paper style={styleRow} className="UserInfo" elevation={20}>
-                                    <div style={styleColumn}>
-                                        <strong>Valor Capital</strong><br/>${Utils.parseNumberMoney(this.state.result.capital_balance)}
-                                    </div>
-                                    <div style={styleColumn}>
-                                        <strong>Intereses</strong><br/>${Utils.parseNumberMoney(this.state.result.interests)}
-                                    </div>
-                                    <div style={styleColumn}>
-                                        <strong>Total a pagar</strong><br/>${Utils.parseNumberMoney(
-                                            this.state.result.capital_balance + this.state.result.interests
-                                        )}
-                                    </div>
+                                <Paper className="UserInfo" elevation={20}>
+                                    <h3 style={{ textAlign: 'center' }}>NO INCLUYE INTERESES DE MORA</h3>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12} sm={4}>
+                                            <strong>Capital</strong><br />${Utils.parseNumberMoney(this.state.result.capital_balance)}
+                                        </Grid>
+                                        <Grid item xs={12} sm={4}>
+                                            <strong>Intereses</strong><br />${Utils.parseNumberMoney(this.state.result.interests)}
+                                        </Grid>
+                                        <Grid item xs={12} sm={4}>
+                                            <strong>Total a pagar</strong><br />${Utils.parseNumberMoney(
+                                                this.state.result.capital_balance + this.state.result.interests
+                                            )}
+                                        </Grid>
+                                    </Grid>
                                 </Paper>
                             }
                         </div>
@@ -187,7 +182,7 @@ export default class ProjectionPage extends ContainerComponent {
                 <Snackbar open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onClose={(_) => this.setState({openMessage: false})}
+                    onClose={(_) => this.setState({ openMessage: false })}
                 />
             </div>
         );
