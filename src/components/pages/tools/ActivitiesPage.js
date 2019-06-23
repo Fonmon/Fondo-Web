@@ -332,7 +332,7 @@ export default class ActivitiesPage extends ContainerComponent{
                                                 </Button><br /><br />
                                             </div>
                                         }
-                                        <Grid container spacing={16}>
+                                        <Grid container spacing={3}>
                                             <Grid item xs={12}>
                                                 <TextField label="Nombre"
                                                     value={this.state.activity.name}

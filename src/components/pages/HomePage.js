@@ -4,7 +4,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import ContainerComponent from '../base/ContainerComponent';
 import FinanceInfoComponent from '../base/FinanceInfoComponent';
 import LoanListComponent from '../base/LoanListComponent';
-import Utils from '../../utils/Utils';
 
 class HomePage extends ContainerComponent {
 
@@ -25,22 +24,8 @@ class HomePage extends ContainerComponent {
         }
     }
 
-    componentDidMount = () => {
-        let scope = this;
-        this.setState({loading:true});
-        Utils.getUser(-1)
-            .then(function(response){
-                scope.setState({
-                    financeInfo: response.data.finance,
-                    loading: false
-                });
-            }).catch(function(error){
-                scope.setState({loading:false});
-                scope.handleRequestError(error);
-            });
-    }
-
     render() {
+        const financeInfo = this.props.financeInfo ? this.props.financeInfo : this.state.financeInfo;
         return (
             <div>
                 <ContainerComponent showHeader={true}
@@ -48,7 +33,7 @@ class HomePage extends ContainerComponent {
                     renderTwoColGrid={true}
                     leftWidth={3}
                     left={
-                        <FinanceInfoComponent financeInfo={this.state.financeInfo}/>
+                        <FinanceInfoComponent financeInfo={financeInfo}/>
                     }
                     rightWidth={9}
                     right={

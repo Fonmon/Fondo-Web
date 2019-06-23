@@ -92,7 +92,7 @@ class RequestLoanPage extends ContainerComponent {
                     middle={
                         <Paper className="UserInfo" elevation={20}>
                             <h2 style={{ textAlign: 'center' }}>Solicitud de crédito</h2>
-                            <Grid container spacing={16}>
+                            <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <CurrencyField label="Valor a solicitar"
                                         style={{ width: '100%' }}

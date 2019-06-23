@@ -52,7 +52,7 @@ class LoginPage extends ContainerComponent {
                 <img className="banner" src={banner} alt="" />
                 <Paper className="LoginForm" elevation={20}>
                     <h2>Iniciar Sesión</h2>
-                    <Grid container spacing={16}>
+                    <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <TextField label="Email"
                                 placeholder="Ingresa tu email"

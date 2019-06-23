@@ -82,7 +82,7 @@ class HeaderComponent extends Component {
                                 <MenuIcon />
                             </IconButton>
                         }
-                        <Typography variant="title"
+                        <Typography variant="h6"
                             color="inherit"
                             style={{ cursor: 'pointer' }}
                             onClick={this.handleTitleClick}

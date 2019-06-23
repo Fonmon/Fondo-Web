@@ -5,6 +5,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter } from 'react-router-dom';
 
+import loadingGif from './resources/images/loading_logo_512.gif';
+
 // Components
 import RouterMain from './components/RouterMain';
 
@@ -25,7 +27,7 @@ registerServiceWorker({
     },
 });
 
-const loadApp = (palettePrimary = '#800000', paletteSecondary = '#c83737') => {
+const loadApp = (financeInfo, palettePrimary = '#800000', paletteSecondary = '#c83737') => {
     const muiTheme = createMuiTheme({
         palette: {
             primary: {
@@ -40,7 +42,7 @@ const loadApp = (palettePrimary = '#800000', paletteSecondary = '#c83737') => {
     const Wrapper = () => (
         <BrowserRouter>
             <MuiThemeProvider theme={muiTheme}>
-                <RouterMain />
+                <RouterMain financeInfo={financeInfo} />
             </MuiThemeProvider>
         </BrowserRouter>
     );
@@ -49,6 +51,7 @@ const loadApp = (palettePrimary = '#800000', paletteSecondary = '#c83737') => {
 }
 
 if (Utils.isAuthenticated()) {
+    ReactDOM.render(<img className="index-loading" src={loadingGif} alt=""/>, document.getElementById('root'));
     Utils.getUser(-1)
         .then(function (response) {
             localStorage.setItem(ID_KEY, response.data.user.id);
@@ -61,7 +64,11 @@ if (Utils.isAuthenticated()) {
                 Utils.pushManagerUnsubscribe(false)
             }
 
-            loadApp();
+            loadApp(
+                response.data.finance, 
+                response.data.preferences.primary_color, 
+                response.data.preferences.secondary_color
+            );
         }).catch(function (error) {
             console.error('Error on index.js: ', error);
             loadApp();
