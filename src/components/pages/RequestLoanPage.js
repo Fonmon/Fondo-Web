@@ -54,7 +54,6 @@ class RequestLoanPage extends ContainerComponent {
         } else
             this.setState({ value_error: '' });
         if (!isError) {
-            let scope = this;
             this.setState({ 
                 loading: true,
                 value_error: '', 
@@ -69,13 +68,13 @@ class RequestLoanPage extends ContainerComponent {
                 comments: this.state.comments
             }
             Utils.createLoan(loan)
-                .then(function (response) {
-                    scope.setState({ loading: false });
+                .then((response) => {
+                    this.setState({ loading: false });
                     let id = response.data.id;
-                    Utils.redirectTo(`/loan/${id}`);
-                }).catch(function (error) {
-                    scope.setState({ loading: false });
-                    scope.handleRequestError(error, [{
+                    this.props.history.push(`/loan/${id}`);
+                }).catch((error) => {
+                    this.setState({ loading: false });
+                    this.handleRequestError(error, [{
                         status: 406,
                         message: error.response.data.message
                     }]);

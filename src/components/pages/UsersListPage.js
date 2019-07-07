@@ -24,23 +24,18 @@ import Utils from '../../utils/Utils';
 import CreateUserDialog from '../dialogs/CreateUserDialog';
 
 const ButtonsActions = (props) => {
-    if(Utils.isAdmin())
-        return (
-            <div>
-                <IconButton onClick={props.onEdit.bind(this,props.id)}><OpenInNew /></IconButton>
-                <IconButton onClick={props.onRemove.bind(this,props.id)}><DeleteIcon /></IconButton>
-            </div>
-        );
-    else
-        return (
-            <div>
-                <IconButton onClick={props.onEdit.bind(this,props.id)}><OpenInNew /></IconButton>
-            </div>
-        );
+    return (
+        <div>
+            <IconButton onClick={props.onEdit.bind(this, props.id)}><OpenInNew /></IconButton>
+            {Utils.isAdmin() && 
+                <IconButton onClick={props.onRemove.bind(this, props.id)}><DeleteIcon /></IconButton>
+            }
+        </div>
+    );
 }
 
-class UsersListPage extends ContainerComponent{
-    constructor(){
+class UsersListPage extends ContainerComponent {
+    constructor() {
         super();
         this.state = {
             openMessage: false,
@@ -52,7 +47,7 @@ class UsersListPage extends ContainerComponent{
             currentPage: 1,
             count: 0,
             totalPages: 1,
-            loading:false
+            loading: false
         }
         this.createUserKey = 1;
     }
@@ -61,84 +56,86 @@ class UsersListPage extends ContainerComponent{
         this.getUsers(1);
     }
 
-    getUsers(page){
-        let scope = this;
-        this.setState({currentPage:page});
-        this.setState({loading:true});
+    getUsers(page) {
+        this.setState({ 
+            currentPage: page,
+            loading: true
+        });
         Utils.getUsers(page)
-            .then(function(response){
-                scope.setState({
-                    totalPages:response.data.num_pages,
+            .then((response) => {
+                this.setState({
+                    totalPages: response.data.num_pages,
                     users: response.data.list,
                     count: response.data.count,
                     loading: false
                 });
-            }).catch(function(error){
-                scope.setState({loading:false});
-                scope.handleRequestError(error);
+            }).catch((error) => {
+                this.setState({ loading: false });
+                this.handleRequestError(error);
             });
     }
 
     handleEditUser = (id) => {
-        Utils.redirectTo(`/user/${id}`);
-    }
-    
-    handleDialogRemoveUser = (id) => {
-        this.setState({removeOpen:true, removeId:id});
+        this.props.history.push(`/user/${id}`);
     }
 
-    handleRemoveUser = () =>{
-        let scope = this;
-        this.setState({loading:true});
+    handleDialogRemoveUser = (id) => {
+        this.setState({ 
+            removeOpen: true, 
+            removeId: id 
+        });
+    }
+
+    handleRemoveUser = () => {
+        this.setState({ loading: true });
         Utils.removeUser(this.state.removeId)
-            .then(function(response){
-                scope.setState({loading:false});
-                scope.showMessageError('Usuario eliminado');
-                scope.handleClose();
-                scope.getUsers(1);
-            }).catch(function(error){
-                scope.setState({loading:false});
-                scope.handleRequestError(error);
+            .then((response) => {
+                this.setState({ loading: false });
+                this.showMessageError('Usuario eliminado');
+                this.handleClose();
+                this.getUsers(1);
+            }).catch((error) => {
+                this.setState({ loading: false });
+                this.handleRequestError(error);
             });
     }
 
     handleClose = () => {
-        this.setState({removeOpen: false});
+        this.setState({ removeOpen: false });
     }
 
-    handleCreateUserDialog = () =>{
-        this.setState({createUserDialog: true});
+    handleCreateUserDialog = () => {
+        this.setState({ createUserDialog: true });
     }
 
-    handleUpdateLoad = (file) =>{
-        let scope = this;
-        if(!file)
+    handleUpdateLoad = (file) => {
+        if (!file)
             return;
-        if(!file.name.match(/.(txt)$/i)){
+        if (!file.name.match(/.(txt)$/i)) {
             this.showMessageError("El archivo a subir debe ser .txt");
             return;
-        }else{
-            this.setState({loading:true});
+        } else {
+            this.setState({ loading: true });
             let formData = new FormData();
-            formData.append('file',file);
+            formData.append('file', file);
             Utils.updateUsersLoad(formData)
-                .then(function(response){
-                    scope.setState({loading:false});
-                    scope.showMessageError('Actualización realizada.');
-                }).catch(function(error){
-                    scope.setState({loading:false});
-                    scope.handleRequestError(error);
+                .then((response) => {
+                    this.setState({ loading: false });
+                    this.showMessageError('Actualización realizada.');
+                }).catch((error) => {
+                    this.setState({ loading: false });
+                    this.handleRequestError(error);
                 });
         }
     }
 
     callbackUserCreated = () => {
         this.createUserKey++;
-        this.setState({createUserDialog: false});
+        this.setState({ createUserDialog: false });
         this.getUsers(1);
     }
-    
-    render(){
+
+    render() {
         const actions = [
             <Button color="primary" key="no"
                 onClick={this.handleClose}>No</Button>,
@@ -154,8 +151,8 @@ class UsersListPage extends ContainerComponent{
                     leftWidth={6}
                     left={
                         <Button variant="contained"
-                            color="secondary" 
-                            style={{marginTop: '30px',width:'100%'}}
+                            color="secondary"
+                            style={{ marginTop: '30px', width: '100%' }}
                             onClick={this.handleCreateUserDialog}
                             disabled={!Utils.isAdmin()}
                         >
@@ -167,20 +164,20 @@ class UsersListPage extends ContainerComponent{
                         <div>
                             <input type="file"
                                 accept=".txt"
-                                disabled={!Utils.isAuthorizedEdit()} 
+                                disabled={!Utils.isAuthorizedEdit()}
                                 onChange={e => this.handleUpdateLoad(e.target.files[0])}
-                                style={{ display: 'none' }} 
+                                style={{ display: 'none' }}
                                 id="upload-file"
                             />
                             <label htmlFor="upload-file">
                                 <Button color="primary"
                                     variant="contained"
-                                    style={{marginTop:'30px',width:'100%'}}
+                                    style={{ marginTop: '30px', width: '100%' }}
                                     disabled={!Utils.isAuthorizedEdit()}
                                     component="span"
                                 >
                                     Cargar información
-                                    
+
                                 </Button>
                             </label>
                         </div>
@@ -188,13 +185,13 @@ class UsersListPage extends ContainerComponent{
                     renderOneFullColGrid={true}
                     middle={
                         <Paper className="TableLoan" elevation={20}>
-                            <div style={{ overflowX: 'auto'}}>
+                            <div style={{ overflowX: 'auto' }}>
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell 
+                                            <TableCell
                                                 colSpan='5'
-                                                style={{textAlign: 'center'}}
+                                                style={{ textAlign: 'center' }}
                                             >
                                                 Lista de usuarios
                                             </TableCell>
@@ -208,7 +205,7 @@ class UsersListPage extends ContainerComponent{
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {this.state.users.map((user,i) => {
+                                        {this.state.users.map((user, i) => {
                                             return (
                                                 <TableRow key={i}>
                                                     <TableCell>{user.id}</TableCell>
@@ -216,8 +213,8 @@ class UsersListPage extends ContainerComponent{
                                                     <TableCell>{user.email}</TableCell>
                                                     <TableCell>{user.role_display}</TableCell>
                                                     <TableCell>
-                                                        <ButtonsActions 
-                                                            id={user.id} 
+                                                        <ButtonsActions
+                                                            id={user.id}
                                                             onEdit={this.handleEditUser}
                                                             onRemove={this.handleDialogRemoveUser}
                                                         />
@@ -240,8 +237,8 @@ class UsersListPage extends ContainerComponent{
                                 nextIconButtonProps={{
                                     'aria-label': 'Next Page',
                                 }}
-                                labelDisplayedRows={({from, to, count}) => `${from}-${to} de ${count}`}
-                                onChangePage={(_, page) => this.getUsers( page+1 )}
+                                labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+                                onChangePage={(_, page) => this.getUsers(page + 1)}
                             />
                         </Paper>
                     }
@@ -249,7 +246,7 @@ class UsersListPage extends ContainerComponent{
                 <Snackbar open={this.state.openMessage}
                     message={this.state.errorMessage}
                     autoHideDuration={4000}
-                    onClose={(_) => this.setState({openMessage: false})}
+                    onClose={(_) => this.setState({ openMessage: false })}
                 />
                 <Dialog aria-labelledby="confirmation-dialog-title"
                     open={this.state.removeOpen}
@@ -265,7 +262,7 @@ class UsersListPage extends ContainerComponent{
                     creationOpen={this.state.createUserDialog}
                     onClose={() => {
                         this.createUserKey++;
-                        this.setState({createUserDialog: false})
+                        this.setState({ createUserDialog: false })
                     }}
                 />
             </div>
