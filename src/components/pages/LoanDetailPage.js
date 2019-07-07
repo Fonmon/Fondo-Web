@@ -138,7 +138,7 @@ class LoanDetailPage extends ContainerComponent{
                                 renderTwoColGrid={true}
                                 leftWidth={6}
                                 left={
-                                    <div>
+                                    <React.Fragment>
                                         <span className="Labels"><strong>Número de crédito:</strong> {this.state.loan.id}</span><br/>
                                         <span className="Labels"><strong>Nombre:</strong> {this.state.loan.user_full_name}</span><br/>
                                         <span className="Labels"><strong>Fecha creación:</strong> {this.state.loan.created_at}</span><br/>
@@ -156,12 +156,17 @@ class LoanDetailPage extends ContainerComponent{
                                             </div>
                                         }
                                         <span className="Labels"><strong>Información adicional:</strong> {this.state.loan.comments}</span><br/>
-                                    </div>
+                                    </React.Fragment>
                                 }
                                 rightWidth={6}
                                 right={
-                                    <div>
-                                        <InputLabel htmlFor="state">Estado solicitud</InputLabel>
+                                    <React.Fragment>
+                                        <InputLabel style={{ 
+                                                fontWeight: 'bold', 
+                                                color: 'rgba(0, 0, 0, 0.87)',
+                                                lineHeight: 1.8,
+                                            }} 
+                                            htmlFor="state">Estado solicitud</InputLabel>
                                         <Select value={this.state.loan.state}
                                             inputProps={{
                                                 id:"state"
@@ -192,7 +197,7 @@ class LoanDetailPage extends ContainerComponent{
                                                 }
                                             </div>
                                         }
-                                    </div>
+                                    </React.Fragment>
                                 }
                             />
                         </Paper>

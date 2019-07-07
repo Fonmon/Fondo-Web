@@ -144,7 +144,7 @@ class UsersListPage extends ContainerComponent {
                 onClick={this.handleRemoveUser}>Si</Button>,
         ];
         return (
-            <div>
+            <React.Fragment>
                 <ContainerComponent showHeader={true}
                     loadingMask={this.state.loading}
                     renderTwoColGrid={true}
@@ -161,7 +161,7 @@ class UsersListPage extends ContainerComponent {
                     }
                     rightWidth={6}
                     right={
-                        <div>
+                        <React.Fragment>
                             <input type="file"
                                 accept=".txt"
                                 disabled={!Utils.isAuthorizedEdit()}
@@ -180,7 +180,7 @@ class UsersListPage extends ContainerComponent {
 
                                 </Button>
                             </label>
-                        </div>
+                        </React.Fragment>
                     }
                     renderOneFullColGrid={true}
                     middle={
@@ -265,7 +265,7 @@ class UsersListPage extends ContainerComponent {
                         this.setState({ createUserDialog: false })
                     }}
                 />
-            </div>
+            </React.Fragment>
         );
     }
 }

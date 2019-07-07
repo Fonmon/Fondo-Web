@@ -1,41 +1,48 @@
 import React, { Component } from 'react';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import Grid from '@material-ui/core/Grid';
 
 import HeaderComponent from './HeaderComponent';
 import LoadingMaskComponent from './LoadingMaskComponent';
 import Utils from '../../utils/Utils';
 
-class ContainerComponent extends Component{
-    constructor(props){
+const gridItemStyles = {
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingRight: 16,
+    paddingLeft: 16,
+}
+
+class ContainerComponent extends Component {
+    constructor(props) {
         super(props);
         this.state = {
             loading: false
         }
     }
 
-    componentWillReceiveProps(props){
-        this.setState({loading: props.loadingMask});
+    componentWillReceiveProps(props) {
+        this.setState({ loading: props.loadingMask });
     }
 
-    showMessageError(message){
-        this.setState({openMessage: true,errorMessage:message});
+    showMessageError(message) {
+        this.setState({ openMessage: true, errorMessage: message });
     }
 
-    handleKeyPress(event){
-        if(event.key === 'Enter')
+    handleKeyPress(event) {
+        if (event.key === 'Enter')
             this.submit();
     }
 
-    handleRequestError(error,messages=[]){
-        if(!error.response){
+    handleRequestError(error, messages = []) {
+        if (!error.response) {
             return this.showMessageError('Error de conexión, inténtalo más tarde.');
-        }else if(error.response.status === 401){
+        } else if (error.response.status === 401) {
             return Utils.clearStorage();
-        }else if(error.response.status === 404){
+        } else if (error.response.status === 404) {
             return Utils.redirectTo('/error');
-        }else{
-            for(let message of messages){
-                if(message.status === error.response.status){
+        } else {
+            for (let message of messages) {
+                if (message.status === error.response.status) {
                     return this.showMessageError(message.message);
                 }
             }
@@ -43,74 +50,78 @@ class ContainerComponent extends Component{
         this.showMessageError(error.message);
     }
 
-    render(){
+    render() {
         let componentsGrid = new Array(4);
         let order = -1;
-        if(this.props.renderTwoColGrid){
+        if (this.props.renderTwoColGrid) {
             order = !isNaN(this.props.orderRenderTwoColGrid) ? this.props.orderRenderTwoColGrid : 0;
             componentsGrid[order] = (
-                <Row key={order}>
-                    <Col xs={12} md={this.props.leftWidth} lg={this.props.leftWidth}>
+                <React.Fragment key={order}>
+                    <Grid item xs={12} md={this.props.leftWidth} lg={this.props.leftWidth}
+                        style={gridItemStyles}
+                    >
                         {this.props.left}
-                    </Col>
-                    <Col xs={12} md={this.props.rightWidth} lg={this.props.rightWidth}>
+                    </Grid>
+                    <Grid item xs={12} md={this.props.rightWidth} lg={this.props.rightWidth}
+                        style={gridItemStyles}
+                    >
                         {this.props.right}
-                    </Col>
-                </Row>
+                    </Grid>
+                </React.Fragment>
             )
         }
 
-        if(this.props.renderOneMidColGrid){
+        if (this.props.renderOneMidColGrid) {
             order = !isNaN(this.props.orderRenderOneMidColGrid) ? this.props.orderRenderOneMidColGrid : 1;
             componentsGrid[order] = (
-                <Row key={order}>
-                    <Col smOffset={3} sm={6} xs={12}>
+                <Grid container item justify="center" key={order}>
+                    <Grid item sm={6} xs={12} style={gridItemStyles}>
                         {this.props.middle}
-                    </Col>
-                </Row>
+                    </Grid>
+                </Grid>
             )
         }
 
-        if(this.props.renderOneFullColGrid){
+        if (this.props.renderOneFullColGrid) {
             order = !isNaN(this.props.orderRenderOneFullColGrid) ? this.props.orderRenderOneFullColGrid : 2;
             componentsGrid[order] = (
-                <Row key={order}>
-                    <Col xs={12} >
-                        {this.props.middle}
-                    </Col>
-                </Row>
+                <Grid item xs={12} key={order} style={gridItemStyles}>
+                    {this.props.middle}
+                </Grid>
             )
         }
 
-        if(this.props.renderListColGrid){
+        if (this.props.renderListColGrid) {
             order = !isNaN(this.props.orderRenderOneFullColGrid) ? this.props.orderRenderOneFullColGrid : 3;
             componentsGrid[order] = (
-                <Row key={order}>
-                    {this.props.items.map((item,i)=>{
+                <Grid container item key={order}>
+                    {this.props.items.map((item, i) => {
                         return (
-                            <Col xs={6} md={this.props.colsWidth} lg={this.props.colsWidth} key={i}>
+                            <Grid item xs={6} md={this.props.colsWidth} lg={this.props.colsWidth} key={i}
+                                style={{ paddingRight: 10, paddingLeft: 10 }}
+                            >
                                 {item}
-                            </Col>
+                            </Grid>
                         )
                     })}
-                </Row>
+                </Grid>
             )
         }
-            
+
         return (
-            <div>
+            <React.Fragment>
                 {this.props.showHeader &&
                     <HeaderComponent />
                 }
                 {(order >= 0) &&
-                    <Grid fluid>
-                    {componentsGrid.map((component,i) => {
-                        return (component)
-                    })}
+                    <Grid container style={{ flexGrow: 1 }}>
+                        {componentsGrid.map((component, i) => {
+                            return (component)
+                        })}
                     </Grid>
                 }
                 <LoadingMaskComponent active={this.state.loading} />
-            </div>
+            </React.Fragment>
         )
     }
 }

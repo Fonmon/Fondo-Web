@@ -7,10 +7,10 @@ class NotFoundPage extends ContainerComponent{
 
     render(){
         return (
-            <div>
+            <React.Fragment>
                 <ContainerComponent showHeader={true}/>
-                <center><img alt="" src={require("../../resources/images/not_found.png")} /></center>
-            </div>
+                <center><img className="notFound" alt="" src={require("../../resources/images/not_found.png")} /></center>
+            </React.Fragment>
         );
     }
 }

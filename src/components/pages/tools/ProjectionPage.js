@@ -100,10 +100,11 @@ export default class ProjectionPage extends ContainerComponent {
 
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <ContainerComponent showHeader={true}
                     loadingMask={this.state.loading}
                     renderTwoColGrid={true}
+                    leftWidth={6}
                     left={
                         <Paper className="UserInfo" elevation={20}>
                             <h3 style={{ textAlign: 'center' }}>Proyección de pago</h3>
@@ -156,8 +157,9 @@ export default class ProjectionPage extends ContainerComponent {
                             </Grid>
                         </Paper>
                     }
+                    rightWidth={6}
                     right={
-                        <div>
+                        <React.Fragment>
                             {this.state.result &&
                                 <Paper className="UserInfo" elevation={20}>
                                     <h3 style={{ textAlign: 'center' }}>NO INCLUYE INTERESES DE MORA</h3>
@@ -176,7 +178,7 @@ export default class ProjectionPage extends ContainerComponent {
                                     </Grid>
                                 </Paper>
                             }
-                        </div>
+                        </React.Fragment>
                     }
                 />
                 <Snackbar open={this.state.openMessage}
@@ -184,7 +186,7 @@ export default class ProjectionPage extends ContainerComponent {
                     autoHideDuration={4000}
                     onClose={(_) => this.setState({ openMessage: false })}
                 />
-            </div>
+            </React.Fragment>
         );
     }
 }
