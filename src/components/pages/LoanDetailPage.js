@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
@@ -46,25 +47,30 @@ class LoanDetailPage extends ContainerComponent{
         this.getLoan();
     }
 
-    getLoan(){
-        let id = this.props.match.params.id,
-            scope = this;
-        this.setState({id, loading: true});
+    componentWillReceiveProps(nextProps) {
+        this.getLoan(nextProps.match.params.id);
+    }
+
+    getLoan(loanId){
+        let id = loanId || this.props.match.params.id;
+        this.setState({
+            id, 
+            loading: true
+        });
         Utils.getLoan(id)
-            .then(function(response){
-                scope.setState({
-                    loanDetail:response.data.loan_detail,
-                    loan:response.data.loan,
-                    loading:false
+            .then((response) => {
+                this.setState({
+                    loanDetail: response.data.loan_detail,
+                    loan: response.data.loan,
+                    loading: false
                 });
-            }).catch(function(error){
-                scope.setState({loading:false});
-                scope.handleRequestError(error);
+            }).catch((error) => {
+                this.setState({ loading:false });
+                this.handleRequestError(error);
             });
     }
 
     updateState(value){
-        let scope = this;
         if(this.state.loan.state === value)
             return;
         if(this.state.loan.state === 0 && value === 3){
@@ -77,16 +83,19 @@ class LoanDetailPage extends ContainerComponent{
         }else{
             this.setState({loading:true});
             Utils.updateLoan(this.state.loan.id,value)
-                .then(function(response){
-                    scope.showMessageError('Cambio de estado exitoso');
-                    scope.setState({
-                        loading:false,
-                        loanDetail:response.data,
-                        loan:{...scope.state.loan,state:value}
+                .then((response) => {
+                    this.showMessageError('Cambio de estado exitoso');
+                    this.setState({
+                        loading: false,
+                        loanDetail: response.data,
+                        loan: {
+                            ...this.state.loan,
+                            state: value
+                        }
                     });
-                }).catch(function(error){
-                    scope.setState({loading:false});
-                    scope.handleRequestError(error);
+                }).catch((error) => {
+                    this.setState({ loading:false });
+                    this.handleRequestError(error);
                 })
         }
     }
@@ -108,8 +117,8 @@ class LoanDetailPage extends ContainerComponent{
 
     handleRefinancedLoanCreated = (new_loan_id) => {
         this.refinanceKey++;
-        this.setState({ refinanceDialog: false })
-        Utils.redirectTo(`/loan/${new_loan_id}`)
+        this.setState({ refinanceDialog: false });
+        this.props.history.push(`/loan/${new_loan_id}`);
     }
 
     render(){
@@ -129,7 +138,7 @@ class LoanDetailPage extends ContainerComponent{
                                 renderTwoColGrid={true}
                                 leftWidth={6}
                                 left={
-                                    <p>
+                                    <React.Fragment>
                                         <span className="Labels"><strong>Número de crédito:</strong> {this.state.loan.id}</span><br/>
                                         <span className="Labels"><strong>Nombre:</strong> {this.state.loan.user_full_name}</span><br/>
                                         <span className="Labels"><strong>Fecha creación:</strong> {this.state.loan.created_at}</span><br/>
@@ -142,17 +151,22 @@ class LoanDetailPage extends ContainerComponent{
                                         {this.state.loan.refinanced_loan &&
                                             <div>
                                                 <span className="Labels">
-                                                    <strong>Refinanciación:</strong> <a href={`/loan/${this.state.loan.refinanced_loan}`}>crédito #{this.state.loan.refinanced_loan}</a>
+                                                    <strong>Refinanciación:</strong> <Link to={`/loan/${this.state.loan.refinanced_loan}`}>crédito #{this.state.loan.refinanced_loan}</Link>
                                                 </span><br/>
                                             </div>
                                         }
                                         <span className="Labels"><strong>Información adicional:</strong> {this.state.loan.comments}</span><br/>
-                                    </p>
+                                    </React.Fragment>
                                 }
                                 rightWidth={6}
                                 right={
-                                    <div>
-                                        <InputLabel htmlFor="state">Estado solicitud</InputLabel>
+                                    <React.Fragment>
+                                        <InputLabel style={{ 
+                                                fontWeight: 'bold', 
+                                                color: 'rgba(0, 0, 0, 0.87)',
+                                                lineHeight: 1.8,
+                                            }} 
+                                            htmlFor="state">Estado solicitud</InputLabel>
                                         <Select value={this.state.loan.state}
                                             inputProps={{
                                                 id:"state"
@@ -178,12 +192,12 @@ class LoanDetailPage extends ContainerComponent{
                                                         children="Refinanciar"
                                                         color="primary"
                                                         style={{width: '100%', top: '30px'}}
-                                                        onClick={(_) => this.setState({refinanceDialog: true})}
+                                                        onClick={(_) => this.setState({ refinanceDialog: true })}
                                                     />
                                                 }
                                             </div>
                                         }
-                                    </div>
+                                    </React.Fragment>
                                 }
                             />
                         </Paper>

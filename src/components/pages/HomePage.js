@@ -24,6 +24,12 @@ class HomePage extends ContainerComponent {
         }
     }
 
+    onRowSelection = (loanId) => {
+        if(loanId){
+            this.props.history.push(`/loan/${loanId}`)
+        }
+    }
+
     render() {
         const financeInfo = this.props.financeInfo ? this.props.financeInfo : this.state.financeInfo;
         return (
@@ -37,7 +43,8 @@ class HomePage extends ContainerComponent {
                     }
                     rightWidth={9}
                     right={
-                        <LoanListComponent all={false} 
+                        <LoanListComponent all={false}
+                            onRowSelection={this.onRowSelection}
                             applicantColumn={false}/>
                     }
                 />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 
 import ContainerComponent from '../base/ContainerComponent';
@@ -26,9 +27,9 @@ class ToolsListPage extends ContainerComponent{
                     return (
                         <Paper className={"ToolsCard " + (tool.ref ? "Active" : "Soon")}>
                             {tool.ref &&
-                                <a href={tool.ref} className="ToolsButton">
+                                <Link to={tool.ref} className="ToolsButton">
                                     <img alt="" className="Svg" src={tool.image} />
-                                </a>
+                                </Link>
                             }
                             <center><span className="ToolsLabel">
                                 <strong>{tool.text}</strong>

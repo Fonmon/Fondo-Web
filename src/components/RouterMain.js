@@ -22,7 +22,10 @@ const PrivateRoute = ({ component: Component, rProps, ...rest }) => (
     <Route {...rest} render={(props) => (
         Utils.isAuthenticated()
         ? <Component {...props} {...rProps}/>
-        : <Redirect to='/login' />
+        : <Redirect to={{
+            pathname: '/login',
+            state: { from: props.location }
+        }} />
     )} />
 );
 
@@ -30,7 +33,10 @@ const NotValidRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
         !Utils.isAuthenticated()
         ? <Component {...props} />
-        : <Redirect to='/home' />
+        : <Redirect to={{
+            pathname: '/home',
+            state: { from: props.location }
+        }} />
     )} />
 );
 
@@ -38,7 +44,10 @@ const ManagementRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
         Utils.isAuthenticated() && Utils.isAuthorized()
         ? <Component {...props} />
-        : <Redirect to='/home' />
+        : <Redirect to={{
+            pathname: '/login',
+            state: { from: props.location }
+        }} />
     )} />
 );
 

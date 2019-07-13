@@ -18,24 +18,29 @@ class LoansListPage extends ContainerComponent {
     }
 
     handleUpdateLoad = (file) =>{
-        let scope = this;
         if(!file)
             return;
         if(!file.name.match(/.(txt)$/i)){
             this.showMessageError("El archivo a subir debe ser .txt");
             return;
         }else{
-            this.setState({loading:true});
+            this.setState({ loading:true });
             let formData = new FormData();
             formData.append('file',file);
             Utils.updateLoansLoad(formData)
-            .then(function(response){
-                scope.setState({loading:false});
-                scope.showMessageError('Actualización realizada.');
-            }).catch(function(error){
-                scope.setState({loading:false});
-                scope.handleRequestError(error);
+            .then((response) => {
+                this.setState({ loading: false });
+                this.showMessageError('Actualización realizada.');
+            }).catch((error) => {
+                this.setState({ loading: false });
+                this.handleRequestError(error);
             });
+        }
+    }
+
+    onRowSelection = (loanId) => {
+        if(loanId){
+            this.props.history.push(`/loan/${loanId}`)
         }
     }
 
@@ -65,7 +70,8 @@ class LoansListPage extends ContainerComponent {
                                     
                                 </Button>
                             </label>
-                            <LoanListComponent all={true} 
+                            <LoanListComponent all={true}
+                                onRowSelection={this.onRowSelection} 
                                 applicantColumn={true}/>
                         </div>
                     }

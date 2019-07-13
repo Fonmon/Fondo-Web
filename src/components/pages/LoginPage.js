@@ -20,7 +20,8 @@ class LoginPage extends ContainerComponent {
             password: '',
             openMessage: false,
             errorMessage: '',
-            loading: false
+            loading: false,
+            redirectToReferrer: false
         }
     }
 
@@ -29,16 +30,14 @@ class LoginPage extends ContainerComponent {
     }
 
     submit(event) {
-        let scope = this;
         this.setState({ loading: true });
         Utils.authenticate(this.state.email.toLowerCase(), this.state.password)
-            .then(function (response) {
-                scope.setState({ loading: false });
+        .then((response) => {
                 localStorage.setItem(TOKEN_KEY, response.data.token);
-                Utils.redirectTo('/home');
-            }).catch(function (error) {
-                scope.setState({ loading: false });
-                scope.handleRequestError(error, [{
+                this.setState({ loading: false, redirectToReferrer: true });
+            }).catch((error) => {
+                this.setState({ loading: false });
+                this.handleRequestError(error, [{
                     status: 400,
                     message: 'Email o contraseña incorrectos.'
                 }]);
@@ -46,6 +45,10 @@ class LoginPage extends ContainerComponent {
     }
 
     render() {
+        let { from } = this.props.location.state || { from: { pathname: '/home' } };
+        if (this.state.redirectToReferrer) 
+            return Utils.redirectTo(from.pathname);
+
         return (
             <div className="Login">
                 <ContainerComponent loadingMask={this.state.loading} />

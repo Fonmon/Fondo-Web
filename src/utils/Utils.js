@@ -19,6 +19,7 @@ class Utils{
 
     static redirectTo(path){
         window.location = path;
+        return null;
     }
 
     static isTreasurer(){

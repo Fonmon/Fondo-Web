@@ -55,24 +55,27 @@ class UserDetailPage extends ContainerComponent{
         this.getUser();
     }
 
-    getUser(){
-        let id = this.props.match.params.id;
-        let scope = this;
+    componentWillReceiveProps(nextProps) {
+        this.getUser(nextProps.match.params.id);
+    }
+
+    getUser(userId){
+        let id = userId || this.props.match.params.id;
         this.setState({
             id,
             loading:true
         });
         Utils.getUser(id)
-            .then(function(response){
-                scope.setState({
-                    user:response.data.user,
-                    finance:response.data.finance,
+            .then((response) => {
+                this.setState({
+                    user: response.data.user,
+                    finance: response.data.finance,
                     preferences: response.data.preferences,
                     loading: false
                 });
-            }).catch(function(error){
-                scope.setState({loading:false});
-                scope.handleRequestError(error);
+            }).catch((error) => {
+                this.setState({ loading: false });
+                this.handleRequestError(error);
             });
     }
 
@@ -95,16 +98,16 @@ class UserDetailPage extends ContainerComponent{
         let requestBody = {
             type: this.state.expanded,
             [this.state.expanded]: obj
-        }, scope = this;
+        };
         
-        this.setState({loading:true});
+        this.setState({ loading: true });
         Utils.updateUser(this.state.id,requestBody)
-            .then(function(response){
-                scope.setState({loading:false});
-                scope.showMessageError('Cambios guardados');
-            }).catch(function(error){
-                scope.setState({loading:false});
-                scope.handleRequestError(error,[{
+            .then((response) => {
+                this.setState({loading:false});
+                this.showMessageError('Cambios guardados');
+            }).catch((error) => {
+                this.setState({loading:false});
+                this.handleRequestError(error,[{
                     status: 409,
                     message: 'Email/Documento de identidad ya existe.'
                 }]);
@@ -138,8 +141,7 @@ class UserDetailPage extends ContainerComponent{
 
     onColorSave = () => {
         this.setState({ loading: true });
-        const scope = this,
-            requestBody = {
+        const requestBody = {
                 type: this.state.expanded,
                 [this.state.expanded]: {
                     notifications: this.state.preferences.notifications,
@@ -149,11 +151,11 @@ class UserDetailPage extends ContainerComponent{
             };
         Utils.updateUser(this.state.id, requestBody)
             .then((response) => {
-                scope.setState({ loading: false });
-                scope.showMessageError('Cambios guardados. Actualizar página');
+                this.setState({ loading: false });
+                this.showMessageError('Cambios guardados. Actualizar página');
             }).catch((error) => {
-                scope.setState({ loading:false });
-                scope.handleRequestError(error);
+                this.setState({ loading:false });
+                this.handleRequestError(error);
             })
     }
 
@@ -167,24 +169,27 @@ class UserDetailPage extends ContainerComponent{
                 primary_color: this.state.preferences.primary_color,
                 secondary_color: this.state.preferences.secondary_color
             }
-        }, scope = this;
+        };
         
         Utils.updateUser(this.state.id,requestBody)
-            .then(function(response){
+            .then((response) => {
                 localStorage.setItem(NOTIFICATIONS_KEY, targetValue)
-                scope.setState({
-                    loading:false,
-                    preferences:{...scope.state.preferences, notifications: targetValue}
+                this.setState({
+                    loading: false,
+                    preferences: {
+                        ...this.state.preferences, 
+                        notifications: targetValue
+                    }
                 });
                 if (targetValue) {
                     Utils.pushManagerSubscribe();
                 } else {
                     Utils.pushManagerUnsubscribe(false);
                 }
-                scope.showMessageError('Cambios guardados');
-            }).catch(function(error){
-                scope.setState({loading:false});
-                scope.handleRequestError(error);
+                this.showMessageError('Cambios guardados');
+            }).catch((error) => {
+                this.setState({ loading:false });
+                this.handleRequestError(error);
             })
     }
 

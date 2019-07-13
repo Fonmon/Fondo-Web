@@ -31,23 +31,24 @@ class LoanListComponent extends Component{
     }
     
     componentDidMount = () => {
-        this.getLoanList(1,this.state.filterValue);
+        this.getLoanList(1, this.state.filterValue);
     }
 
     getLoanList(page,filterValue){
-        let scope = this;
-        this.setState({loading:true});
-        this.setState({currentPage:page});
-        Utils.getLoans(page,this.props.all,filterValue)
-            .then(function(response){
-                scope.setState({
+        this.setState({ 
+            loading:true, 
+            currentPage:page
+        });
+        Utils.getLoans(page, this.props.all,filterValue)
+            .then((response) => {
+                this.setState({
                     totalPages:response.data.num_pages, 
                     count: response.data.count,
                     loans:response.data.list,
                     loading:false
                 });
-            }).catch(function(error){
-                scope.setState({loading:false});
+            }).catch((error) => {
+                this.setState({ loading:false });
                 if(!error.response){
                     console.log(error);
                 }else if(error.response.status === 401){
@@ -69,14 +70,8 @@ class LoanListComponent extends Component{
             return 'Finalizada';
     }
     
-    onRowSelection(loanId){
-        if(loanId){
-            Utils.redirectTo(`/loan/${loanId}`);
-        }
-    }
-
     applyFilter = (event) => {
-        this.setState({filterValue: event.target.value});
+        this.setState({ filterValue: event.target.value });
         this.getLoanList(1, event.target.value);
     }
     
@@ -124,7 +119,7 @@ class LoanListComponent extends Component{
                             {this.state.loans.map((loan,i) => {
                                 return (
                                     <TableRow key={i} hover={true}
-                                        onClick={(_) => this.onRowSelection(loan.id)}
+                                        onClick={(_) => this.props.onRowSelection(loan.id)}
                                     >
                                         <TableCell>{loan.id}</TableCell>
                                         {this.props.applicantColumn &&

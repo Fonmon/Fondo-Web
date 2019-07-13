@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -21,32 +22,22 @@ const styles = {
     }
 };
 
-const SidebarMenus = () => {
-    let currentId = `/user/${Utils.currentId()}`;
-    let items = (
-        <div>
-            <MenuItem component='a' href="/home">Inicio</MenuItem>
-            <MenuItem component='a' href={currentId}>Mi Perfil</MenuItem>
-            <MenuItem component='a' href="/tools">Herramientas</MenuItem>
-            <MenuItem component='a' href="/info">Información del fondo</MenuItem>
-        </div>
-    );
-    if (Utils.isAuthorized()) {
-        items = (
-            <div>
-                <MenuItem component='a' href="/home">Inicio</MenuItem>
-                <MenuItem component='a' href={currentId} >Mi Perfil</MenuItem>
-                <MenuItem component='a' href="/users">Usuarios</MenuItem>
-                <MenuItem component='a' href="/loans">Solicitudes de créditos</MenuItem>
-                <MenuItem component='a' href="/tools">Herramientas</MenuItem>
-                <MenuItem component='a' href="/info">Información del fondo</MenuItem>
-            </div>
-        );
-    }
+const SidebarMenus = (props) => {
     return (
         <div>
             <center><img style={{ marginTop: '30px', width: '120px' }} src={ffm} alt="" /></center>
-            {items}
+            <div>
+                <MenuItem onClick={props.handleToggle} component={Link} to="/home">Inicio</MenuItem>
+                <MenuItem onClick={props.handleToggle} component={Link} to={`/user/${Utils.currentId()}`}>Mi Perfil</MenuItem>
+                {Utils.isAuthorized() &&
+                    <div>
+                        <MenuItem onClick={props.handleToggle} component={Link} to="/users">Usuarios</MenuItem>
+                        <MenuItem onClick={props.handleToggle} component={Link} to="/loans">Solicitudes de créditos</MenuItem>
+                    </div>
+                }
+                <MenuItem onClick={props.handleToggle} component={Link} to="/tools">Herramientas</MenuItem>
+                <MenuItem onClick={props.handleToggle} component={Link} to="/info">Información del fondo</MenuItem>
+            </div>
         </div>
     )
 }
@@ -60,8 +51,6 @@ class HeaderComponent extends Component {
     }
 
     handleToggle = () => this.setState({ open: !this.state.open });
-
-    handleTitleClick = () => (Utils.redirectTo("/home"))
 
     handleSignOut = () => {
         Utils.pushManagerUnsubscribe()
@@ -84,19 +73,20 @@ class HeaderComponent extends Component {
                         }
                         <Typography variant="h6"
                             color="inherit"
-                            style={{ cursor: 'pointer' }}
-                            onClick={this.handleTitleClick}
+                            style={{ textDecoration: 'none' }}
+                            component={Link} to="/home"
                         >
                             Fondo Montañez
                         </Typography>
                         {Utils.isAuthenticated() &&
                             <section className={classes.rightToolbar}>
-                                <IconButton color="inherit" 
-                                    href="/request-loan"
+                                <IconButton color="inherit"
+                                    component={Link}
+                                    to="/request-loan"
                                 >
                                     <ContentAdd />
                                 </IconButton>
-                                <IconButton color="inherit" 
+                                <IconButton color="inherit"
                                     onClick={this.handleSignOut}
                                 >
                                     <PowerOff />
@@ -108,7 +98,7 @@ class HeaderComponent extends Component {
                 <Drawer open={this.state.open}
                     onClose={this.handleToggle}
                 >
-                    <SidebarMenus />
+                    <SidebarMenus handleToggle={this.handleToggle} />
                 </Drawer>
             </div>
         );
