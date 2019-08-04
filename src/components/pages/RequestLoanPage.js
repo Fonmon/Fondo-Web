@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 import ContainerComponent from '../base/ContainerComponent';
 import CurrencyField from '../fields/CurrencyField';
@@ -22,12 +23,14 @@ class RequestLoanPage extends ContainerComponent {
             value: null,
             payment: 0,
             timelimit: 0,
-            fee: 0,
+            fee: null,
             comments: '',
             disbursement_date: null,
+
             value_error: '',
             timelimit_error: '',
-            loading: false
+            fee_error: '',
+            loading: false,
         }
     }
 
@@ -43,16 +46,27 @@ class RequestLoanPage extends ContainerComponent {
         } else if (this.state.timelimit <= 0 || this.state.timelimit > 24) {
             isError = true;
             this.setState({ timelimit_error: 'Valor debe ser entre 1 y 24' });
-        } else
+        } else {
             this.setState({ timelimit_error: '' });
+        }
+
         if (!this.state.value) {
             isError = true;
             this.setState({ value_error: 'Campo requerido' });
         } else if (this.state.value < 0) {
             isError = true;
             this.setState({ value_error: 'Valor debe ser mayor a 0' });
-        } else
+        } else {
             this.setState({ value_error: '' });
+        }
+
+        if (this.state.fee === null) {
+            isError = true;
+            this.setState({ fee_error: 'Campo requerido' });
+        } else {
+            this.setState({ fee_error: '' });
+        }
+
         if (!isError) {
             this.setState({ 
                 loading: true,
@@ -112,16 +126,24 @@ class RequestLoanPage extends ContainerComponent {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <InputLabel htmlFor="fee">Cuota</InputLabel>
+                                    <InputLabel error={this.state.fee_error !== ''}
+                                        htmlFor="fee"
+                                    >
+                                        Cuota
+                                    </InputLabel>
                                     <Select value={this.state.fee}
                                         inputProps={{
                                             id:"fee"
                                         }}
+                                        error={this.state.fee_error !== ''}
                                         style={{ width: '100%' }}
                                         onChange={(event) => this.setState({ fee: event.target.value })}>
                                         <MenuItem value={0}>Mensual</MenuItem>
                                         <MenuItem value={1}>Única</MenuItem>
                                     </Select>
+                                    {this.state.fee_error !== '' &&
+                                        <FormHelperText error>{this.state.fee_error}</FormHelperText>
+                                    }
                                 </Grid>
                                 <Grid item xs={12}>
                                     <DateField min={Utils.formatDate(new Date())}
