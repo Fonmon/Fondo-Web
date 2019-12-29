@@ -9,8 +9,9 @@ import ContainerComponent from '../base/ContainerComponent';
 import Utils from '../../utils/Utils';
 import banner from '../../resources/images/banner.png';
 import '../../resources/styles/Login.css';
+import LoadingMaskComponent from '../base/LoadingMaskComponent';
 
-class ActivateAccountPage extends ContainerComponent{
+class ActivateAccountPage extends ContainerComponent {
 
     constructor(){
         super();
@@ -36,8 +37,7 @@ class ActivateAccountPage extends ContainerComponent{
     }
 
     submit(_){
-        let scope = this,
-            error = false;
+        let error = false;
         this.setState({errorIdentification:'',errorPassword:'',errorRepeatPsw:''});
         if(!this.state.identification){
             this.setState({errorIdentification:'Campo requerido'});
@@ -65,17 +65,17 @@ class ActivateAccountPage extends ContainerComponent{
                 password: this.state.password
             };
             Utils.activateAccount(Number(this.state.id),obj)
-                .then(function(response){
-                    scope.setState({loading:false});
+                .then(() => {
+                    this.setState({loading:false});
                     Utils.redirectTo("/");
-                }).catch(function(error){
-                    scope.setState({loading:false});
+                }).catch((error) => {
+                    this.setState({loading:false});
                     if(!error.response){
-                        scope.showMessageError('Error de conexión, inténtalo más tarde.');
+                        this.showMessageError('Error de conexión, inténtalo más tarde.');
                     }else if(error.response.status === 404){
-                        scope.showMessageError('Identificación incorrecta');
+                        this.showMessageError('Identificación incorrecta');
                     }else{
-                        scope.showMessageError(error);
+                        this.showMessageError(error);
                     }
                 });
         }
@@ -84,7 +84,7 @@ class ActivateAccountPage extends ContainerComponent{
     render(){
         return (
             <div className="Login">
-                <ContainerComponent loadingMask={this.state.loading} />
+                <LoadingMaskComponent active={this.state.loading} />
                 <img className="banner" src={banner} alt=""/>
                 <Paper className="LoginForm" elevation={20}>
                     <h2>Activación de cuenta</h2>
@@ -139,7 +139,7 @@ class ActivateAccountPage extends ContainerComponent{
                     <Snackbar open={this.state.openMessage}
                         message={this.state.errorMessage}
                         autoHideDuration={4000}
-                        onClose={(event) => this.setState({openMessage:false})}
+                        onClose={(_) => this.setState({openMessage:false})}
                     />
                 </Paper>
             </div>

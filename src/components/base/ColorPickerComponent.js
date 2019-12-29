@@ -12,7 +12,7 @@ export default class ColorPickerComponent extends Component {
         }
     }
 
-    componentWillReceiveProps(nextValue) {
+    UNSAFE_componentWillReceiveProps(nextValue) {
         this.setState({ color: nextValue.color })
     }
 

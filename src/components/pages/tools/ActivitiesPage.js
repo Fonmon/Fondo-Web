@@ -29,6 +29,7 @@ import CreateActivityDialog from '../../dialogs/CreateActivityDialog';
 import CurrencyField from '../../fields/CurrencyField';
 import DateField from '../../fields/DateField';
 import Utils from '../../../utils/Utils';
+import LoadingMaskComponent from '../../base/LoadingMaskComponent';
 
 const ButtonsActions = (props) => {
     return (
@@ -248,8 +249,8 @@ export default class ActivitiesPage extends ContainerComponent{
         ];
         return (
             <div>
+                <LoadingMaskComponent active={this.state.loading} />
                 <ContainerComponent showHeader={true}
-                    loadingMask={this.state.loading}
                     renderTwoColGrid={true}
                     leftWidth={4}
                     left={

@@ -20,7 +20,6 @@ class HomePage extends ContainerComponent {
             loans : [],
             openMessage: false,
             errorMessage: '',
-            loading: false
         }
     }
 
@@ -35,7 +34,6 @@ class HomePage extends ContainerComponent {
         return (
             <div>
                 <ContainerComponent showHeader={true}
-                    loadingMask={this.state.loading}
                     renderTwoColGrid={true}
                     leftWidth={3}
                     left={

@@ -1,27 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class LoadingMaskComponent extends Component {
-
-    constructor(props){
-        super(props);
-        this.state = {
-            active : props.active
-        }
-    }
-
-    componentWillReceiveProps(nextValue){
-        this.setState(nextValue);
-    }
-
-    render(){
-        return (
-            <div>
-                {this.state.active &&
-                    <div className="loading"></div>
-                }
-            </div>
-        );
-    }
+function LoadingMaskComponent(props) {
+    return (
+        <div>
+            {props.active &&
+                <div className="loading"></div>
+            }
+        </div>
+    );
 }
 
 export default LoadingMaskComponent;

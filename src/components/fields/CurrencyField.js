@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import NumberFormat from 'react-number-format';
 
@@ -21,14 +21,12 @@ function NumberFormatCustom(props) {
     );
 }
 
-export default class CurrencyField extends Component {
-    render() {
-        return (
-            <TextField {...this.props}
-                InputProps={{
-                    inputComponent: NumberFormatCustom,
-                }}
-            />
-        )
-    }
+export default function CurrencyField(props) {
+    return (
+        <TextField {...props}
+            InputProps={{
+                inputComponent: NumberFormatCustom,
+            }}
+        />
+    )
 }

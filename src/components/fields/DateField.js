@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import InputLabel from '@material-ui/core/InputLabel'
 
 const styles = {
@@ -6,20 +6,18 @@ const styles = {
     outline: 'none'
 }
 
-export default class DateField extends Component {
-    render() {
-        return (
-            <div>
-                <InputLabel htmlFor="dateField">{this.props.label}</InputLabel>
-                <input type="date" style={{...this.props.style, ...styles}}
-                    id="dateField"
-                    min={this.props.min}
-                    max={this.props.max}
-                    onChange={this.props.onChange}
-                    value={this.props.value}
-                    disabled={this.props.disabled}
-                />
-            </div>
-        )
-    }
+export default function DateField(props) {
+    return (
+        <div>
+            <InputLabel htmlFor="dateField">{props.label}</InputLabel>
+            <input type="date" style={{...props.style, ...styles}}
+                id="dateField"
+                min={props.min}
+                max={props.max}
+                onChange={props.onChange}
+                value={props.value}
+                disabled={props.disabled}
+            />
+        </div>
+    )
 }
