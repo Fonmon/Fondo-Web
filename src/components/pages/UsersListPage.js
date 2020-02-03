@@ -22,6 +22,7 @@ import OpenInNew from '@material-ui/icons/OpenInNew'
 import ContainerComponent from '../base/ContainerComponent';
 import Utils from '../../utils/Utils';
 import CreateUserDialog from '../dialogs/CreateUserDialog';
+import LoadingMaskComponent from '../base/LoadingMaskComponent';
 
 const ButtonsActions = (props) => {
     return (
@@ -145,8 +146,8 @@ class UsersListPage extends ContainerComponent {
         ];
         return (
             <React.Fragment>
+                <LoadingMaskComponent active={this.state.loading} />
                 <ContainerComponent showHeader={true}
-                    loadingMask={this.state.loading}
                     renderTwoColGrid={true}
                     leftWidth={6}
                     left={

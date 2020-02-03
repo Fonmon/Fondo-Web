@@ -1,19 +1,26 @@
 import React from 'react';
-import Snackbar from '@material-ui/core/Snackbar';
-import Paper from '@material-ui/core/Paper';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import InputLabel from '@material-ui/core/InputLabel';
+import { FormControlLabel,
+  Snackbar,
+  Paper,
+  Select,
+  MenuItem,
+  Button,
+  TextField,
+  Grid,
+  InputLabel,
+  FormHelperText,
+  Radio,
+  RadioGroup } from '@material-ui/core';
 
 import ContainerComponent from '../base/ContainerComponent';
 import CurrencyField from '../fields/CurrencyField';
 import DateField from '../fields/DateField'
 import Utils from '../../utils/Utils';
+import LoadingMaskComponent from '../base/LoadingMaskComponent';
+import { isBoolean } from 'util';
 
 class RequestLoanPage extends ContainerComponent {
+
     constructor() {
         super();
         this.state = {
@@ -22,12 +29,16 @@ class RequestLoanPage extends ContainerComponent {
             value: null,
             payment: 0,
             timelimit: 0,
-            fee: 0,
+            fee: -1,
             comments: '',
             disbursement_date: null,
+            include_tax: 1,
+            disbursement_value: null,
+
             value_error: '',
             timelimit_error: '',
-            loading: false
+            fee_error: '',
+            loading: false,
         }
     }
 
@@ -43,16 +54,32 @@ class RequestLoanPage extends ContainerComponent {
         } else if (this.state.timelimit <= 0 || this.state.timelimit > 24) {
             isError = true;
             this.setState({ timelimit_error: 'Valor debe ser entre 1 y 24' });
-        } else
+        } else {
             this.setState({ timelimit_error: '' });
+        }
+
         if (!this.state.value) {
             isError = true;
             this.setState({ value_error: 'Campo requerido' });
         } else if (this.state.value < 0) {
             isError = true;
             this.setState({ value_error: 'Valor debe ser mayor a 0' });
-        } else
+        } else {
             this.setState({ value_error: '' });
+        }
+
+        if (this.state.fee === -1) {
+            isError = true;
+            this.setState({ fee_error: 'Campo requerido' });
+        } else {
+            this.setState({ fee_error: '' });
+        }
+
+        if (!isBoolean(this.state.include_tax)) {
+            isError = true;
+            this.setState({ openMessage: true, errorMessage: 'Debe indicar si incluir o no 4x1.000' });
+        }
+
         if (!isError) {
             this.setState({ 
                 loading: true,
@@ -65,7 +92,8 @@ class RequestLoanPage extends ContainerComponent {
                 disbursement_date: this.state.disbursement_date,
                 fee: Number(this.state.fee),
                 payment: Number(this.state.payment),
-                comments: this.state.comments
+                comments: this.state.comments,
+                disbursement_value: Number(this.state.disbursement_value),
             }
             Utils.createLoan(loan)
                 .then((response) => {
@@ -82,11 +110,46 @@ class RequestLoanPage extends ContainerComponent {
         }
     }
 
+    getDisbursementValue(value, include_tax = undefined) {
+        let includeTax = include_tax === undefined ? this.state.include_tax : include_tax;
+        if (includeTax === true) {
+            return value - value*0.004;
+        } else if (includeTax === false) {
+            return value * 1.004;
+        }
+        return value;
+    }
+
+    onTaxChange(event) {
+        let value, disbursement_value, include_tax = event.target.value === "true";
+        if (include_tax) {
+            value = this.state.value;
+            disbursement_value = this.getDisbursementValue(this.state.value, include_tax);
+        } else {
+            value = this.state.value * 1.004;
+            disbursement_value = this.state.value;
+        }
+        this.setState({
+            value,
+            disbursement_value,
+            include_tax,
+        });
+    }
+
+    onChangeValue(value) {
+        if (this.state.value !== Number(value)) {
+            this.setState({ 
+                value,
+                disbursement_value: this.getDisbursementValue(value)
+            });
+        }
+    }
+
     render() {
         return (
             <div>
+                <LoadingMaskComponent active={this.state.loading} />
                 <ContainerComponent showHeader={true}
-                    loadingMask={this.state.loading}
                     renderOneMidColGrid={true}
                     middle={
                         <Paper className="UserInfo" elevation={20}>
@@ -98,7 +161,32 @@ class RequestLoanPage extends ContainerComponent {
                                         value={this.state.value}
                                         helperText={this.state.value_error}
                                         error={this.state.value_error !== ''}
-                                        onChange={(event) => this.setState({ value: event.target.value })}
+                                        disabled={isBoolean(this.state.include_tax)}
+                                        onChange={(event) => this.onChangeValue(event.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <InputLabel htmlFor="tax">Incluye 4x1.000</InputLabel>
+                                    <RadioGroup aria-label="position" name="position" value={this.state.include_tax} onChange={event => this.onTaxChange(event)} row>
+                                        <FormControlLabel
+                                            value={true}
+                                            control={<Radio />}
+                                            label="Si"
+                                            labelPlacement="start"
+                                        />
+                                        <FormControlLabel
+                                            value={false}
+                                            control={<Radio />}
+                                            label="No"
+                                            labelPlacement="start"
+                                        />
+                                    </RadioGroup>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <CurrencyField label="Valor a desembolsar"
+                                        style={{ width: '100%' }}
+                                        value={this.state.disbursement_value}
+                                        disabled
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -112,16 +200,25 @@ class RequestLoanPage extends ContainerComponent {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <InputLabel htmlFor="fee">Cuota</InputLabel>
+                                    <InputLabel error={this.state.fee_error !== ''}
+                                        htmlFor="fee"
+                                    >
+                                        Cuota
+                                    </InputLabel>
                                     <Select value={this.state.fee}
                                         inputProps={{
                                             id:"fee"
                                         }}
+                                        error={this.state.fee_error !== ''}
                                         style={{ width: '100%' }}
                                         onChange={(event) => this.setState({ fee: event.target.value })}>
+                                        <MenuItem value={-1}>Seleccione un valor</MenuItem>
                                         <MenuItem value={0}>Mensual</MenuItem>
                                         <MenuItem value={1}>Única</MenuItem>
                                     </Select>
+                                    {this.state.fee_error !== '' &&
+                                        <FormHelperText error>{this.state.fee_error}</FormHelperText>
+                                    }
                                 </Grid>
                                 <Grid item xs={12}>
                                     <DateField min={Utils.formatDate(new Date())}

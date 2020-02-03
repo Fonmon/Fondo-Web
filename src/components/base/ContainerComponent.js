@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import HeaderComponent from './HeaderComponent';
-import LoadingMaskComponent from './LoadingMaskComponent';
 import Utils from '../../utils/Utils';
 
 const gridItemStyles = {
@@ -13,15 +12,12 @@ const gridItemStyles = {
 }
 
 class ContainerComponent extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
             loading: false
         }
-    }
-
-    componentWillReceiveProps(props) {
-        this.setState({ loading: props.loadingMask });
     }
 
     showMessageError(message) {
@@ -120,7 +116,6 @@ class ContainerComponent extends Component {
                         })}
                     </Grid>
                 }
-                <LoadingMaskComponent active={this.state.loading} />
             </React.Fragment>
         )
     }

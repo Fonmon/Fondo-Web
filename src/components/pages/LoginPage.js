@@ -10,6 +10,7 @@ import Utils, { TOKEN_KEY } from '../../utils/Utils';
 import { HOST_APP } from '../../utils/Constants';
 import banner from '../../resources/images/banner.png';
 import '../../resources/styles/Login.css';
+import LoadingMaskComponent from '../base/LoadingMaskComponent';
 
 class LoginPage extends ContainerComponent {
 
@@ -51,7 +52,7 @@ class LoginPage extends ContainerComponent {
 
         return (
             <div className="Login">
-                <ContainerComponent loadingMask={this.state.loading} />
+                <LoadingMaskComponent active={this.state.loading} />
                 <img className="banner" src={banner} alt="" />
                 <Paper className="LoginForm" elevation={20}>
                     <h2>Iniciar Sesión</h2>

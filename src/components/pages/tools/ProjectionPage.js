@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import ContainerComponent from '../../base/ContainerComponent';
 import DateField from '../../fields/DateField';
 import Utils from '../../../utils/Utils';
+import LoadingMaskComponent from '../../base/LoadingMaskComponent';
 
 export default class ProjectionPage extends ContainerComponent {
     constructor() {
@@ -101,8 +102,8 @@ export default class ProjectionPage extends ContainerComponent {
     render() {
         return (
             <React.Fragment>
+                <LoadingMaskComponent active={this.state.loading} />
                 <ContainerComponent showHeader={true}
-                    loadingMask={this.state.loading}
                     renderTwoColGrid={true}
                     leftWidth={6}
                     left={

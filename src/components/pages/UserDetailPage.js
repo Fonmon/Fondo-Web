@@ -18,6 +18,7 @@ import ColorPickerComponent from '../base/ColorPickerComponent';
 import CurrencyField from '../fields/CurrencyField';
 import Utils, {NOTIFICATIONS_KEY} from '../../utils/Utils';
 import '../../resources/styles/UserDetail.css';
+import LoadingMaskComponent from '../base/LoadingMaskComponent';
 
 class UserDetailPage extends ContainerComponent{
 
@@ -34,7 +35,7 @@ class UserDetailPage extends ContainerComponent{
                 first_name:'',
                 last_name:'',
                 email:'',
-                role:-1
+                role: 3
             },
             finance:{
                 contributions:'',
@@ -51,11 +52,11 @@ class UserDetailPage extends ContainerComponent{
         }
     }
 
-    componentDidMount = () =>{
+    componentDidMount = () => {
         this.getUser();
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.getUser(nextProps.match.params.id);
     }
 
@@ -196,8 +197,8 @@ class UserDetailPage extends ContainerComponent{
     render(){
         return (
             <div>
+                <LoadingMaskComponent active={this.state.loading} />
                 <ContainerComponent showHeader={true}
-                    loadingMask={this.state.loading}
                     renderOneFullColGrid={true}
                     middle={
                         <div className="UserInfo">

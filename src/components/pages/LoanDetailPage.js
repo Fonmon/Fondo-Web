@@ -10,13 +10,14 @@ import Button from '@material-ui/core/Button';
 import ContainerComponent from '../base/ContainerComponent';
 import RefinanceDialog from '../dialogs/RefinanceDialog';
 import Utils from '../../utils/Utils';
+import LoadingMaskComponent from '../base/LoadingMaskComponent';
 
 class LoanDetailPage extends ContainerComponent{
     
     constructor(){
         super();
         this.state = {
-            id:-1,
+            id: -1,
             openMessage:false,
             errorMessage:'',
             loading: false,
@@ -31,7 +32,9 @@ class LoanDetailPage extends ContainerComponent{
                 comments:'',
                 state:0,
                 user_full_name:'',
-                rate:0
+                rate: 0,
+                include_tax: false,
+                disbursement_value: '',
             },
             loanDetail:{
                 total_payment:0,
@@ -43,11 +46,11 @@ class LoanDetailPage extends ContainerComponent{
         this.refinanceKey = 1;
     }
 
-    componentDidMount = () =>{
+    componentDidMount = () => {
         this.getLoan();
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.getLoan(nextProps.match.params.id);
     }
 
@@ -124,8 +127,8 @@ class LoanDetailPage extends ContainerComponent{
     render(){
         return (
             <div>
+                <LoadingMaskComponent active={this.state.loading} />
                 <ContainerComponent showHeader={true}
-                    loadingMask={this.state.loading}
                     renderOneFullColGrid={true}
                     middle={
                         <Paper className="UserInfo" elevation={20}>
@@ -142,7 +145,8 @@ class LoanDetailPage extends ContainerComponent{
                                         <span className="Labels"><strong>Número de crédito:</strong> {this.state.loan.id}</span><br/>
                                         <span className="Labels"><strong>Nombre:</strong> {this.state.loan.user_full_name}</span><br/>
                                         <span className="Labels"><strong>Fecha creación:</strong> {this.state.loan.created_at}</span><br/>
-                                        <span className="Labels"><strong>Valor solicitado:</strong> ${Utils.parseNumberMoney(this.state.loan.value)}</span><br/>
+                                        <span className="Labels"><strong>Valor solicitado:</strong> ${Utils.parseNumberMoney(this.state.loan.value)}</span> {this.state.loan.disbursement_value && <span>(incluye 4x1.000)</span>}<br/>
+                                        <span className="Labels"><strong>Valor a desembolsar:</strong> {this.state.loan.disbursement_value && <span>$</span>}{this.state.loan.disbursement_value ? Utils.parseNumberMoney(this.state.loan.disbursement_value) : "N/A"} </span><br/>
                                         <span className="Labels"><strong>Plazo:</strong> {this.state.loan.timelimit} Meses</span><br/>
                                         <span className="Labels"><strong>Cuota:</strong> {this.getFeeType(this.state.loan.fee)}</span><br/>
                                         <span className="Labels"><strong>Tasa:</strong> {this.state.loan.rate*100}%</span><br/>
