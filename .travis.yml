@@ -11,7 +11,7 @@ before_install:
 - tar zxf google-cloud-sdk-280.0.0-linux-x86_64.tar.gz google-cloud-sdk
 - export CLOUDSDK_CORE_DISABLE_PROMPTS=1
 - sh google-cloud-sdk/install.sh
-- source $HOME/google-cloud-sdk/path.bash.inc
+- source google-cloud-sdk/path.bash.inc
 - gcloud version
 - if [ -a scripts/client_credentials.json ]; then 
     gcloud -q auth activate-service-account --key-file scripts/client_credentials.json;
