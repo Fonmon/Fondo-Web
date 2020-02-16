@@ -1,22 +1,37 @@
-language: python
+language: node_js
 node_js: 8
-python: 3.6
-install:
-  - npm install
-  - pip install awscli
+services:
+  - docker
 cache:
   directories:
     - node_modules
+    - $HOME/gcloud
+env:
+  - PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin
+before_install:
+  - if [ ! -d $HOME/gcloud/google-cloud-sdk ]; then
+      mkdir -p $HOME/gcloud &&
+      wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz --directory-prefix=$HOME/gcloud &&
+      cd $HOME/gcloud &&
+      tar xzf google-cloud-sdk.tar.gz &&
+      printf '\ny\n\ny\ny\n' | ./google-cloud-sdk/install.sh &&
+      cd $TRAVIS_BUILD_DIR;
+    fi
+  - gcloud -q components update
+  - echo $GCLOUD_CLIENT_SECRETS > client_secrets.json
+  - if [ -a client_secrets.json ]; then
+      gcloud -q auth activate-service-account --key-file client_secrets.json;
+    fi
+install:
+  - npm install
 script:
   - npm test
 deploy:
   - provider: script
-    script: sh $TRAVIS_BUILD_DIR/scripts/trigger-deploy.sh $TRAVIS_COMMIT i-02fd1798f1ce6963a $TRAVIS_BRANCH
+    script: sh $TRAVIS_BUILD_DIR/scripts/trigger-deploy.sh
     skip_cleanup: true
     on:
-      branch: master
-  - provider: script
-    script: sh $TRAVIS_BUILD_DIR/scripts/trigger-deploy.sh $TRAVIS_COMMIT i-028018a7f5b27a704 $TRAVIS_BRANCH
-    skip_cleanup: true
-    on:
-      branch: develop
+      branches:
+        only:
+          - gcp
+          - develop

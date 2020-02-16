@@ -1,31 +1,19 @@
 #!/bin/bash
 set -x
 
-######################################################
-# Script that trigger deploy process for web layer   #
-# in server side.                                    #
-######################################################
+$HOST_APP=cloud-fonmon.minagle.com
 
-# Arguments length: 2
-# 1: commit number
-# 2: instance ID
-# 3: env
-if [  $# -ne 3 ]; then
-	echo 'Arguments: commit_revision instance_id {master|develop}'
-	exit 1
-fi
+echo $TRAVIS_BRANCH
 
-COMMIT=$1
-INSTANCE=$2
-ENV=$3
+cd $TRAVIS_BUILD_DIR/
+echo "export const HOST_APP = \"https://${HOST_APP}/\";" > src/utils/Constants.js
+GENERATE_SOURCEMAP=false npm run build
 
-# Triggering deploy process
-echo 'Starting trigger'
-aws ssm send-command \
-	--document-name "AWS-RunShellScript" \
-	--comment "Deploying web layer" \
-	--instance-ids "${INSTANCE}" \
-	--parameters commands="entrypoint_deploy ${COMMIT} web ${ENV}" \
-	--output text
-echo 'Deploying in background'
+cd $TRAVIS_BUILD_DIR/container
+docker build -t fonmon_web -f ./Dockerfile ..
+docker tag fonmon_web:latest us.gcr.io/notificationstest-90976/fonmon_web:dev
+
+gcloud -q auth configure-docker
+docker push us.gcr.io/notificationstest-90976/fonmon_web:dev
+
 exit 0
