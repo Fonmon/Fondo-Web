@@ -30,7 +30,5 @@ deploy:
   script: sh $TRAVIS_BUILD_DIR/scripts/trigger-deploy.sh
   skip_cleanup: true
   on:
-    branches:
-      only:
-      - gcp
-      - develop
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^(gcp|develop)$
