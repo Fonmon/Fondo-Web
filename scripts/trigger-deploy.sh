@@ -10,7 +10,7 @@ if [ $TRAVIS_BRANCH == 'master' ]; then
 else
   HOST_API=cloud-api-fonmon.minagle.com
   TAG=dev
-  SERVICE=fonmonweb_dev
+  SERVICE=fonmonweb-dev
 fi
 
 cd $TRAVIS_BUILD_DIR/
