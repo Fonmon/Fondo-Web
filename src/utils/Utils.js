@@ -143,9 +143,9 @@ class Utils{
 
     // https://github.com/axios/axios
     static authenticate(username, password){
-        return axios.post(`${HOST_APP}api-token-auth/`,{
-            username:username,
-            password:password
+        return axios.post(`${HOST_APP}api-token-auth/`, {
+            username: username,
+            password: password
         });
     }
 
@@ -196,7 +196,7 @@ class Utils{
     }
 
     static updateUsersLoad(obj){
-        return axios.patch(`${HOST_APP}api/user/`,obj,requestOpt);
+        return axios.patch(`${HOST_APP}api/user/`, obj, requestOpt);
     }
 
     static updateLoansLoad(obj){
@@ -241,6 +241,19 @@ class Utils{
 
     static unsubscribeNotifications(subscription){
         return axios.post(`${HOST_APP}api/notification/unsubscribe`,subscription,requestOpt);
+    }
+
+    static getFiles(type) {
+        let query = type !== undefined ? `?type=${type}` : "";
+        return axios.get(`${HOST_APP}api/file${query}`, requestOpt);
+    }
+
+    static saveFile(obj) {
+        return axios.post(`${HOST_APP}api/file/`, obj, requestOpt);
+    }
+
+    static getFileUrl(id) {
+        return axios.get(`${HOST_APP}api/file/${id}`, requestOpt);
     }
 }
 
