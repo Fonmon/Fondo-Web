@@ -38,6 +38,7 @@ class UserDetailPage extends ContainerComponent{
                 email:'',
                 role: 3,
                 birthdate: '',
+                old_birthdate: null,
             },
             finance:{
                 contributions:'',
@@ -71,7 +72,10 @@ class UserDetailPage extends ContainerComponent{
         Utils.getUser(id)
             .then((response) => {
                 this.setState({
-                    user: response.data.user,
+                    user: {
+                        ...response.data.user,
+                        old_birthdate: response.data.user.birthdate
+                    },
                     finance: response.data.finance,
                     preferences: response.data.preferences,
                     loading: false
@@ -89,11 +93,14 @@ class UserDetailPage extends ContainerComponent{
     handleUpdate(){
         let obj;
         if(this.state.expanded === 'personal') {
-            obj = this.state.user;
+            obj = Object.assign({}, this.state.user);
             if(obj.email === '' || obj.identification === 0 || obj.first_name === '' || obj.last_name === '')
                 return this.showMessageError('Debe completar los campos faltantes.');
             else if (!this.isEmailValid(obj.email))
-                return this.showMessageError('Ingrese un email válido.')
+                return this.showMessageError('Ingrese un email válido.');
+            if (obj.birthdate === obj.old_birthdate) {
+                delete obj["birthdate"];
+            }
         } else if(this.state.expanded === 'finance') {
             obj = this.state.finance
         }
@@ -104,9 +111,15 @@ class UserDetailPage extends ContainerComponent{
         };
         
         this.setState({ loading: true });
-        Utils.updateUser(this.state.id,requestBody)
-            .then((response) => {
-                this.setState({loading:false});
+        Utils.updateUser(this.state.id, requestBody)
+            .then(() => {
+                this.setState({ 
+                    loading: false,
+                    user: {
+                        ...this.state.user,
+                        old_birthdate: this.state.user.birthdate
+                    }
+                });
                 this.showMessageError('Cambios guardados');
             }).catch((error) => {
                 this.setState({loading:false});

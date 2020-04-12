@@ -114,12 +114,15 @@ class Utils{
         }
 
         console.log('subscribing push manager');
-        registration.pushManager.subscribe({
-            userVisibleOnly: true, //Always display notifications
-            applicationServerKey: this.urlB64ToUint8Array(process.env.REACT_APP_VAPID_PUBLIC_KEY)
-        })
-            .then(subscription => this.subscribeNotifications(subscription))
-            .catch(err => console.error("Registering subscription error: ", err));
+        try {
+            const subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true, //Always display notifications
+                applicationServerKey: this.urlB64ToUint8Array(process.env.REACT_APP_VAPID_PUBLIC_KEY)
+            })
+            await this.subscribeNotifications(subscription);
+        } catch (err) {
+            console.error("Registering subscription error: ", err);
+        }
     }
 
     static async pushManagerUnsubscribe(callService = true) {
@@ -129,13 +132,15 @@ class Utils{
         if (!currentSubscription) return;
 
         console.log('unsubscribing push manager');
-        if(callService) {
-            currentSubscription.unsubscribe()
-                .then(() => this.unsubscribeNotifications(currentSubscription))
-                .catch(err => console.error("Unregistering subscription error: ", err));
-        } else {
-            currentSubscription.unsubscribe()
-                .catch(err => console.error("Unregistering subscription error: ", err));
+        try {
+            if(callService) {
+                await currentSubscription.unsubscribe()
+                await this.unsubscribeNotifications(currentSubscription)
+            } else {
+                await currentSubscription.unsubscribe()
+            }
+        } catch (err) {
+            console.error("Unregistering subscription error: ", err)
         }
     }
 
