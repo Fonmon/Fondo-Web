@@ -16,6 +16,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ContainerComponent from '../base/ContainerComponent';
 import ColorPickerComponent from '../base/ColorPickerComponent';
 import CurrencyField from '../fields/CurrencyField';
+import DateField from '../fields/DateField';
 import Utils, {NOTIFICATIONS_KEY} from '../../utils/Utils';
 import '../../resources/styles/UserDetail.css';
 import LoadingMaskComponent from '../base/LoadingMaskComponent';
@@ -35,7 +36,9 @@ class UserDetailPage extends ContainerComponent{
                 first_name:'',
                 last_name:'',
                 email:'',
-                role: 3
+                role: 3,
+                birthdate: '',
+                old_birthdate: null,
             },
             finance:{
                 contributions:'',
@@ -69,7 +72,10 @@ class UserDetailPage extends ContainerComponent{
         Utils.getUser(id)
             .then((response) => {
                 this.setState({
-                    user: response.data.user,
+                    user: {
+                        ...response.data.user,
+                        old_birthdate: response.data.user.birthdate
+                    },
                     finance: response.data.finance,
                     preferences: response.data.preferences,
                     loading: false
@@ -87,11 +93,14 @@ class UserDetailPage extends ContainerComponent{
     handleUpdate(){
         let obj;
         if(this.state.expanded === 'personal') {
-            obj = this.state.user;
+            obj = Object.assign({}, this.state.user);
             if(obj.email === '' || obj.identification === 0 || obj.first_name === '' || obj.last_name === '')
                 return this.showMessageError('Debe completar los campos faltantes.');
             else if (!this.isEmailValid(obj.email))
-                return this.showMessageError('Ingrese un email válido.')
+                return this.showMessageError('Ingrese un email válido.');
+            if (obj.birthdate === obj.old_birthdate) {
+                delete obj["birthdate"];
+            }
         } else if(this.state.expanded === 'finance') {
             obj = this.state.finance
         }
@@ -102,9 +111,15 @@ class UserDetailPage extends ContainerComponent{
         };
         
         this.setState({ loading: true });
-        Utils.updateUser(this.state.id,requestBody)
-            .then((response) => {
-                this.setState({loading:false});
+        Utils.updateUser(this.state.id, requestBody)
+            .then(() => {
+                this.setState({ 
+                    loading: false,
+                    user: {
+                        ...this.state.user,
+                        old_birthdate: this.state.user.birthdate
+                    }
+                });
                 this.showMessageError('Cambios guardados');
             }).catch((error) => {
                 this.setState({loading:false});
@@ -250,7 +265,14 @@ class UserDetailPage extends ContainerComponent{
                                                 value={this.state.user.email}
                                                 style={{width:'100%'}}
                                                 disabled={!this.allowToEditPersonal()}
-                                                onChange = {(event) => this.setStateUserInfo('email',event.target.value)}
+                                                onChange = {(event) => this.setStateUserInfo('email', event.target.value)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <DateField max={Utils.formatDate(new Date())}
+                                                label="Fecha de nacimiento"
+                                                value={this.state.user.birthdate ? this.state.user.birthdate : ""}
+                                                onChange={(event) => this.setStateUserInfo('birthdate', event.target.value)}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>

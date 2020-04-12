@@ -11,11 +11,11 @@ import visionMision from '../../resources/templates/visionMision.json';
 import statutes from '../../resources/templates/statutes.json';
 import regulation from '../../resources/templates/regulation.json';
 import directive from '../../resources/images/directive.jpg';
-import proceedings from '../../resources/templates/proceedings.json';
 import power from '../../resources/templates/power.json';
 
 import ContainerComponent from '../base/ContainerComponent';
-import {HOST_APP} from '../../utils/Constants';
+import { HOST_APP } from '../../utils/Constants';
+import ProceedingsDialog from '../dialogs/ProceedingsDialog.js';
 
 class FondoInfoPage extends ContainerComponent{
 
@@ -25,14 +25,15 @@ class FondoInfoPage extends ContainerComponent{
             dialogOpen: false,
             dialogTitle: '',
             dialogContent: '',
-            dialogOpenImg:false
+            dialogOpenImg: false,
+            dialogProceedingsOpen: false
         }
     }
 
     handlerClick(file){
         this.setState({
-            dialogTitle:file.title,
-            dialogOpen:true
+            dialogTitle: file.title,
+            dialogOpen: true
         });
 
         this.resolveJsonVariables(file.body,'HOST_APP',HOST_APP);
@@ -68,13 +69,13 @@ class FondoInfoPage extends ContainerComponent{
                     middle={
                         <Paper className="UserInfo" elevation={20}>
                             <h2 style={{textAlign:'center'}}>Información del fondo</h2>
-                            <MenuItem onClick={this.handlerClick.bind(this,history)} >Historia del fondo</MenuItem>
-                            <MenuItem onClick={this.handlerClick.bind(this,visionMision)} >Visión y misión</MenuItem>
-                            <MenuItem onClick={this.handlerClick.bind(this,statutes)} >Estatutos</MenuItem>
-                            <MenuItem onClick={this.handlerClick.bind(this,regulation)} >Reglamento mesa directiva</MenuItem>
-                            <MenuItem onClick={this.handlerClickImg.bind(this,"Mesa directiva",directive)} >Mesa directiva</MenuItem>
-                            <MenuItem onClick={this.handlerClick.bind(this,power)} >Poder asamblea</MenuItem>
-                            <MenuItem onClick={this.handlerClick.bind(this,proceedings)} >Copias de actas</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this, history)} >Historia del fondo</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this, visionMision)} >Visión y misión</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this, statutes)} >Estatutos</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this, regulation)} >Reglamento mesa directiva</MenuItem>
+                            <MenuItem onClick={this.handlerClickImg.bind(this, "Mesa directiva", directive)} >Mesa directiva</MenuItem>
+                            <MenuItem onClick={this.handlerClick.bind(this, power)} >Poder asamblea</MenuItem>
+                            <MenuItem onClick={() => this.setState({dialogProceedingsOpen: true})} >Copias de actas</MenuItem>
                         </Paper>
                     }
                 />
@@ -97,6 +98,8 @@ class FondoInfoPage extends ContainerComponent{
                         <center><img style={{width:'100%'}} src={this.state.dialogContent} alt="" /></center>
                     </DialogContent>
                 </Dialog>
+                <ProceedingsDialog open={this.state.dialogProceedingsOpen}
+                    onClose={() => this.setState({dialogProceedingsOpen: false})} />
             </div>
         );
     }

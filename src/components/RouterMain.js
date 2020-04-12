@@ -15,6 +15,7 @@ import ToolsListPage from './pages/ToolsListPage';
     import SimulationPage from './pages/tools/SimulationPage';
     import ProjectionPage from './pages/tools/ProjectionPage';
     import ActivitiesPage from './pages/tools/ActivitiesPage';
+    import BirthdatesPage from './pages/tools/BirthdatesPage';
 
 import Utils from '../utils/Utils';
 
@@ -67,6 +68,7 @@ const RouterMain = (props) => (
             <PrivateRoute rProps={props} exact path='/tool/simulation' component={SimulationPage} />
             <PrivateRoute rProps={props} exact path='/tool/projection' component={ProjectionPage} />
             <PrivateRoute rProps={props} exact path='/tool/activities' component={ActivitiesPage} />
+            <PrivateRoute rProps={props} exact path='/tool/birthdates' component={BirthdatesPage} />
             <ManagementRoute exact path='/users' component={UsersListPage} />
             <ManagementRoute exact path='/loans' component={LoansListPage} />
             <Redirect to="/error" />
