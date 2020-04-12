@@ -89,15 +89,14 @@ class ProceedingsDialog extends ContainerComponent {
                             <center><p>No hay actas cargadas aún</p></center>
                         }
                         {this.state.proceedings.map((proceeding) => (
-                            <>
-                                <Link key={proceeding.id}
-                                    component="button"
+                            <div key={proceeding.id}>
+                                <Link component="button"
                                     onClick={() => this.openFile(proceeding.id)}
                                 >
                                     {proceeding.display_name}
                                 </Link>
                                 <br />
-                            </>
+                            </div>
                         ))}
                     </DialogContent>
                 </Dialog>

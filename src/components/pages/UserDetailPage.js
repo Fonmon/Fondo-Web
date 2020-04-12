@@ -16,6 +16,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ContainerComponent from '../base/ContainerComponent';
 import ColorPickerComponent from '../base/ColorPickerComponent';
 import CurrencyField from '../fields/CurrencyField';
+import DateField from '../fields/DateField';
 import Utils, {NOTIFICATIONS_KEY} from '../../utils/Utils';
 import '../../resources/styles/UserDetail.css';
 import LoadingMaskComponent from '../base/LoadingMaskComponent';
@@ -35,7 +36,8 @@ class UserDetailPage extends ContainerComponent{
                 first_name:'',
                 last_name:'',
                 email:'',
-                role: 3
+                role: 3,
+                birthdate: '',
             },
             finance:{
                 contributions:'',
@@ -250,7 +252,14 @@ class UserDetailPage extends ContainerComponent{
                                                 value={this.state.user.email}
                                                 style={{width:'100%'}}
                                                 disabled={!this.allowToEditPersonal()}
-                                                onChange = {(event) => this.setStateUserInfo('email',event.target.value)}
+                                                onChange = {(event) => this.setStateUserInfo('email', event.target.value)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <DateField max={Utils.formatDate(new Date())}
+                                                label="Fecha de nacimiento"
+                                                value={this.state.user.birthdate ? this.state.user.birthdate : ""}
+                                                onChange={(event) => this.setStateUserInfo('birthdate', event.target.value)}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>

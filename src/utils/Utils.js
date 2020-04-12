@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosLib from 'axios';
 import {HOST_APP} from './Constants';
 
 export const TOKEN_KEY = "TOKEN_FONDO_KEY";
@@ -6,11 +6,13 @@ export const ID_KEY = "USER_ID";
 export const ROLE_KEY = "USER_ROLE";
 export const NOTIFICATIONS_KEY = "NOTIFICATIONS_FONMON";
 
-const requestOpt = {
+const axios = axiosLib.create({
+    baseURL: HOST_APP,
     headers: {
         'Authorization':`Token ${localStorage.getItem(TOKEN_KEY)}`
     }
-}
+});
+
 class Utils{
     static isAuthenticated(){
         let token = localStorage.getItem(TOKEN_KEY);
@@ -143,117 +145,117 @@ class Utils{
 
     // https://github.com/axios/axios
     static authenticate(username, password){
-        return axios.post(`${HOST_APP}api-token-auth/`, {
+        return axiosLib.post(`${HOST_APP}api-token-auth/`, {
             username: username,
             password: password
         });
     }
 
     static getUsers(page){
-        return axios.get(`${HOST_APP}api/user?page=${page}`,requestOpt);
+        return axios.get(`api/user?page=${page}`);
     }
 
     static getLoans(page,all_loans,state,paginate = true){
-        return axios.get(`${HOST_APP}api/loan?page=${page}&all_loans=${all_loans}&state=${state}&paginate=${paginate}`,requestOpt);
+        return axios.get(`api/loan?page=${page}&all_loans=${all_loans}&state=${state}&paginate=${paginate}`);
     }
 
     static removeUser(id){
-        return axios.delete(`${HOST_APP}api/user/${id}`,requestOpt);
+        return axios.delete(`api/user/${id}`);
     }
 
     static createUser(obj){
-        return axios.post(`${HOST_APP}api/user/`,obj,requestOpt);
+        return axios.post(`api/user/`,obj);
     }
 
     static getUser(id){
-        return axios.get(`${HOST_APP}api/user/${id}`,requestOpt);
+        return axios.get(`api/user/${id}`);
     }
 
     static updateUser(id,obj){
-        return axios.patch(`${HOST_APP}api/user/${id}`,obj,requestOpt);
+        return axios.patch(`api/user/${id}`,obj);
     }
 
     static createLoan(obj){
-        return axios.post(`${HOST_APP}api/loan/`,obj,requestOpt);
+        return axios.post(`api/loan/`,obj);
     }
 
-    static updateLoan(id,state){
-        return axios.patch(`${HOST_APP}api/loan/${id}`,{
-                'state':state
-            },requestOpt);
+    static updateLoan(id, state){
+        return axios.patch(`api/loan/${id}`, {
+            'state':state
+        });
     }
 
     static getLoan(id){
-        return axios.get(`${HOST_APP}api/loan/${id}`,requestOpt);
-    }
-
-    static logout(){
-        return axios.post(`${HOST_APP}api/user/logout/`,{},requestOpt);
+        return axios.get(`api/loan/${id}`);
     }
 
     static activateAccount(id,obj){
-        return axios.post(`${HOST_APP}api/user/activate/${id}`,obj);
+        return axiosLib.post(`${HOST_APP}api/user/activate/${id}`, obj);
     }
 
     static updateUsersLoad(obj){
-        return axios.patch(`${HOST_APP}api/user/`, obj, requestOpt);
+        return axios.patch(`api/user/`, obj);
     }
 
     static updateLoansLoad(obj){
-        return axios.patch(`${HOST_APP}api/loan/`,obj,requestOpt);
+        return axios.patch(`api/loan/`, obj);
     }
 
-    static loanApps(id, app, body){
-        return axios.post(`${HOST_APP}api/loan/${id}/${app}`, body, requestOpt);
+    static loanApps(id, app, body={}){
+        return axios.post(`api/loan/${id}/${app}`, body);
     }
 
     static getActivityYears(){
-        return axios.get(`${HOST_APP}api/activity/year`,requestOpt);
+        return axios.get(`api/activity/year`);
     }
 
     static getActivities(idYear){
-        return axios.get(`${HOST_APP}api/activity/year/${idYear}`,requestOpt);
+        return axios.get(`api/activity/year/${idYear}`);
     }
 
     static getActivity(id){
-        return axios.get(`${HOST_APP}api/activity/${id}`,requestOpt);
+        return axios.get(`api/activity/${id}`);
     }
 
     static deleteActivity(id){
-        return axios.delete(`${HOST_APP}api/activity/${id}`,requestOpt);
+        return axios.delete(`api/activity/${id}`);
     }
 
     static createActivityYear(){
-        return axios.post(`${HOST_APP}api/activity/year`,{},requestOpt);
+        return axios.post(`api/activity/year`, {});
     }
 
     static updateActivity(id, type, data){
-        return axios.patch(`${HOST_APP}api/activity/${id}?patch=${type}`,data,requestOpt);
+        return axios.patch(`api/activity/${id}?patch=${type}`, data);
     }
 
     static createActivity(idYear, activity){
-        return axios.post(`${HOST_APP}api/activity/year/${idYear}`,activity,requestOpt);
+        return axios.post(`api/activity/year/${idYear}`, activity);
     }
 
     static subscribeNotifications(subscription){
-        return axios.post(`${HOST_APP}api/notification/subscribe`,subscription,requestOpt);
+        return axios.post(`api/notification/subscribe`, subscription);
     }
 
     static unsubscribeNotifications(subscription){
-        return axios.post(`${HOST_APP}api/notification/unsubscribe`,subscription,requestOpt);
+        return axios.post(`api/notification/unsubscribe`, subscription);
     }
 
     static getFiles(type) {
         let query = type !== undefined ? `?type=${type}` : "";
-        return axios.get(`${HOST_APP}api/file${query}`, requestOpt);
+        return axios.get(`api/file${query}`);
     }
 
     static saveFile(obj) {
-        return axios.post(`${HOST_APP}api/file/`, obj, requestOpt);
+        return axios.post(`api/file/`, obj);
     }
 
     static getFileUrl(id) {
-        return axios.get(`${HOST_APP}api/file/${id}`, requestOpt);
+        return axios.get(`api/file/${id}`);
+    }
+
+    static userApps(app, body={}){
+        return axios.post(`api/user/${app}`, body);
     }
 }
 

@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 
 import ContainerComponent from '../base/ContainerComponent';
-import {SimulationIcon,ProjectionIcon,ActivitiesIcon} from '../../utils/SvgIcons';
+import {
+    SimulationIcon,
+    ProjectionIcon,
+    ActivitiesIcon,
+    BirthdaysIcon,
+} from '../../utils/SvgIcons';
 import '../../resources/styles/Tools.css';
 
 const listTools = (
@@ -11,7 +16,7 @@ const listTools = (
         {image: SimulationIcon, ref:'tool/simulation', text:'Simulador'},
         {image: ProjectionIcon, ref:'tool/projection', text:'Proyección pago'},
         {image: ActivitiesIcon, ref:'tool/activities', text:'Actividades'},
-        {image: null, ref:null, text:'Próximamente'},
+        {image: BirthdaysIcon, ref:'tool/birthdates', text:'Cumpleaños'},
         {image: null, ref:null, text:'Próximamente'}
     ]
 )
