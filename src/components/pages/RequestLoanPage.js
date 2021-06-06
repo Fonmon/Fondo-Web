@@ -17,7 +17,6 @@ import CurrencyField from '../fields/CurrencyField';
 import DateField from '../fields/DateField'
 import Utils from '../../utils/Utils';
 import LoadingMaskComponent from '../base/LoadingMaskComponent';
-import { isBoolean } from 'util';
 
 class RequestLoanPage extends ContainerComponent {
 
@@ -75,7 +74,7 @@ class RequestLoanPage extends ContainerComponent {
             this.setState({ fee_error: '' });
         }
 
-        if (!isBoolean(this.state.include_tax)) {
+        if (!this.isBoolean(this.state.include_tax)) {
             isError = true;
             this.setState({ openMessage: true, errorMessage: 'Debe indicar si incluir o no 4x1.000' });
         }
@@ -145,6 +144,10 @@ class RequestLoanPage extends ContainerComponent {
         }
     }
 
+    isBoolean(value) {
+        return typeof value === 'boolean'
+    }
+
     render() {
         return (
             <div>
@@ -161,7 +164,7 @@ class RequestLoanPage extends ContainerComponent {
                                         value={this.state.value}
                                         helperText={this.state.value_error}
                                         error={this.state.value_error !== ''}
-                                        disabled={isBoolean(this.state.include_tax)}
+                                        disabled={this.isBoolean(this.state.include_tax)}
                                         onChange={(event) => this.onChangeValue(event.target.value)}
                                     />
                                 </Grid>

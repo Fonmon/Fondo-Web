@@ -74,7 +74,7 @@ class FondoInfoPage extends ContainerComponent{
                             <MenuItem onClick={this.handlerClick.bind(this, statutes)} >Estatutos</MenuItem>
                             <MenuItem onClick={this.handlerClick.bind(this, regulation)} >Reglamento mesa directiva</MenuItem>
                             <MenuItem onClick={this.handlerClickImg.bind(this, "Mesa directiva", directive)} >Mesa directiva</MenuItem>
-                            <MenuItem onClick={this.handlerClick.bind(this, power)} >Poder asamblea</MenuItem>
+                            {/* <MenuItem onClick={this.handlerClick.bind(this, power)} >Poder asamblea</MenuItem> */}
                             <MenuItem onClick={() => this.setState({dialogProceedingsOpen: true})} >Copias de actas</MenuItem>
                         </Paper>
                     }

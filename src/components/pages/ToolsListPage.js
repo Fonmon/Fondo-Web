@@ -8,6 +8,7 @@ import {
     ProjectionIcon,
     ActivitiesIcon,
     BirthdaysIcon,
+    PowerIcon,
 } from '../../utils/SvgIcons';
 import '../../resources/styles/Tools.css';
 
@@ -17,6 +18,7 @@ const listTools = (
         {image: ProjectionIcon, ref:'tool/projection', text:'Proyección pago'},
         {image: ActivitiesIcon, ref:'tool/activities', text:'Actividades'},
         {image: BirthdaysIcon, ref:'tool/birthdates', text:'Cumpleaños'},
+        {image: PowerIcon, ref:'tool/power', text:'Poder Asamblea'},
         {image: null, ref:null, text:'Próximamente'}
     ]
 )
