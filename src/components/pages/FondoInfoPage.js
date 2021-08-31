@@ -11,7 +11,7 @@ import visionMision from '../../resources/templates/visionMision.json';
 import statutes from '../../resources/templates/statutes.json';
 import regulation from '../../resources/templates/regulation.json';
 import directive from '../../resources/images/directive.jpg';
-import power from '../../resources/templates/power.json';
+// import power from '../../resources/templates/power.json';
 
 import ContainerComponent from '../base/ContainerComponent';
 import { HOST_APP } from '../../utils/Constants';
