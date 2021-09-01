@@ -6,6 +6,7 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  TablePagination,
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -32,28 +33,44 @@ export default class PowerPage extends ContainerComponent {
     this.state = {
       openMessage: false,
       errorMessage: '',
-      requestsSent: [],
-      requestsReceived: [],
       users: [],
       date: null,
-      user: 0
+      user: 0,
+      sent: {
+        currentPage: 1,
+        totalPages: 1,
+        list: [],
+        count: 0,
+      },
+      received: {
+        currentPage: 1,
+        totalPages: 1,
+        list: [],
+        count: 0,
+      }
     }
   }
 
   componentDidMount() {
     this.getUsers();
-    this.getPowers();
+    this.getPowers(1, 'requested', 'sent');
+    this.getPowers(1, 'requestee', 'received');
   }
 
-  async getPowers() {
+  async getPowers(page, obj, state) {
     try {
       this.setState({ loading: true })
       const response = await Utils.userApps('power', {
-        type: 'get'
+        type: 'get',
+        page, obj
       });
       this.setState({
-        requestsSent: response.data.requested,
-        requestsReceived: response.data.requestee
+        [state]: {
+          list: response.data.list,
+          currentPage: page,
+          totalPages: response.data.num_pages,
+          count: response.data.count
+        }
       })
     } catch (error) {
       this.handleRequestError(error);
@@ -90,6 +107,11 @@ export default class PowerPage extends ContainerComponent {
         meeting_date: this.state.date,
         requestee: this.state.user
       })
+      this.setState({
+        user: 0
+      })
+      await this.getPowers(1, 'requested', 'sent');
+      this.showMessageError("Solicitud enviada correctamente.")
     } catch (error) {
       this.handleRequestError(error);
     } finally {
@@ -106,7 +128,7 @@ export default class PowerPage extends ContainerComponent {
       case 2:
         return 'Rechazado'
       default:
-          return null
+        return null
     }
   }
 
@@ -118,7 +140,7 @@ export default class PowerPage extends ContainerComponent {
         id: powerId,
         state
       })
-      this.getPowers();
+      this.getPowers(this.state.received.currentPage, 'requestee', 'received');
     } catch (error) {
       this.handleRequestError(error);
     } finally {
@@ -170,10 +192,10 @@ export default class PowerPage extends ContainerComponent {
             <div>
               <Paper className="UserInfo" elevation={20}>
                 <h3 style={{ textAlign: 'center' }}>Peticiones recibidas</h3>
-                {this.state.requestsReceived.length === 0 &&
+                {this.state.received.list.length === 0 &&
                   <h4 style={{ textAlign: 'center', fontWeight: 'normal' }}>No hay solicitudes.</h4>
                 }
-                {this.state.requestsReceived.length !== 0 &&
+                {this.state.received.list.length !== 0 &&
                   <div style={{ overflowX: 'auto' }}>
                     <Table>
                       <TableHead>
@@ -186,12 +208,12 @@ export default class PowerPage extends ContainerComponent {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {this.state.requestsReceived.map((req, i) => {
+                        {this.state.received.list.map((req, i) => {
                           return (
                             <TableRow key={i}>
                               <TableCell>{req.id}</TableCell>
                               <TableCell>{req.meeting_date}</TableCell>
-                              <TableCell>{req.requestee}</TableCell>
+                              <TableCell>{req.requester}</TableCell>
                               <TableCell>{this.resolveState(req.state)}</TableCell>
                               <TableCell>
                                 {req.state === 0 &&
@@ -206,15 +228,30 @@ export default class PowerPage extends ContainerComponent {
                         })}
                       </TableBody>
                     </Table>
+                    <TablePagination
+                      component="div"
+                      count={this.state.received.count}
+                      rowsPerPage={10}
+                      rowsPerPageOptions={[]}
+                      page={this.state.received.currentPage - 1}
+                      backIconButtonProps={{
+                        'aria-label': 'Previous Page',
+                      }}
+                      nextIconButtonProps={{
+                        'aria-label': 'Next Page',
+                      }}
+                      labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+                      onChangePage={(_, page) => this.getPowers(page+1, 'requestee', 'received')}
+                    />
                   </div>
                 }
               </Paper>
               <Paper className="UserInfo" elevation={20}>
                 <h3 style={{ textAlign: 'center' }}>Peticiones enviadas</h3>
-                {this.state.requestsSent.length === 0 &&
+                {this.state.sent.list.length === 0 &&
                   <h4 style={{ textAlign: 'center', fontWeight: 'normal' }}>No hay solicitudes.</h4>
                 }
-                {this.state.requestsSent.length !== 0 &&
+                {this.state.sent.list.length !== 0 &&
                   <div style={{ overflowX: 'auto' }}>
                     <Table>
                       <TableHead>
@@ -226,7 +263,7 @@ export default class PowerPage extends ContainerComponent {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {this.state.requestsSent.map((req, i) => {
+                        {this.state.sent.list.map((req, i) => {
                           return (
                             <TableRow key={i}>
                               <TableCell>{req.id}</TableCell>
@@ -238,6 +275,21 @@ export default class PowerPage extends ContainerComponent {
                         })}
                       </TableBody>
                     </Table>
+                    <TablePagination
+                      component="div"
+                      count={this.state.sent.count}
+                      rowsPerPage={10}
+                      rowsPerPageOptions={[]}
+                      page={this.state.sent.currentPage - 1}
+                      backIconButtonProps={{
+                        'aria-label': 'Previous Page',
+                      }}
+                      nextIconButtonProps={{
+                        'aria-label': 'Next Page',
+                      }}
+                      labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+                      onChangePage={(_, page) => this.getPowers(page + 1, 'requested', 'sent')}
+                    />
                   </div>
                 }
               </Paper>
