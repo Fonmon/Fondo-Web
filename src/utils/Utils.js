@@ -157,7 +157,7 @@ class Utils{
     }
 
     static getUsers(page){
-        return axios.get(`api/user?page=${page}`);
+        return axios.get(`api/user${page?`?page=${page}`:''}`);
     }
 
     static getLoans(page,all_loans,state,paginate = true){
