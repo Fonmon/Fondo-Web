@@ -262,6 +262,12 @@ class Utils{
     static userApps(app, body={}){
         return axios.post(`api/user/${app}`, body);
     }
+
+    // Admin panel
+
+    static adminTestEmail() {
+        return axios.get(`api/admin/`)
+    }
 }
 
 export default Utils;

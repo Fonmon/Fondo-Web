@@ -37,6 +37,9 @@ const SidebarMenus = (props) => {
                 }
                 <MenuItem onClick={props.handleToggle} component={Link} to="/tools">Herramientas</MenuItem>
                 <MenuItem onClick={props.handleToggle} component={Link} to="/info">Información del fondo</MenuItem>
+                {Utils.isAdmin() && 
+                    <MenuItem onClick={async () => await Utils.adminTestEmail()}>Test Email</MenuItem>
+                }
             </div>
         </div>
     )
