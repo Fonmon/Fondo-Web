@@ -29,6 +29,7 @@ const SidebarMenus = (props) => {
             <div>
                 <MenuItem onClick={props.handleToggle} component={Link} to="/home">Inicio</MenuItem>
                 <MenuItem onClick={props.handleToggle} component={Link} to={`/user/${Utils.currentId()}`}>Mi Perfil</MenuItem>
+                <MenuItem onClick={props.handleToggle} component={Link} to={`/user/caps`}>CAPs</MenuItem>
                 {Utils.isAuthorized() &&
                     <div>
                         <MenuItem onClick={props.handleToggle} component={Link} to="/users">Usuarios</MenuItem>
@@ -85,7 +86,7 @@ class HeaderComponent extends Component {
                             <section className={classes.rightToolbar}>
                                 <IconButton color="inherit"
                                     component={Link}
-                                    to="/request-loan"
+                                    to="/request"
                                 >
                                     <ContentAdd />
                                 </IconButton>

@@ -10,7 +10,8 @@ import { FormControlLabel,
   InputLabel,
   FormHelperText,
   Radio,
-  RadioGroup } from '@material-ui/core';
+  RadioGroup,
+} from '@material-ui/core';
 
 import ContainerComponent from '../base/ContainerComponent';
 import CurrencyField from '../fields/CurrencyField';

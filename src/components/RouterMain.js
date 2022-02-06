@@ -11,6 +11,8 @@ import LoanDetailPage from './pages/LoanDetailPage';
 import LoansListPage from './pages/LoansListPage';
 import ActivateAccountPage from './pages/ActivateAccountPage';
 import FondoInfoPage from './pages/FondoInfoPage';
+import RequestPage from './pages/RequestPage';
+import RequestCapPage from './pages/RequestCapPage';
 import ToolsListPage from './pages/ToolsListPage';
     import SimulationPage from './pages/tools/SimulationPage';
     import ProjectionPage from './pages/tools/ProjectionPage';
@@ -61,7 +63,10 @@ const RouterMain = (props) => (
             <NotValidRoute exact path='/login' component={LoginPage}/>
             <NotValidRoute exact path='/activate/:id/:key' component={ActivateAccountPage}/>
             <PrivateRoute rProps={props} exact path='/home' component={HomePage} />
-            <PrivateRoute rProps={props} exact path='/user/:id' component={UserDetailPage} />
+            <PrivateRoute rProps={props} exact path='/user/:id(\d+)' component={UserDetailPage} />
+            {/* <PrivateRoute rProps={props} exact path='/user/caps' component={} /> */}
+            <PrivateRoute rProps={props} exact path='/request' component={RequestPage} />
+            <PrivateRoute rProps={props} exact path='/request-cap' component={RequestCapPage} />
             <PrivateRoute rProps={props} exact path='/request-loan' component={RequestLoanPage} />
             <PrivateRoute rProps={props} exact path='/loan/:id' component={LoanDetailPage} />
             <PrivateRoute rProps={props} exact path='/info' component={FondoInfoPage} />
@@ -73,6 +78,7 @@ const RouterMain = (props) => (
             <PrivateRoute rProps={props} exact path='/tool/power' component={PowerPage} />
             <ManagementRoute exact path='/users' component={UsersListPage} />
             <ManagementRoute exact path='/loans' component={LoansListPage} />
+            {/* <ManagementRoute exact path='/caps' component={} /> */}
             <Redirect to="/error" />
         </Switch>
     </main>
