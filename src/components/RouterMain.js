@@ -13,6 +13,7 @@ import ActivateAccountPage from './pages/ActivateAccountPage';
 import FondoInfoPage from './pages/FondoInfoPage';
 import RequestPage from './pages/RequestPage';
 import RequestCapPage from './pages/RequestCapPage';
+import CapsListPage from './pages/CapsListPage';
 import ToolsListPage from './pages/ToolsListPage';
     import SimulationPage from './pages/tools/SimulationPage';
     import ProjectionPage from './pages/tools/ProjectionPage';
@@ -47,7 +48,7 @@ const NotValidRoute = ({ component: Component, ...rest }) => (
 const ManagementRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
         Utils.isAuthenticated() && Utils.isAuthorized()
-        ? <Component {...props} />
+        ? <Component {...props} isManage={true} />
         : <Redirect to={{
             pathname: '/login',
             state: { from: props.location }
@@ -64,7 +65,7 @@ const RouterMain = (props) => (
             <NotValidRoute exact path='/activate/:id/:key' component={ActivateAccountPage}/>
             <PrivateRoute rProps={props} exact path='/home' component={HomePage} />
             <PrivateRoute rProps={props} exact path='/user/:id(\d+)' component={UserDetailPage} />
-            {/* <PrivateRoute rProps={props} exact path='/user/caps' component={} /> */}
+            <PrivateRoute rProps={props} exact path='/user/caps' component={CapsListPage} />
             <PrivateRoute rProps={props} exact path='/request' component={RequestPage} />
             <PrivateRoute rProps={props} exact path='/request-cap' component={RequestCapPage} />
             <PrivateRoute rProps={props} exact path='/request-loan' component={RequestLoanPage} />
@@ -76,9 +77,9 @@ const RouterMain = (props) => (
             <PrivateRoute rProps={props} exact path='/tool/activities' component={ActivitiesPage} />
             <PrivateRoute rProps={props} exact path='/tool/birthdates' component={BirthdatesPage} />
             <PrivateRoute rProps={props} exact path='/tool/power' component={PowerPage} />
-            <ManagementRoute exact path='/users' component={UsersListPage} />
-            <ManagementRoute exact path='/loans' component={LoansListPage} />
-            {/* <ManagementRoute exact path='/caps' component={} /> */}
+            <ManagementRoute exact path='/manage/users' component={UsersListPage} />
+            <ManagementRoute exact path='/manage/loans' component={LoansListPage} />
+            <ManagementRoute exact path='/manage/caps' component={CapsListPage} />
             <Redirect to="/error" />
         </Switch>
     </main>

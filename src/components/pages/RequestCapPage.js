@@ -28,7 +28,23 @@ class RequestCapPage extends ContainerComponent {
       this.setState({ openMessage: true, errorMessage: 'Fecha limite de ahorro requerida o inválida' });
     }
     if (!isError) {
-
+      this.setState({
+        loading: true,
+      });
+      let cap = {
+        end_date: this.state.limit_date,
+      }
+      Utils.createCap(cap)
+        .then((_) => {
+          this.setState({ loading: false });
+          this.props.history.push(`/user/caps`);
+        }).catch((error) => {
+          this.setState({ loading: false });
+          this.handleRequestError(error, [{
+            status: 406,
+            message: error.response.data.message
+          }]);
+        });
     }
   }
 

@@ -1,0 +1,7 @@
+.HeaderMenuListItemRoot {
+  display: flex;
+  flex-direction: column;
+}
+.HeaderMenuListItem > *{
+  padding-left: 32px !important
+}

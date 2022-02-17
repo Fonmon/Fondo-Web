@@ -84,7 +84,8 @@ class RequestLoanPage extends ContainerComponent {
             this.setState({ 
                 loading: true,
                 value_error: '', 
-                timelimit_error: ''
+                timelimit_error: '',
+                fee_error: '',
             });
             let loan = {
                 value: Number(this.state.value),
