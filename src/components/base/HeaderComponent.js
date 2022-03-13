@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
-import Drawer from '@material-ui/core/Drawer';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core';
-
+import {
+    withStyles,
+    AppBar,
+    IconButton,
+    MenuItem,
+    Drawer,
+    Toolbar,
+    Typography,
+    Collapse,
+    ListItemText,
+} from '@material-ui/core';
 import ContentAdd from '@material-ui/icons/Add';
 import MenuIcon from '@material-ui/icons/Menu';
 import PowerOff from '@material-ui/icons/PowerSettingsNew';
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 
 import Utils from '../../utils/Utils';
 import ffm from '../../resources/images/ffm_256.png';
+import '../../resources/styles/Header.css'
 
 const styles = {
     rightToolbar: {
@@ -29,18 +35,51 @@ const SidebarMenus = (props) => {
             <div>
                 <MenuItem onClick={props.handleToggle} component={Link} to="/home">Inicio</MenuItem>
                 <MenuItem onClick={props.handleToggle} component={Link} to={`/user/${Utils.currentId()}`}>Mi Perfil</MenuItem>
-                {Utils.isAuthorized() &&
-                    <div>
-                        <MenuItem onClick={props.handleToggle} component={Link} to="/users">Usuarios</MenuItem>
-                        <MenuItem onClick={props.handleToggle} component={Link} to="/loans">Solicitudes de créditos</MenuItem>
-                    </div>
-                }
+                <MenuItem onClick={props.handleToggle} component={Link} to='/user/caps'>CAPs</MenuItem>
                 <MenuItem onClick={props.handleToggle} component={Link} to="/tools">Herramientas</MenuItem>
                 <MenuItem onClick={props.handleToggle} component={Link} to="/info">Información del fondo</MenuItem>
-                {Utils.isAdmin() && 
-                    <MenuItem onClick={async () => await Utils.adminTestEmail()}>Test Email</MenuItem>
+                {Utils.isAuthorized() &&
+                    <MenuListItem label={'Gestion'}>
+                        <MenuItem onClick={props.handleToggle} component={Link} to="/manage/caps">CAPs</MenuItem>
+                        <MenuItem onClick={props.handleToggle} component={Link} to="/manage/users">Usuarios</MenuItem>
+                        <MenuItem onClick={props.handleToggle} component={Link} to="/manage/loans">Solicitudes de créditos</MenuItem>
+                    </MenuListItem>
+                }
+                {Utils.isAdmin() &&
+                    <MenuListItem label={'Admin'}>
+                        <MenuItem onClick={async () => await Utils.adminTestEmail()}>Test Email</MenuItem>
+                    </MenuListItem>
                 }
             </div>
+        </div>
+    )
+}
+
+function ListItemLink(props) {
+    const { open, ...other } = props;
+
+    return (
+        <MenuItem {...other}>
+            <ListItemText primary={props.label} />
+            {open != null ? open ? <ExpandLess /> : <ExpandMore /> : null}
+        </MenuItem>
+    );
+}
+
+const MenuListItem = (props) => {
+    const [open, setOpen] = React.useState(false)
+    return (
+        <div className='HeaderMenuListItemRoot'>
+            <ListItemLink
+                open={open}
+                label={props.label}
+                onClick={() => setOpen((prevOpen) => !prevOpen)}
+            />
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <div className='HeaderMenuListItem'>
+                    {props.children}
+                </div>
+            </Collapse>
         </div>
     )
 }
@@ -85,7 +124,7 @@ class HeaderComponent extends Component {
                             <section className={classes.rightToolbar}>
                                 <IconButton color="inherit"
                                     component={Link}
-                                    to="/request-loan"
+                                    to="/request"
                                 >
                                     <ContentAdd />
                                 </IconButton>

@@ -10,7 +10,8 @@ import { FormControlLabel,
   InputLabel,
   FormHelperText,
   Radio,
-  RadioGroup } from '@material-ui/core';
+  RadioGroup,
+} from '@material-ui/core';
 
 import ContainerComponent from '../base/ContainerComponent';
 import CurrencyField from '../fields/CurrencyField';
@@ -83,7 +84,8 @@ class RequestLoanPage extends ContainerComponent {
             this.setState({ 
                 loading: true,
                 value_error: '', 
-                timelimit_error: ''
+                timelimit_error: '',
+                fee_error: '',
             });
             let loan = {
                 value: Number(this.state.value),

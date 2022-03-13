@@ -1,0 +1,15 @@
+.ButtonOpt{
+  max-width: 400px;
+  padding: 20px 25px 30px;
+  margin:0 auto;
+  margin-top: 30px;
+  word-wrap: break-word;
+  cursor: pointer;
+  height: 300px;
+  border: gray solid;
+}
+.TextBtn {
+  text-align: center;
+  color: gray;
+  font-size: 50px;
+}

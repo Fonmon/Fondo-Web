@@ -263,6 +263,14 @@ class Utils{
         return axios.post(`api/user/${app}`, body);
     }
 
+    static getCaps(page, all_caps, state, paginate = true){
+        return axios.get(`api/saving-account?page=${page}&all_accounts=${all_caps}&state=${state}&paginate=${paginate}`);
+    }
+
+    static createCap(obj){
+        return axios.post(`api/saving-account/`, obj);
+    }
+
     // Admin panel
 
     static adminTestEmail() {

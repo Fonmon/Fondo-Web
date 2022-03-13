@@ -39,7 +39,7 @@ class LoanListComponent extends Component{
             loading:true, 
             currentPage:page
         });
-        Utils.getLoans(page, this.props.all,filterValue)
+        Utils.getLoans(page, this.props.all, filterValue)
             .then((response) => {
                 this.setState({
                     totalPages:response.data.num_pages, 

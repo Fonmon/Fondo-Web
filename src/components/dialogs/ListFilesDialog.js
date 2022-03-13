@@ -18,11 +18,11 @@ const styles = {
     },
 };
 
-class ProceedingsDialog extends ContainerComponent {
+class ListFilesDialog extends ContainerComponent {
     constructor(props) {
         super(props);
         this.state = {
-            proceedings: [],
+            files: [],
             openUploadFile: false,
             loading: false
         }
@@ -34,11 +34,11 @@ class ProceedingsDialog extends ContainerComponent {
 
     getFiles() {
         this.setState({loading: true});
-        Utils.getFiles(0)
+        Utils.getFiles(this.props.fileType)
             .then((response) => {
                 this.setState({
                     loading: false,
-                    proceedings: response.data
+                    files: response.data
                 })
             }).catch((error) => {
                 this.setState({ loading: false });
@@ -72,7 +72,7 @@ class ProceedingsDialog extends ContainerComponent {
                 <Dialog open={this.props.open}
                     onClose={this.props.onClose}>
                     <DialogTitle>
-                        Copias de actas
+                        {this.props.title}
                         {Utils.isAdmin() && 
                             <IconButton className={classes.uploadBtn}
                                 onClick={() => this.setState({openUploadFile: true})} 
@@ -83,17 +83,15 @@ class ProceedingsDialog extends ContainerComponent {
                     </DialogTitle>
                     <DialogContent>
                         <LoadingMaskComponent active={this.state.loading} />
-                        Se muestran a continuación las actas tomadas de cada asamblea.
-                        <br /><br />
-                        {this.state.proceedings.length === 0 && 
-                            <center><p>No hay actas cargadas aún</p></center>
+                        {this.state.files.length === 0 && 
+                            <center><p>No hay archivos cargados aún</p></center>
                         }
-                        {this.state.proceedings.map((proceeding) => (
-                            <div key={proceeding.id}>
+                        {this.state.files.map((file) => (
+                            <div key={file.id}>
                                 <Link component="button"
-                                    onClick={() => this.openFile(proceeding.id)}
+                                    onClick={() => this.openFile(file.id)}
                                 >
-                                    {proceeding.display_name}
+                                    {file.display_name}
                                 </Link>
                                 <br />
                             </div>
@@ -102,7 +100,7 @@ class ProceedingsDialog extends ContainerComponent {
                 </Dialog>
                 <UploadFileDialog open={this.state.openUploadFile}
                     onClose={() => this.fileUploadedClose()} 
-                    type={0} allowedFiles={[".pdf"]}/>
+                    type={this.props.fileType} allowedFiles={[".pdf"]}/>
                 <Snackbar
                     open={this.state.openMessage}
                     message={this.state.errorMessage}
@@ -114,4 +112,4 @@ class ProceedingsDialog extends ContainerComponent {
     }
 }
 
-export default withStyles(styles)(ProceedingsDialog);
+export default withStyles(styles)(ListFilesDialog);
