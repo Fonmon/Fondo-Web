@@ -15,7 +15,8 @@ import directive from '../../resources/images/directive.jpg';
 
 import ContainerComponent from '../base/ContainerComponent';
 import { HOST_APP } from '../../utils/Constants';
-import ProceedingsDialog from '../dialogs/ProceedingsDialog.js';
+import ListFilesDialog from '../dialogs/ListFilesDialog.js';
+import { FileType } from '../model/enums';
 
 class FondoInfoPage extends ContainerComponent{
 
@@ -26,7 +27,8 @@ class FondoInfoPage extends ContainerComponent{
             dialogTitle: '',
             dialogContent: '',
             dialogOpenImg: false,
-            dialogProceedingsOpen: false
+            dialogProceedingsOpen: false,
+            dialogPresentationsOpen: false,
         }
     }
 
@@ -76,6 +78,7 @@ class FondoInfoPage extends ContainerComponent{
                             <MenuItem onClick={this.handlerClickImg.bind(this, "Mesa directiva", directive)} >Mesa directiva</MenuItem>
                             {/* <MenuItem onClick={this.handlerClick.bind(this, power)} >Poder asamblea</MenuItem> */}
                             <MenuItem onClick={() => this.setState({dialogProceedingsOpen: true})} >Copias de actas</MenuItem>
+                            <MenuItem onClick={() => this.setState({dialogPresentationsOpen: true})} >Copias de presentaciones</MenuItem>
                         </Paper>
                     }
                 />
@@ -98,8 +101,16 @@ class FondoInfoPage extends ContainerComponent{
                         <center><img style={{width:'100%'}} src={this.state.dialogContent} alt="" /></center>
                     </DialogContent>
                 </Dialog>
-                <ProceedingsDialog open={this.state.dialogProceedingsOpen}
-                    onClose={() => this.setState({dialogProceedingsOpen: false})} />
+                <ListFilesDialog open={this.state.dialogProceedingsOpen}
+                    fileType={FileType.PROCEEDING}
+                    title={"Copias de actas"}
+                    onClose={() => this.setState({dialogProceedingsOpen: false})} 
+                />
+                <ListFilesDialog open={this.state.dialogPresentationsOpen}
+                    fileType={FileType.PRESENTATIONS}
+                    title={"Copias de presentaciones"}
+                    onClose={() => this.setState({dialogPresentationsOpen: false})} 
+                />
             </div>
         );
     }
