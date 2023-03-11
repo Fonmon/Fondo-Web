@@ -271,6 +271,10 @@ class Utils{
         return axios.post(`api/saving-account/`, obj);
     }
 
+    static updateCap(obj) {
+        return axios.put('api/saving-account', obj);
+    }
+
     // Admin panel
 
     static adminTestEmail() {

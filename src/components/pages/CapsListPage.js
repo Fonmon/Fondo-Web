@@ -1,4 +1,10 @@
 import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
   InputLabel,
   MenuItem,
   Paper,
@@ -18,6 +24,19 @@ import Utils from '../../utils/Utils';
 import ContainerComponent from "../base/ContainerComponent";
 import LoadingMaskComponent from "../base/LoadingMaskComponent";
 
+import ContentAdd from '@material-ui/icons/Add';
+import CancelIcon from '@material-ui/icons/Cancel';
+import CurrencyField from "../fields/CurrencyField";
+
+const ButtonsActions = (props) => {
+  return (
+    <div>
+      <IconButton onClick={props.onAdd.bind(this, props.id)}><ContentAdd /></IconButton>
+      <IconButton onClick={props.onCancel.bind(this, props.id)}><CancelIcon /></IconButton>
+    </div>
+  );
+}
+
 export default class CapsListPage extends ContainerComponent {
   constructor(props) {
     super(props)
@@ -30,6 +49,13 @@ export default class CapsListPage extends ContainerComponent {
       filterValue: 0,
       openMessage: false,
       errorMessage: '',
+      updateCAP: {
+        cancelOpen: false,
+        setValueOpen: false,
+        newValueError: '',
+        newValue: '',
+        cap: {},
+      }
     }
   }
 
@@ -63,11 +89,75 @@ export default class CapsListPage extends ContainerComponent {
 
   onRowSelection = () => {
     if (!this.props.isManage) {
-
+      // TODO: is it going to be necessary?
     }
   }
 
+  setUpdateCapState = (props) => {
+    this.setState({
+      updateCAP: {
+        ...this.state.updateCAP,
+        ...props
+      }
+    })
+  }
+
+  handleClose = () => {
+    this.setUpdateCapState({
+      cancelOpen: false,
+      setValueOpen: false,
+    });
+  }
+
+  handleCancelCAP = () => {
+    this.setState({
+      loading: true,
+    })
+    Utils.updateCap({
+      id: this.state.updateCAP.cap.id,
+      state: 1,
+      value: this.state.updateCAP.cap.value,
+    }).then(() => {
+        this.handleClose();
+        this.getCapsList(1, this.state.filterValue)
+      }).catch((error) => {
+        this.setState({ loading: false });
+        this.handleRequestError(error);
+      });
+  }
+
+  handleSetValue = () => {
+    this.setState({
+      loading: true,
+    })
+    Utils.updateCap({
+      id: this.state.updateCAP.cap.id,
+      state: this.state.updateCAP.cap.state,
+      value: this.state.updateCAP.newValue,
+    }).then(() => {
+        this.handleClose();
+        this.getCapsList(1, this.state.filterValue)
+      }).catch((error) => {
+        this.setState({ loading: false });
+        this.handleRequestError(error);
+      });
+  }
+
   render() {
+    const cancelActions = [
+      <Button color="primary" key="no"
+        onClick={this.handleClose}>No</Button>,
+      <Button color="primary" key="si"
+        variant="contained"
+        onClick={this.handleCancelCAP}>Si</Button>,
+    ];
+    const newValueActions = [
+      <Button color="primary" key="no"
+        onClick={this.handleClose}>Cancelar</Button>,
+      <Button color="primary" key="si"
+        variant="contained"
+        onClick={this.handleSetValue}>Actualizar</Button>,
+    ];
     return (
       <React.Fragment>
         <ContainerComponent showHeader={true}
@@ -93,7 +183,7 @@ export default class CapsListPage extends ContainerComponent {
                   <TableHead>
                     <TableRow>
                       <TableCell
-                        colSpan={this.props.isManage ? '5' : '4'}
+                        colSpan={this.props.isManage ? '6' : '4'}
                         style={{ textAlign: 'center' }}
                       >
                         Cuentas de Ahorro Programado
@@ -107,6 +197,9 @@ export default class CapsListPage extends ContainerComponent {
                       <TableCell>Fecha creación</TableCell>
                       <TableCell>Fecha cierre</TableCell>
                       <TableCell>Valor</TableCell>
+                      {this.props.isManage && this.state.filterValue === 0 &&
+                        <TableCell>Acciones</TableCell>
+                      }
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -122,6 +215,20 @@ export default class CapsListPage extends ContainerComponent {
                           <TableCell>{cap.created_at}</TableCell>
                           <TableCell>{cap.end_date}</TableCell>
                           <TableCell>${Utils.parseNumberMoney(cap.value)}</TableCell>
+                          {this.props.isManage && this.state.filterValue === 0 &&
+                            <TableCell>
+                              <ButtonsActions
+                                onAdd={() => this.setUpdateCapState({
+                                  setValueOpen: true,
+                                  cap,
+                                })}
+                                onCancel={() => this.setUpdateCapState({
+                                  cancelOpen: true,
+                                  cap,
+                                })}
+                              />
+                            </TableCell>
+                          }
                         </TableRow>
                       );
                     })}
@@ -151,6 +258,31 @@ export default class CapsListPage extends ContainerComponent {
           autoHideDuration={4000}
           onClose={(event) => this.setState({ openMessage: false })}
         />
+        <Dialog aria-labelledby="confirmation-dialog-title"
+          open={this.state.updateCAP.cancelOpen}
+        >
+          <DialogTitle id="confirmation-dialog-title">Confirmación</DialogTitle>
+          <DialogContent>
+            ¿Seguro que desea cerrar esta cuenta?
+          </DialogContent>
+          <DialogActions>{cancelActions}</DialogActions>
+        </Dialog>
+        <Dialog aria-labelledby="confirmation-dialog-title"
+          open={this.state.updateCAP.setValueOpen}
+        >
+          <DialogTitle id="confirmation-dialog-title">Cambiar monto</DialogTitle>
+          <DialogContent>
+            Ingrese el nuevo valor de la CAP
+            <CurrencyField label=""
+              style={{ width: '100%' }}
+              value={this.state.updateCAP.newValue}
+              helperText={this.state.updateCAP.newValueError}
+              error={this.state.updateCAP.newValueError !== ''}
+              onChange={(event) => this.setUpdateCapState({ newValue: event.target.value })}
+            />
+          </DialogContent>
+          <DialogActions>{newValueActions}</DialogActions>
+        </Dialog>
       </React.Fragment>
     )
   }

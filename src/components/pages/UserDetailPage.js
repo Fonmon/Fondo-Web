@@ -45,7 +45,8 @@ class UserDetailPage extends ContainerComponent{
                 balance_contributions:'',
                 total_quota:'',
                 utilized_quota:'',
-                last_modified:''
+                last_modified:'',
+                total_savingaccounts: '',
             },
             preferences: {
                 notifications: false,
@@ -337,6 +338,13 @@ class UserDetailPage extends ContainerComponent{
                                                 style={{width:'100%'}}
                                                 disabled={!Utils.isAuthorizedEdit()}
                                                 onChange = {(event) => this.setStateFinanceInfo('utilized_quota',event.target.value)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <CurrencyField label="Total CAPs"
+                                                value={this.state.finance.total_savingaccounts}
+                                                style={{width:'100%'}}
+                                                disabled={true}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
