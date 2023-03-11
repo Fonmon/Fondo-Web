@@ -68,7 +68,7 @@ class RequestCapPage extends ContainerComponent {
                 </Grid>
                 <Grid item xs={12}>
                   <Button color='primary'
-                    disabled={true}
+                    // disabled={true}
                     variant="contained"
                     style={{ width: '100%' }}
                     onClick={this.handleSubmit.bind(this)}

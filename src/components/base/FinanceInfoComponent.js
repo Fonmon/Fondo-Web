@@ -19,6 +19,8 @@ export default function FinanceInfoComponent(props){
                 &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(props.financeInfo.utilized_quota)}</span><br/>
                 <span className="Labels"><strong>Cupo disponible:</strong> <br />
                 &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(props.financeInfo.available_quota)}</span><br/>
+                <span className="Labels"><strong>Total CAPs:</strong> <br />
+                &nbsp;&nbsp;&nbsp;&nbsp;${Utils.parseNumberMoney(props.financeInfo.total_savingaccounts)}</span><br/>
                 <span className="Labels"><strong>Actualizado:</strong> <br />
                 &nbsp;&nbsp;&nbsp;&nbsp;{props.financeInfo.last_modified}</span><br/>
             </p>
