@@ -1,0 +1,19 @@
+version: 0.2
+env:
+  shell: bash
+  parameter-store:
+    DOCKER_PASSWORD: /fonmon/DOCKER_PASSWORD
+phases:
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      nodejs: 16
+    commands:
+      # - docker login -u minmiguelm -p $DOCKER_PASSWORD
+      - npm i --production
+  build:
+    commands:
+      - npm test
+  post_build:
+    commands:
+      - bash scripts/trigger-deploy.sh

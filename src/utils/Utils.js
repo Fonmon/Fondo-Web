@@ -277,8 +277,8 @@ class Utils{
 
     // Admin panel
 
-    static adminTestEmail() {
-        return axios.get(`api/admin/`)
+    static adminTest(type) {
+        return axios.get(`api/admin?type=${type}`)
     }
 }
 

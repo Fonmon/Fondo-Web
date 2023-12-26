@@ -6,26 +6,15 @@ set -x
 # in server side.                                    #
 ######################################################
 
-# Arguments length: 2
-# 1: commit number
-# 2: instance ID
-# 3: env
-if [  $# -ne 3 ]; then
-	echo 'Arguments: commit_revision instance_id {master|develop}'
-	exit 1
+if [ $CODEBUILD_WEBHOOK_EVENT == 'PUSH' ] && [ $CODEBUILD_WEBHOOK_HEAD_REF == 'refs/heads/master' ]; then
+	# Triggering deploy process
+	echo 'Starting trigger'
+	aws ssm send-command \
+		--document-name "AWS-RunShellScript" \
+		--comment "Deploying web layer" \
+		--instance-ids "i-06e827f552c3f56a0" \
+		--parameters commands="entrypoint_deploy master web master" \
+		--output text
+	echo 'Deploying in background'
+	exit 0
 fi
-
-COMMIT=$1
-INSTANCE=$2
-ENV=$3
-
-# Triggering deploy process
-echo 'Starting trigger'
-aws ssm send-command \
-	--document-name "AWS-RunShellScript" \
-	--comment "Deploying web layer" \
-	--instance-ids "${INSTANCE}" \
-	--parameters commands="entrypoint_deploy ${COMMIT} web ${ENV}" \
-	--output text
-echo 'Deploying in background'
-exit 0

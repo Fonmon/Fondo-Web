@@ -47,7 +47,8 @@ const SidebarMenus = (props) => {
                 }
                 {Utils.isAdmin() &&
                     <MenuListItem label={'Admin'}>
-                        <MenuItem onClick={async () => await Utils.adminTestEmail()}>Test Email</MenuItem>
+                        <MenuItem onClick={async () => await Utils.adminTest('email')}>Test Email</MenuItem>
+                        <MenuItem onClick={async () => await Utils.adminTest('notifications')}>Test Notification</MenuItem>
                     </MenuListItem>
                 }
             </div>
