@@ -18,7 +18,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && workbox generateSW workbox-config.js",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --watchAll=false",
     "eject": "react-scripts eject",
     "start-notifications": "REACT_APP_NOTIFICATIONS=true react-scripts start"
   },
