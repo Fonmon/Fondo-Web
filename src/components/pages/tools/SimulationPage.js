@@ -35,11 +35,16 @@ class SimulationPage extends ContainerComponent{
     }
 
     getRate(){
-        if(6 < this.state.timelimit && this.state.timelimit <= 12)
+        if(6 < this.state.timelimit && this.state.timelimit <= 12) {
+            return 0.020;
+        }
+        if(12 < this.state.timelimit && this.state.timelimit <= 24) {
+            return 0.022;
+        }
+        if(24 < this.state.timelimit && this.state.timelimit <= 36) {
             return 0.025;
-        if(12 < this.state.timelimit && this.state.timelimit <= 24)
-            return 0.03;
-        return 0.02;
+        }
+        return 0.015;
     }
 
     buildTable(){
