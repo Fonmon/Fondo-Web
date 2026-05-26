@@ -51,9 +51,9 @@ class RefinanceDialog extends ContainerComponent{
         if (!this.state.timelimit) {
             isError = true;
             this.setState({ timelimit_error: 'Campo requerido' });
-        } else if (this.state.timelimit <= 0 || this.state.timelimit > 24) {
+        } else if (this.state.timelimit <= 0 || this.state.timelimit > 36) {
             isError = true;
-            this.setState({ timelimit_error: 'Valor debe ser entre 1 y 24' });
+            this.setState({ timelimit_error: 'Valor debe ser entre 1 y 36' });
         } else
             this.setState({ timelimit_error: '' });
         if (!isError) {
