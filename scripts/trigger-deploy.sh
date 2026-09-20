@@ -12,7 +12,7 @@ if [ $CODEBUILD_WEBHOOK_EVENT == 'PUSH' ] && [ $CODEBUILD_WEBHOOK_HEAD_REF == 'r
 	aws ssm send-command \
 		--document-name "AWS-RunShellScript" \
 		--comment "Deploying web layer" \
-		--instance-ids "i-06e827f552c3f56a0" \
+		--instance-ids "i-05acbc9a8ab623549" \
 		--parameters commands="entrypoint_deploy master web master" \
 		--output text
 	echo 'Deploying in background'
